@@ -1,0 +1,117 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\RMSproject\\RMS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7FB16294-60C0-4CA4-AD13-B772E7797931}|conifs.rms.dto\\conifs.rms.dto.csproj|d:\\rmsproject\\rms\\conifs.rms.dto\\conifs.rms.dto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7FB16294-60C0-4CA4-AD13-B772E7797931}|conifs.rms.dto\\conifs.rms.dto.csproj|solutionrelative:conifs.rms.dto\\conifs.rms.dto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{61579C25-0E9C-4081-A8DE-37DE705A9C15}|conifs.rms.data\\conifs.rms.data.csproj|d:\\rmsproject\\rms\\conifs.rms.data\\conifs.rms.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{61579C25-0E9C-4081-A8DE-37DE705A9C15}|conifs.rms.data\\conifs.rms.data.csproj|solutionrelative:conifs.rms.data\\conifs.rms.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{817568FE-D4CE-4927-9BD3-A8D490253EF5}|conifs.rms.business\\conifs.rms.business.csproj|d:\\rmsproject\\rms\\conifs.rms.business\\conifs.rms.business.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{817568FE-D4CE-4927-9BD3-A8D490253EF5}|conifs.rms.business\\conifs.rms.business.csproj|solutionrelative:conifs.rms.business\\conifs.rms.business.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7FB16294-60C0-4CA4-AD13-B772E7797931}|conifs.rms.dto\\conifs.rms.dto.csproj|d:\\rmsproject\\rms\\conifs.rms.dto\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7FB16294-60C0-4CA4-AD13-B772E7797931}|conifs.rms.dto\\conifs.rms.dto.csproj|solutionrelative:conifs.rms.dto\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{61579C25-0E9C-4081-A8DE-37DE705A9C15}|conifs.rms.data\\conifs.rms.data.csproj|d:\\rmsproject\\rms\\conifs.rms.data\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{61579C25-0E9C-4081-A8DE-37DE705A9C15}|conifs.rms.data\\conifs.rms.data.csproj|solutionrelative:conifs.rms.data\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{817568FE-D4CE-4927-9BD3-A8D490253EF5}|conifs.rms.business\\conifs.rms.business.csproj|d:\\rmsproject\\rms\\conifs.rms.business\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{817568FE-D4CE-4927-9BD3-A8D490253EF5}|conifs.rms.business\\conifs.rms.business.csproj|solutionrelative:conifs.rms.business\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "conifs.rms.data.csproj",
+              "DocumentMoniker": "D:\\RMSproject\\RMS\\conifs.rms.data\\conifs.rms.data.csproj",
+              "RelativeDocumentMoniker": "conifs.rms.data\\conifs.rms.data.csproj",
+              "ToolTip": "D:\\RMSproject\\RMS\\conifs.rms.data\\conifs.rms.data.csproj",
+              "RelativeToolTip": "conifs.rms.data\\conifs.rms.data.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-04-07T18:48:59.073Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "conifs.rms.business.csproj",
+              "DocumentMoniker": "D:\\RMSproject\\RMS\\conifs.rms.business\\conifs.rms.business.csproj",
+              "RelativeDocumentMoniker": "conifs.rms.business\\conifs.rms.business.csproj",
+              "ToolTip": "D:\\RMSproject\\RMS\\conifs.rms.business\\conifs.rms.business.csproj",
+              "RelativeToolTip": "conifs.rms.business\\conifs.rms.business.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-04-07T18:47:44.367Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "conifs.rms.dto.csproj",
+              "DocumentMoniker": "D:\\RMSproject\\RMS\\conifs.rms.dto\\conifs.rms.dto.csproj",
+              "RelativeDocumentMoniker": "conifs.rms.dto\\conifs.rms.dto.csproj",
+              "ToolTip": "D:\\RMSproject\\RMS\\conifs.rms.dto\\conifs.rms.dto.csproj",
+              "RelativeToolTip": "conifs.rms.dto\\conifs.rms.dto.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-04-07T18:39:12.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\RMSproject\\RMS\\conifs.rms.dto\\Class1.cs",
+              "RelativeDocumentMoniker": "conifs.rms.dto\\Class1.cs",
+              "ToolTip": "D:\\RMSproject\\RMS\\conifs.rms.dto\\Class1.cs",
+              "RelativeToolTip": "conifs.rms.dto\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-07T18:20:50.371Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\RMSproject\\RMS\\conifs.rms.data\\Class1.cs",
+              "RelativeDocumentMoniker": "conifs.rms.data\\Class1.cs",
+              "ToolTip": "D:\\RMSproject\\RMS\\conifs.rms.data\\Class1.cs",
+              "RelativeToolTip": "conifs.rms.data\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-07T18:17:58.506Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\RMSproject\\RMS\\conifs.rms.business\\Class1.cs",
+              "RelativeDocumentMoniker": "conifs.rms.business\\Class1.cs",
+              "ToolTip": "D:\\RMSproject\\RMS\\conifs.rms.business\\Class1.cs",
+              "RelativeToolTip": "conifs.rms.business\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-07T18:11:18.031Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
