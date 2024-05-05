@@ -8,9 +8,8 @@ namespace conifs.rms.data.entities
 {
     public class ReservationGroup
     {
-        public Guid Id { get; set; }
-        public string GroupName { get; set; }
-        // Navigation property to represent the relationship
-        public ICollection<ReservationItem> ReservationItems { get; set; }
+        public Guid id { get; set; }
+        public string groupName { get; set; }
+        
     }
 }

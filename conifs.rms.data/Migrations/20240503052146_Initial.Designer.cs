@@ -12,7 +12,7 @@ using conifs.rms.data;
 namespace conifs.rms.data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240502050634_Initial")]
+    [Migration("20240503052146_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,57 +27,57 @@ namespace conifs.rms.data.Migrations
 
             modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("GroupName")
+                    b.Property<string>("groupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.ToTable("ReservationGroups");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Capacity")
+                    b.Property<string>("capacity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationPerSlot")
+                    b.Property<int>("durationPerSlot")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("GroupId")
+                    b.Property<Guid>("groupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ItemName")
+                    b.Property<string>("itemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NoOfReservations")
+                    b.Property<string>("noOfReservations")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NoOfSlots")
+                    b.Property<int>("noOfSlots")
                         .HasColumnType("int");
 
-                    b.Property<string>("SlotDurationType")
+                    b.Property<string>("slotDurationType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TimeSlotType")
+                    b.Property<string>("timeSlotType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("groupId");
 
                     b.ToTable("ReservationItems");
                 });
@@ -85,17 +85,12 @@ namespace conifs.rms.data.Migrations
             modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
                 {
                     b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
-                        .WithMany("ReservationItems")
-                        .HasForeignKey("GroupId")
+                        .WithMany()
+                        .HasForeignKey("groupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ReservationGroup");
-                });
-
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
-                {
-                    b.Navigation("ReservationItems");
                 });
 #pragma warning restore 612, 618
         }
