@@ -1,7 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.vs (2)",
+    "\\conifs.rms.base.api",
+    "\\conifs.rms.base.api\\Properties",
+    "\\conifs.rms.business",
+    "\\conifs.rms.data",
+    "\\conifs.rms.data\\entities",
+    "\\conifs.rms.data\\Migrations",
+    "\\conifs.rms.dto"
   ],
-  "SelectedNode": "\\H:\\RMS_BE",
+  "SelectedNode": "\\RMS.sln",
   "PreviewInSolutionExplorer": false
 }
