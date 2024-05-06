@@ -21,6 +21,6 @@ namespace conifs.rms.data.entities
         public Guid groupId { get; set; }
 
         // Navigation property to represent the relationship
-        public ReservationGroup ReservationGroup { get; set; }
+        //public ReservationGroup ReservationGroup { get; set; }
     }
 }

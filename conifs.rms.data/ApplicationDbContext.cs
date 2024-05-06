@@ -23,7 +23,7 @@ namespace conifs.rms.data
         {
             // Configure entity mappings and relationships
             modelBuilder.Entity<ReservationItem>()
-                .HasOne(ri => ri.ReservationGroup)
+                .HasOne<ReservationGroup>()
                 .WithMany()
                 .HasForeignKey(ri => ri.groupId);
         }
