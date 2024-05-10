@@ -26,4 +26,5 @@ namespace conifs.rms.data.entities
             UserRoleID = Guid.NewGuid();
         }
     }
+    //has to complete after integration
 }

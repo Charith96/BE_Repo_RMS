@@ -1,5 +1,5 @@
 ﻿using conifs.rms.data.entities;
-using conifs.rms.data.repositories;
+using conifs.rms.data.repositories.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,9 +10,9 @@ namespace conifs.rms.@base.api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUser _userService;
+        private readonly IUserRepository _userService;
 
-        public UserController(IUser userService)
+        public UserController(IUserRepository userService)
         {
             _userService = userService;
         }
@@ -57,6 +57,7 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 _userService.AddUser(newUser);
+
                 return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserCode }, newUser);
             }
             catch (Exception ex)

@@ -1,13 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.vs (2)",
-    "\\conifs.rms.base.api",
-    "\\conifs.rms.base.api\\Properties",
     "\\conifs.rms.business",
+    "\\conifs.rms.business\\managers",
+    "\\conifs.rms.contracts",
     "\\conifs.rms.data",
     "\\conifs.rms.data\\entities",
     "\\conifs.rms.data\\Migrations",
+    "\\conifs.rms.data\\repositories",
+    "\\conifs.rms.data\\repositories\\User",
     "\\conifs.rms.dto"
   ],
   "SelectedNode": "\\RMS.sln",

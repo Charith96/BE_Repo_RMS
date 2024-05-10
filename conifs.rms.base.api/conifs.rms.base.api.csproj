@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\conifs.rms.business\conifs.rms.business.csproj" />
     <ProjectReference Include="..\conifs.rms.data\conifs.rms.data.csproj" />
   </ItemGroup>
 

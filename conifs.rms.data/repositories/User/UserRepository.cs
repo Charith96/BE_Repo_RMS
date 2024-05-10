@@ -1,13 +1,12 @@
-﻿using conifs.rms.data;
-using conifs.rms.data.repositories;
-using conifs.rms.data.entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using conifs.rms.data.entities;
+using conifs.rms.data.repositories.User;
 
-namespace conifs.rms.data.repositories
+namespace conifs.rms.data.repositories.User
 {
-    public class UserRepository : IUser
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -54,14 +53,14 @@ namespace conifs.rms.data.repositories
         }
         public IEnumerable<UserCompany> GetUserCompanies(string userCode)
         {
-            
+
             return _context.UserCompany.Where(uc => uc.UserCode.ToString() == userCode).ToList();
         }
         public IEnumerable<UserRoles> GetUserRoles(string userCode)
         {
-            
+
             return _context.UserRole.Where(uc => uc.UserCode.ToString() == userCode).ToList();
         }
-     
+
     }
 }
