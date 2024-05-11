@@ -1,0 +1,14 @@
+@conifs.rms.base.api_HostAddress = https://localhost:7291
+
+GET {{conifs.rms.base.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{conifs.rms.base.api_HostAddress}}/api/company
+
+###
+
+GET {{conifs.rms.base.api_HostAddress}}/api/company/string
+
+###

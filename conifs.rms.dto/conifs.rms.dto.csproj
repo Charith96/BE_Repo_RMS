@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Company\" />
+    <Folder Include="Customer\" />
+    <Folder Include="ReservationItem\" />
+    <Folder Include="ReservationGroup\" />
+    <Folder Include="Role\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="mappers\" />
+    <Folder Include="validations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\conifs.rms.contracts\conifs.rms.contracts.csproj" />
+    <ProjectReference Include="..\conifs.rms.data\conifs.rms.data.csproj" />
+    <ProjectReference Include="..\conifs.rms.dto\conifs.rms.dto.csproj" />
+  </ItemGroup>
+
+</Project>
