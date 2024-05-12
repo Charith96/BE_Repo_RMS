@@ -1,83 +1,91 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using conifs.rms.data.entities;
+﻿using conifs.rms.business.managers;
 using conifs.rms.data;
+using conifs.rms.data.entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]
-[ApiController]
-public class ReservationItemController : ControllerBase
-{
-        private readonly ApplicationDbContext _context;
+    [ApiController]
+    public class ReservationItemController : ControllerBase
+    {
+        private readonly IReservationItemManager _reservationItemManager;
 
-        public ReservationItemController(ApplicationDbContext context)
+        public ReservationItemController(IReservationItemManager reservationItemManager)
         {
-            _context = context;
+            _reservationItemManager = reservationItemManager;
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<ReservationItem>>> GetAllItems()
+        public IActionResult GetAllItems()
         {
-            var items = await _context.ReservationItems.ToListAsync();
-            return Ok(items);
+            try
+            {
+                _reservationItemManager.GetReservationItem();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<ReservationItem>>> GetItem(Guid id)
+        public IActionResult GetItem(Guid id)
         {
-            var item = await _context.ReservationItems.FindAsync(id);
-            if (item == null)
+            try
             {
-                return NotFound("item not found");
+                _reservationItemManager.GetReservationItemById(id);
+                return Ok();
             }
-            return Ok(item);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<ReservationItem>>> AddItem(ReservationItem itm)
+        public IActionResult AddItem(ReservationItem item)
         {
-            _context.ReservationItems.Add(itm);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.ReservationItems.ToListAsync());
+            try
+            {
+                _reservationItemManager.AddReservationItem(item);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<ReservationItem>>> UpdateItem(ReservationItem UpdatedItem)
+        public IActionResult UpdateItem(ReservationItem updatedItem)
         {
-            var item = await _context.ReservationItems.FindAsync(UpdatedItem.id);
-            if (item == null)
+            try
             {
-                return NotFound("item not found");
+                _reservationItemManager.UpdateReservationItem(updatedItem);
+                return Ok();
             }
-            item.itemName = UpdatedItem.itemName;
-            item.timeSlotType = UpdatedItem.timeSlotType;
-            item.slotDurationType = UpdatedItem.slotDurationType;
-            item.durationPerSlot = UpdatedItem.durationPerSlot;
-            item.noOfSlots = UpdatedItem.noOfSlots;
-            item.noOfReservations = UpdatedItem.noOfReservations;
-            item.capacity = UpdatedItem.capacity;
-
-
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.ReservationItems.ToListAsync());
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete]
-        public async Task<ActionResult<List<ReservationItem>>> DeleteItem(Guid id)
+        public IActionResult DeleteItem(Guid id)
         {
-            var item = await _context.ReservationItems.FindAsync(id);
-            if (item == null)
+            try
             {
-                return NotFound("item not found");
+                _reservationItemManager.DeleteReservationItem(id);
+                return Ok();
             }
-
-            _context.ReservationItems.Remove(item);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.ReservationItems.ToListAsync());
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

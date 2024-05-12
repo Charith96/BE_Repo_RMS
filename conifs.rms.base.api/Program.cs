@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.data;
 
+using conifs.rms.business.managers;
+using conifs.rms.data.repositories.ReservationGroups;
+using conifs.rms.data.repositories.ReservationItems;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IReservationGroupManager, ReservationGroupManager>();
+builder.Services.AddScoped<IReservationGroupRepository, ReservationGroupRepository>();
+builder.Services.AddScoped<IReservationItemManager, ReservationItemManager>();
+builder.Services.AddScoped<IReservationItemRepository, ReservationItemRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

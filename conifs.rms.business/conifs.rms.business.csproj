@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="managers\" />
     <Folder Include="mappers\" />
     <Folder Include="validations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\conifs.rms.contracts\conifs.rms.contracts.csproj" />
   </ItemGroup>
 
 </Project>

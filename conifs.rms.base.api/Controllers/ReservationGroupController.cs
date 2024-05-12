@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using conifs.rms.business.managers;
 using conifs.rms.data.entities;
-using conifs.rms.data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -10,69 +9,81 @@ namespace conifs.rms.@base.api.Controllers
     [ApiController]
     public class ReservationGroupController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IReservationGroupManager _reservationGroupManager;
 
-        public ReservationGroupController(ApplicationDbContext context)
+        public ReservationGroupController(IReservationGroupManager reservationGroupManager)
         {
-            _context = context;
+            _reservationGroupManager = reservationGroupManager;
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<ReservationGroup>>> GetAllGroups()
+        public IActionResult GetAllGroups()
         {
-            var groups = await _context.ReservationGroups.ToListAsync();
-            return Ok(groups);
+            try
+            {
+                _reservationGroupManager.GetReservationGroup();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<ReservationGroup>>> GetGroup(Guid id)
+        public IActionResult GetGroup(Guid id)
         {
-            var group = await _context.ReservationGroups.FindAsync(id);
-            if (group == null)
+            try
             {
-                return NotFound("group not found");
+                _reservationGroupManager.GetReservationGroupById(id);
+                return Ok();
             }
-            return Ok(group);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<ReservationGroup>>> AddGroup(ReservationGroup grp)
+        public IActionResult AddGroup(ReservationGroup group)
         {
-            _context.ReservationGroups.Add(grp);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.ReservationGroups.ToListAsync());
+            try
+            {
+                _reservationGroupManager.AddReservationGroup(group);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<ReservationGroup>>> UpdateGroup(ReservationGroup UpdatedGroup)
+        public IActionResult UpdateGroup(ReservationGroup updatedGroup)
         {
-            var group = await _context.ReservationGroups.FindAsync(UpdatedGroup.id);
-            if (group == null)
+            try
             {
-                return NotFound("group not found");
+                _reservationGroupManager.UpdateReservationGroup(updatedGroup);
+                return Ok();
             }
-            group.groupName = UpdatedGroup.groupName;
-            
-
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.ReservationGroups.ToListAsync());
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete]
-        public async Task<ActionResult<List<ReservationGroup>>> DeleteGroup(Guid id)
+        public IActionResult DeleteGroup(Guid id)
         {
-            var group = await _context.ReservationGroups.FindAsync(id);
-            if (group == null)
+            try
             {
-                return NotFound("group not found");
+                _reservationGroupManager.DeleteReservationGroup(id);
+                return Ok();
             }
-
-            _context.ReservationGroups.Remove(group);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.ReservationGroups.ToListAsync());
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
-
