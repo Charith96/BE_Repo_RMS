@@ -12,10 +12,8 @@ namespace conifs.rms.data.entities
         //columns of the privilege table
 
         [Key]
-        public int Id { get; set; } //table row id
+        public string PrivilegeId { get; set; } //table row id
 
-        [Required]
-        public string PrivilegeId { get; set; }
 
         [Required]
         public string PrivilegeName { get; set; }
@@ -23,7 +21,9 @@ namespace conifs.rms.data.entities
 
 
         // Navigation property to RolePrivilege
-       // public ICollection<RolePrivilege> RolePrivileges { get; set; }
+        // public ICollection<RolePrivilege> RolePrivileges { get; set; }
+        // Navigation property if you have a relationship with another entity (e.g., UserPrivilege)
+       // public ICollection<UserPrivilege> UserPrivileges { get; set; }
     }
 
 }

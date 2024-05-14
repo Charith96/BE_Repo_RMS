@@ -14,28 +14,24 @@ namespace conifs.rms.data.Migrations
                 name: "Privileges",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PrivilegeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PrivilegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PrivilegeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Privileges", x => x.Id);
+                    table.PrimaryKey("PK_Privileges", x => x.PrivilegeId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RoleID = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.RoleID);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,8 +40,8 @@ namespace conifs.rms.data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    PrivilegeId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<string>(type: "nvarchar(8)", nullable: false),
+                    PrivilegeId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,13 +50,13 @@ namespace conifs.rms.data.Migrations
                         name: "FK_RolePrivileges_Privileges_PrivilegeId",
                         column: x => x.PrivilegeId,
                         principalTable: "Privileges",
-                        principalColumn: "Id",
+                        principalColumn: "PrivilegeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RolePrivileges_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
+                        principalColumn: "RoleID",
                         onDelete: ReferentialAction.Cascade);
                 });
 

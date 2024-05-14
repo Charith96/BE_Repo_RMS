@@ -1,9 +1,8 @@
-﻿using conifs.rms.data;
+﻿using conifs.rms.business;
 using conifs.rms.data.entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
+using System;
+using System.Threading.Tasks;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -11,73 +10,110 @@ namespace conifs.rms.@base.api.Controllers
 [ApiController]
 public class RoleController : ControllerBase
 {
+    private readonly IRoleManager _roleManager;
 
-        private readonly ApplicationDbContext _context;
-        private object? croles;
+    public RoleController(IRoleManager roleManager)
+    {
+        _roleManager = roleManager;
+    }
 
-        public RoleController(ApplicationDbContext context)
+    [HttpGet]
+    public async Task<IActionResult> GetAllRoles()
+    {
+        try
         {
-            _context = context;
+            var roles = await _roleManager.GetAllRolesAsync();
+            return Ok(roles);
         }
-
-        [HttpGet] //get all the roles data
-        public async Task<ActionResult<List<Role>>> GetAllCroles()
+        catch (Exception ex)
         {
-            var croles = await _context.Roles.ToListAsync();
-
-            return Ok(croles);
-        }
-
-        [HttpGet("{id}")]  //Get particular role data using row id 
-        public async Task<ActionResult<List<Role>>> GetCrole(int id)
-        {
-            var crole = await _context.Roles.FindAsync(id);
-            if (crole is null)
-                return NotFound("Role not found.");
-
-            return Ok(crole);
-        }
-
-
-        [HttpPost]   //Create a new role 
-        public async Task<ActionResult<List<Role>>> AddCrole(Role crole)
-        {
-            _context.Roles.Add(crole);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.Roles.ToListAsync());
-        }
-
-        [HttpPut]//Update a particular role data (for a given row id)
-        public async Task<ActionResult<List<Role>>> UpdateCrole(Role updatedCrole)
-        {
-
-            if (updatedCrole == null)
-                return BadRequest("Invalid role data.");
-
-            var dbCrole = await _context.Roles.FindAsync(updatedCrole.Id);
-            if (dbCrole == null)
-                return NotFound("Role not found.");
-
-            dbCrole.RoleId = updatedCrole.RoleId;
-            dbCrole.RoleName = updatedCrole.RoleName;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.Roles.ToListAsync());
-        }
-
-        [HttpDelete]//Delete a particular role data(for a given id)
-        public async Task<ActionResult<List<Role>>> DeletCrole(int id)
-        {
-            var dbCrole = await _context.Roles.FindAsync(id);
-            if (dbCrole is null)
-                return NotFound("Role not found.");
-
-            _context.Roles.Remove(dbCrole);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.Roles.ToListAsync());
+            return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
+    [HttpGet("{RoleID}")]
+    public async Task<IActionResult> GetRoleById(string RoleID)
+    {
+        try
+        {
+            var role = await _roleManager.GetRoleByIdAsync(RoleID);
+            if (role == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(role);
+        }
+        catch (FormatException)
+        {
+            return BadRequest("Invalid role ID format.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddRole([FromBody] Role newRole)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var addedRole = await _roleManager.AddRoleAsync(newRole);
+            return CreatedAtAction(nameof(GetRoleById), new { RoleID = addedRole.RoleID }, addedRole);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("{RoleID}")]
+    public async Task<IActionResult> UpdateRole(string RoleID, [FromBody] Role role)
+    {
+        if (RoleID != role.RoleID)
+        {
+            return BadRequest("Role ID mismatch");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var updatedRole = await _roleManager.UpdateRoleAsync(role);
+            if (updatedRole == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedRole);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("{RoleID}")]
+    public async Task<IActionResult> DeleteRole(string RoleID)
+    {
+        try
+        {
+            await _roleManager.DeleteRoleAsync(RoleID);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+}
 }

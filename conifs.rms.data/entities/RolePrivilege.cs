@@ -15,11 +15,11 @@ namespace conifs.rms.data.entities
         public int Id { get; set; }
 
         [ForeignKey("Role")]
-        public int RoleId { get; set; }
+        public string RoleId { get; set; }
         public Role Role { get; set; }
 
         [ForeignKey("Privilege")]
-        public int PrivilegeId { get; set; }
+        public string PrivilegeId { get; set; }
         public Privilege Privilege { get; set; }
     }
 

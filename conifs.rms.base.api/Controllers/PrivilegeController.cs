@@ -1,8 +1,8 @@
-﻿using conifs.rms.data;
+﻿using conifs.rms.business;
 using conifs.rms.data.entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -10,72 +10,110 @@ namespace conifs.rms.@base.api.Controllers
 [ApiController]
 public class PrivilegeController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
-    public PrivilegeController(ApplicationDbContext context)
+    private readonly IPrivilegeManager _privilegeManager;
+
+    public PrivilegeController(IPrivilegeManager privilegeManager)
     {
-        _context = context;
+        _privilegeManager = privilegeManager;
     }
 
-    [HttpGet]//show all the privilege data 
-    public async Task<ActionResult<List<Privilege>>> GetAllPrvl()
+    [HttpGet]
+    public async Task<IActionResult> GetAllPrivileges()
     {
-        var prvl = await _context.Privileges.ToListAsync();
-
-        return Ok(prvl);
+        try
+        {
+            var privileges = await _privilegeManager.GetAllPrivilegesAsync();
+            return Ok(privileges);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 
-    [HttpGet("{id}")]//show particular privilege data for a given row id
-    public async Task<ActionResult<List<Privilege>>> GetPrvl(int id)
+    [HttpGet("{privilegeId}")]
+    public async Task<IActionResult> GetPrivilegeById(string privilegeId)
     {
-        var prvl = await _context.Privileges.FindAsync(id);
-        if (prvl is null)
-            return NotFound("Privilege not found.");
+        try
+        {
+            var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeId);
+            if (privilege == null)
+            {
+                return NotFound();
+            }
 
-        return Ok(prvl);
+            return Ok(privilege);
+        }
+        catch (FormatException)
+        {
+            return BadRequest("Invalid privilege ID format.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 
-    [HttpPost]//Create a new privilege 
-    public async Task<ActionResult<List<Privilege>>> AddCrole(Privilege pvrl)
+    [HttpPost]
+    public async Task<IActionResult> AddPrivilege([FromBody] Privilege newPrivilege)
     {
-        _context.Privileges.Add(pvrl);
-        await _context.SaveChangesAsync();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-        return Ok(await _context.Privileges.ToListAsync());
+        try
+        {
+            var addedPrivilege = await _privilegeManager.AddPrivilegeAsync(newPrivilege);
+            return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeId = addedPrivilege.PrivilegeId }, addedPrivilege);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 
-    [HttpPut] // update perticular  privilege data for a given row id
-    public async Task<ActionResult<List<Privilege>>> UpdatePvrl(Privilege updatedPvrl)
+    [HttpPut("{privilegeId}")]
+    public async Task<IActionResult> UpdatePrivilege(string privilegeId, [FromBody] Privilege privilege)
     {
+        if (privilegeId != privilege.PrivilegeId)
+        {
+            return BadRequest("Privilege ID mismatch");
+        }
 
-        if (updatedPvrl == null)
-            return BadRequest("Invalid privilege data.");
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-        var dbPvrl = await _context.Privileges.FindAsync(updatedPvrl.Id);
-        if (dbPvrl == null)
-            return NotFound("Privilege not found.");
+        try
+        {
+            var updatedPrivilege = await _privilegeManager.UpdatePrivilegeAsync(privilege);
+            if (updatedPrivilege == null)
+            {
+                return NotFound();
+            }
 
-        dbPvrl.PrivilegeId = updatedPvrl.PrivilegeId;
-        dbPvrl.PrivilegeName = updatedPvrl.PrivilegeName;
-
-        await _context.SaveChangesAsync();
-
-        return Ok(await _context.Privileges.ToListAsync());
+            return Ok(updatedPrivilege);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 
-    [HttpDelete]  //Delete a privilege for a given row id
-    public async Task<ActionResult<List<Privilege>>> DeletPvrl(int id)
+    [HttpDelete("{privilegeId}")]
+    public async Task<IActionResult> DeletePrivilege(string privilegeId)
     {
-        var dbPvrl = await _context.Privileges.FindAsync(id);
-        if (dbPvrl is null)
-            return NotFound("Privilege not found.");
-
-        _context.Privileges.Remove(dbPvrl);
-        await _context.SaveChangesAsync();
-
-        return Ok(await _context.Privileges.ToListAsync());
+        try
+        {
+            await _privilegeManager.DeletePrivilegeAsync(privilegeId);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
-
 }
 }
-
-

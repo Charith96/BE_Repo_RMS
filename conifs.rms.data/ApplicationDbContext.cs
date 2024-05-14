@@ -16,21 +16,13 @@ namespace conifs.rms.data
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<RolePrivilege> RolePrivileges { get; set; }
 
-        public DbSet<ReservationGroup> ReservationGroups { get; set; }
-        public DbSet<ReservationItem> ReservationItems { get; set; }
+        
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // Configure entity mappings and relationships
-            modelBuilder.Entity<ReservationItem>()
-                .HasOne(ri => ri.ReservationGroup)
-                .WithMany()
-                .HasForeignKey(ri => ri.groupId);
-        }
+        
     }
 }

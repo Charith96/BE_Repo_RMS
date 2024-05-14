@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="repositories\" />
+    <ProjectReference Include="..\conifs.rms.contracts\conifs.rms.contracts.csproj" />
   </ItemGroup>
 
 </Project>
