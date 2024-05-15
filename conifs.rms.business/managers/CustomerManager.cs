@@ -36,8 +36,21 @@ namespace conifs.rms.business
             if (existingCustomer == null)
                 return null; // Return null if customer not found
 
-            return await _customerRepository.UpdateCustomerAsync(customer);
+            // Update properties of the existing customer
+            existingCustomer.CustomerID = customer.CustomerID;
+            existingCustomer.FullName = customer.FullName;
+            existingCustomer.Identifier = customer.Identifier;
+            existingCustomer.Address = customer.Address;
+            existingCustomer.Email = customer.Email;
+            existingCustomer.ContactNo = customer.ContactNo;
+
+
+
+            await _customerRepository.UpdateCustomerAsync(existingCustomer); // Save changes
+
+            return existingCustomer;
         }
+
 
 
         public async Task<bool> DeleteCustomerAsync(string customerId)
