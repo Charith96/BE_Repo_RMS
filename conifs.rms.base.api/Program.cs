@@ -2,27 +2,24 @@ using Microsoft.EntityFrameworkCore;
 using conifs.rms.data;
 using conifs.rms.business;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register your repositories and managers
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleManager, RoleManager>();
 builder.Services.AddScoped<IPrivilegeRepository, PrivilegeRepository>();
 builder.Services.AddScoped<IPrivilegeManager, PrivilegeManager>();
 
-
-
-
+// Register the DbContext with the connection string
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

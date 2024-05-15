@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using conifs.rms.data;
 using conifs.rms.data.entities;
@@ -34,9 +35,9 @@ namespace conifs.rms.business
             return await _roleRepository.UpdateRoleAsync(role);
         }
 
-        public async Task DeleteRoleAsync(string roleId)
+        public async Task<bool> DeleteRoleAsync(string roleId)
         {
-            await _roleRepository.DeleteRoleAsync(roleId);
+            return await _roleRepository.DeleteRoleAsync(roleId);
         }
     }
 }

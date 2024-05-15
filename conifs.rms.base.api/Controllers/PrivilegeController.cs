@@ -7,113 +7,118 @@ using System.Threading.Tasks;
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]
-[ApiController]
-public class PrivilegeController : ControllerBase
-{
-    private readonly IPrivilegeManager _privilegeManager;
-
-    public PrivilegeController(IPrivilegeManager privilegeManager)
+    [ApiController]
+    public class PrivilegeController : ControllerBase
     {
-        _privilegeManager = privilegeManager;
-    }
+        private readonly IPrivilegeManager _privilegeManager;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllPrivileges()
-    {
-        try
+        public PrivilegeController(IPrivilegeManager privilegeManager)
         {
-            var privileges = await _privilegeManager.GetAllPrivilegesAsync();
-            return Ok(privileges);
+            _privilegeManager = privilegeManager;
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
 
-    [HttpGet("{privilegeId}")]
-    public async Task<IActionResult> GetPrivilegeById(string privilegeId)
-    {
-        try
+        [HttpGet]
+        public async Task<IActionResult> GetAllPrivileges()
         {
-            var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeId);
-            if (privilege == null)
+            try
             {
-                return NotFound();
+                var privileges = await _privilegeManager.GetAllPrivilegesAsync();
+                return Ok(privileges);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("{privilegeId}")]
+        public async Task<IActionResult> GetPrivilegeById(string privilegeId)
+        {
+            try
+            {
+                var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeId);
+                if (privilege == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(privilege);
+            }
+            catch (FormatException)
+            {
+                return BadRequest("Invalid privilege ID format.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPrivilege([FromBody] Privilege newPrivilege)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
-            return Ok(privilege);
-        }
-        catch (FormatException)
-        {
-            return BadRequest("Invalid privilege ID format.");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> AddPrivilege([FromBody] Privilege newPrivilege)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        try
-        {
-            var addedPrivilege = await _privilegeManager.AddPrivilegeAsync(newPrivilege);
-            return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeId = addedPrivilege.PrivilegeId }, addedPrivilege);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
-
-    [HttpPut("{privilegeId}")]
-    public async Task<IActionResult> UpdatePrivilege(string privilegeId, [FromBody] Privilege privilege)
-    {
-        if (privilegeId != privilege.PrivilegeId)
-        {
-            return BadRequest("Privilege ID mismatch");
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        try
-        {
-            var updatedPrivilege = await _privilegeManager.UpdatePrivilegeAsync(privilege);
-            if (updatedPrivilege == null)
+            try
             {
-                return NotFound();
+                var addedPrivilege = await _privilegeManager.AddPrivilegeAsync(newPrivilege);
+                return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeId = addedPrivilege.PrivilegeId }, addedPrivilege);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{privilegeId}")]
+        public async Task<IActionResult> UpdatePrivilege(string privilegeId, [FromBody] Privilege privilege)
+        {
+            if (privilegeId != privilege.PrivilegeId)
+            {
+                return BadRequest("Privilege ID mismatch");
             }
 
-            return Ok(updatedPrivilege);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-    [HttpDelete("{privilegeId}")]
-    public async Task<IActionResult> DeletePrivilege(string privilegeId)
-    {
-        try
-        {
-            await _privilegeManager.DeletePrivilegeAsync(privilegeId);
-            return NoContent();
+            try
+            {
+                var updatedPrivilege = await _privilegeManager.UpdatePrivilegeAsync(privilege);
+                if (updatedPrivilege == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedPrivilege);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-        catch (Exception ex)
+
+        [HttpDelete("{privilegeId}")]
+        public async Task<IActionResult> DeletePrivilege(string privilegeId)
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            try
+            {
+                var result = await _privilegeManager.DeletePrivilegeAsync(privilegeId);
+                if (!result)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
-}
 }

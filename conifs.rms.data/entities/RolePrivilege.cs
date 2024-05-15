@@ -1,28 +1,25 @@
-﻿using conifs.rms.data.entities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace conifs.rms.data.entities
 {
     public class RolePrivilege
     {
         [Key]
-        public int Id { get; set; }
+        public Guid RolePrivilegeId { get; set; }
 
-        [ForeignKey("Role")]
-        public string RoleId { get; set; }
-        public Role Role { get; set; }
+        [Required]
+        public Guid RoleCode { get; set; }
 
-        [ForeignKey("Privilege")]
-        public string PrivilegeId { get; set; }
-        public Privilege Privilege { get; set; }
+        [Required]
+        public Guid PrivilegeCode { get; set; }
+
+        // Navigation properties
+       // [ForeignKey("RoleCode")]
+        //public Role Role { get; set; }
+
+        //[ForeignKey("PrivilegeCode")]
+        //public Privilege Privilege { get; set; }
     }
-
 }
-
-

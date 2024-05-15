@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using conifs.rms.data.entities;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using conifs.rms.data.entities;
 
 namespace conifs.rms.data
 {
@@ -10,6 +11,6 @@ namespace conifs.rms.data
         Task<Role> GetRoleByIdAsync(string roleId);
         Task<Role> AddRoleAsync(Role role);
         Task<Role> UpdateRoleAsync(Role role);
-        Task DeleteRoleAsync(string roleId);
+        Task<bool> DeleteRoleAsync(string roleId);
     }
 }

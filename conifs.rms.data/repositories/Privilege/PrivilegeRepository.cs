@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using conifs.rms.data.entities;
 using Microsoft.EntityFrameworkCore;
+using conifs.rms.data.entities;
 
 namespace conifs.rms.data
 {
@@ -22,31 +23,34 @@ namespace conifs.rms.data
 
         public async Task<Privilege> GetPrivilegeByIdAsync(string privilegeId)
         {
-            return await _context.Privileges.FindAsync(privilegeId);
+            return await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeId == privilegeId);
         }
 
         public async Task<Privilege> AddPrivilegeAsync(Privilege privilege)
         {
-            _context.Privileges.Add(privilege);
+            await _context.Privileges.AddAsync(privilege);
             await _context.SaveChangesAsync();
             return privilege;
         }
 
         public async Task<Privilege> UpdatePrivilegeAsync(Privilege privilege)
         {
-            _context.Entry(privilege).State = EntityState.Modified;
+            _context.Privileges.Update(privilege);
             await _context.SaveChangesAsync();
             return privilege;
         }
 
-        public async Task DeletePrivilegeAsync(string privilegeId)
+        public async Task<bool> DeletePrivilegeAsync(string privilegeId)
         {
-            var privilege = await _context.Privileges.FindAsync(privilegeId);
-            if (privilege != null)
+            var privilege = await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeId == privilegeId);
+            if (privilege == null)
             {
-                _context.Privileges.Remove(privilege);
-                await _context.SaveChangesAsync();
+                return false;
             }
+
+            _context.Privileges.Remove(privilege);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

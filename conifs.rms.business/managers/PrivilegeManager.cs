@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using conifs.rms.data;
 using conifs.rms.data.entities;
@@ -34,9 +35,9 @@ namespace conifs.rms.business
             return await _privilegeRepository.UpdatePrivilegeAsync(privilege);
         }
 
-        public async Task DeletePrivilegeAsync(string privilegeId)
+        public async Task<bool> DeletePrivilegeAsync(string privilegeId)
         {
-            await _privilegeRepository.DeletePrivilegeAsync(privilegeId);
+            return await _privilegeRepository.DeletePrivilegeAsync(privilegeId);
         }
     }
 }
