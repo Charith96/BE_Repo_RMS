@@ -28,12 +28,12 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpGet("{customerId}")]
-        public async Task<ActionResult<Customer>> GetCustomer(string customerId)
+        public async Task<ActionResult<Customer>> GetCustomer(Guid customerId)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -55,20 +55,20 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var addedCustomer = await _customerManager.AddCustomerAsync(customer);
-                return CreatedAtAction(nameof(GetCustomer), new { customerId = addedCustomer.CustomerID }, addedCustomer);
+                return CreatedAtAction(nameof(GetCustomer), new { customerId = addedCustomer.CustomerCode }, addedCustomer);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpPut("{customerId}")]
-        public async Task<ActionResult<Customer>> UpdateCustomer(string customerId, Customer customer)
+        public async Task<ActionResult<Customer>> UpdateCustomer(Guid customerId, Customer customer)
         {
             try
             {
-                if (customerId != customer.CustomerID)
+                if (customerId != customer.CustomerCode)
                     return BadRequest("Customer ID mismatch");
 
                 var updatedCustomer = await _customerManager.UpdateCustomerAsync(customer);
@@ -83,13 +83,12 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-
         [HttpDelete("{customerId}")]
-        public async Task<IActionResult> DeleteCustomer(string customerId)
+        public async Task<IActionResult> DeleteCustomer(Guid customerId)
         {
             try
             {
@@ -101,7 +100,7 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

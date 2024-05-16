@@ -21,11 +21,6 @@ namespace conifs.rms.data
             return await _context.Customers.ToListAsync();
         }
 
-        public async Task<Customer> GetCustomerByIdAsync(string customerId)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.CustomerID == customerId);
-        }
-
         public async Task<Customer> AddCustomerAsync(Customer customer)
         {
             _context.Customers.Add(customer);
@@ -35,18 +30,36 @@ namespace conifs.rms.data
 
         public async Task<Customer> UpdateCustomerAsync(Customer customer)
         {
-            _context.Entry(customer).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return customer;
+            var existingCustomer = await _context.Customers.FindAsync(customer.CustomerCode);
+            if (existingCustomer == null)
+                return null; // Return null if customer not found
+
+            // Update properties of the existing customer
+            existingCustomer.CustomerID = customer.CustomerID;
+            existingCustomer.FullName = customer.FullName;
+            existingCustomer.Identifier = customer.Identifier;
+            existingCustomer.Address = customer.Address;
+            existingCustomer.Email = customer.Email;
+            existingCustomer.ContactNo = customer.ContactNo;
+
+            await _context.SaveChangesAsync(); // Save changes
+
+            return existingCustomer;
         }
 
-        public async Task<bool> DeleteCustomerAsync(string customerId)
+
+        public async Task<Customer> GetCustomerByIdAsync(Guid customerId)
+        {
+            return await _context.Customers.FirstOrDefaultAsync(c => c.CustomerCode == customerId);
+        }
+
+        public async Task<bool> DeleteCustomerAsync(Guid customerId)
         {
             var customer = await _context.Customers.FindAsync(customerId);
             if (customer == null)
                 return false;
 
-            _context.Customers.Remove(customer); 
+            _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
             return true;
         }
