@@ -1,14 +1,16 @@
 ﻿using conifs.rms.data.entities;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace conifs.rms.business.managers
 {
     public interface IReservationGroupManager
     {
-        public void GetReservationGroup();
-        public void GetReservationGroupById(Guid id);
-
-        public void AddReservationGroup(ReservationGroup group);
-        public void UpdateReservationGroup(ReservationGroup UpdatedGroup);
-        public void DeleteReservationGroup(Guid id);
+        public Task<List<ReservationGroup>> GetReservationGroup();
+        public Task<ReservationGroup> GetReservationGroupById(Guid id);
+        public Task AddReservationGroup(ReservationGroup group);
+        public Task UpdateReservationGroup(ReservationGroup updatedGroup);
+        public Task DeleteReservationGroup(Guid id);
     }
 }

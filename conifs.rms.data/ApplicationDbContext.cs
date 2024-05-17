@@ -25,7 +25,7 @@ namespace conifs.rms.data
             modelBuilder.Entity<ReservationItem>()
                 .HasOne<ReservationGroup>()
                 .WithMany()
-                .HasForeignKey(ri => ri.groupId);
+                .HasForeignKey(ri => ri.GroupId);
         }
     }
 }

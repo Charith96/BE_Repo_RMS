@@ -2,6 +2,7 @@
 using conifs.rms.data.entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -17,12 +18,12 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllGroups()
+        public async Task<IActionResult> GetAllGroups()
         {
             try
             {
-                _reservationGroupManager.GetReservationGroup();
-                return Ok();
+                var result = await _reservationGroupManager.GetReservationGroup();
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -31,12 +32,12 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetGroup(Guid id)
+        public async Task<IActionResult> GetGroup(Guid id)
         {
             try
             {
-                _reservationGroupManager.GetReservationGroupById(id);
-                return Ok();
+                var result = await _reservationGroupManager.GetReservationGroupById(id);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -45,11 +46,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddGroup(ReservationGroup group)
+        public async Task<IActionResult> AddGroup(ReservationGroup group)
         {
             try
             {
-                _reservationGroupManager.AddReservationGroup(group);
+                await _reservationGroupManager.AddReservationGroup(group);
                 return Ok();
             }
             catch (Exception ex)
@@ -59,11 +60,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateGroup(ReservationGroup updatedGroup)
+        public async Task<IActionResult> UpdateGroup(ReservationGroup updatedGroup)
         {
             try
             {
-                _reservationGroupManager.UpdateReservationGroup(updatedGroup);
+                await _reservationGroupManager.UpdateReservationGroup(updatedGroup);
                 return Ok();
             }
             catch (Exception ex)
@@ -72,12 +73,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteGroup(Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGroup(Guid id)
         {
             try
             {
-                _reservationGroupManager.DeleteReservationGroup(id);
+                await _reservationGroupManager.DeleteReservationGroup(id);
                 return Ok();
             }
             catch (Exception ex)

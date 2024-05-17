@@ -1,9 +1,8 @@
 ﻿using conifs.rms.business.managers;
-using conifs.rms.data;
 using conifs.rms.data.entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -19,12 +18,12 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllItems()
+        public async Task<IActionResult> GetAllItems()
         {
             try
             {
-                _reservationItemManager.GetReservationItem();
-                return Ok();
+                var result = await _reservationItemManager.GetReservationItem();
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -33,12 +32,12 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetItem(Guid id)
+        public async Task<IActionResult> GetItem(Guid id)
         {
             try
             {
-                _reservationItemManager.GetReservationItemById(id);
-                return Ok();
+                var result = await _reservationItemManager.GetReservationItemById(id);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -47,11 +46,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddItem(ReservationItem item)
+        public async Task<IActionResult> AddItem(ReservationItem item)
         {
             try
             {
-                _reservationItemManager.AddReservationItem(item);
+                await _reservationItemManager.AddReservationItem(item);
                 return Ok();
             }
             catch (Exception ex)
@@ -61,11 +60,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateItem(ReservationItem updatedItem)
+        public async Task<IActionResult> UpdateItem(ReservationItem updatedItem)
         {
             try
             {
-                _reservationItemManager.UpdateReservationItem(updatedItem);
+                await _reservationItemManager.UpdateReservationItem(updatedItem);
                 return Ok();
             }
             catch (Exception ex)
@@ -74,12 +73,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteItem(Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(Guid id)
         {
             try
             {
-                _reservationItemManager.DeleteReservationItem(id);
+                await _reservationItemManager.DeleteReservationItem(id);
                 return Ok();
             }
             catch (Exception ex)

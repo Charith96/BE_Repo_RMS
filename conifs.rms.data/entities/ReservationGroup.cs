@@ -8,8 +8,8 @@ namespace conifs.rms.data.entities
 {
     public class ReservationGroup
     {
-        public Guid id { get; set; }
-        public string groupName { get; set; }
+        public Guid Id { get; set; }
+        public string GroupName { get; set; }
         
     }
 }

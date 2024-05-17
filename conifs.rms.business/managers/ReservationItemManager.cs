@@ -1,6 +1,8 @@
 ﻿using conifs.rms.data.entities;
 using conifs.rms.data.repositories.ReservationItems;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace conifs.rms.business.managers
 {
@@ -13,37 +15,11 @@ namespace conifs.rms.business.managers
             _reservationItemRepository = reservationItemRepository;
         }
 
-        public void AddReservationItem(ReservationItem item)
+        public Task<List<ReservationItem>> GetReservationItem()
         {
             try
             {
-                _reservationItemRepository.AddReservationItem(item);
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception accordingly
-                throw new Exception("Error adding reservation item", ex);
-            }
-        }
-
-        public void DeleteReservationItem(Guid id)
-        {
-            try
-            {
-                _reservationItemRepository.DeleteReservationItem(id);
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception accordingly
-                throw new Exception("Error deleting reservation item", ex);
-            }
-        }
-
-        public void GetReservationItem()
-        {
-            try
-            {
-                _reservationItemRepository.GetReservationItem();
+                return _reservationItemRepository.GetReservationItem();
             }
             catch (Exception ex)
             {
@@ -52,11 +28,11 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public void GetReservationItemById(Guid id)
+        public Task<ReservationItem> GetReservationItemById(Guid id)
         {
             try
             {
-                _reservationItemRepository.GetReservationItemById(id);
+                return _reservationItemRepository.GetReservationItemById(id);
             }
             catch (Exception ex)
             {
@@ -65,11 +41,24 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public void UpdateReservationItem(ReservationItem updatedItem)
+        public async Task AddReservationItem(ReservationItem item)
         {
             try
             {
-                _reservationItemRepository.UpdateReservationItem(updatedItem);
+                await _reservationItemRepository.AddReservationItem(item);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error adding reservation item", ex);
+            }
+        }
+
+        public async Task UpdateReservationItem(ReservationItem updatedItem)
+        {
+            try
+            {
+                await _reservationItemRepository.UpdateReservationItem(updatedItem);
             }
             catch (Exception ex)
             {
@@ -77,6 +66,18 @@ namespace conifs.rms.business.managers
                 throw new Exception("Error updating reservation item", ex);
             }
         }
+
+        public async Task DeleteReservationItem(Guid id)
+        {
+            try
+            {
+                await _reservationItemRepository.DeleteReservationItem(id);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error deleting reservation item", ex);
+            }
+        }
     }
 }
-

@@ -8,17 +8,17 @@ namespace conifs.rms.data.entities
 {
     public class ReservationItem
     {
-        public Guid id { get; set; }
-        public string itemName { get; set; }
-        public string timeSlotType { get; set; }
-        public string slotDurationType { get; set; }
-        public int durationPerSlot { get; set; }
-        public int noOfSlots { get; set; }
-        public string noOfReservations { get; set; }
-        public string capacity { get; set; }
+        public Guid Id { get; set; }
+        public string ItemName { get; set; }
+        public string TimeSlotType { get; set; }
+        public string SlotDurationType { get; set; }
+        public int DurationPerSlot { get; set; }
+        public int NoOfSlots { get; set; }
+        public string NoOfReservations { get; set; }
+        public string Capacity { get; set; }
 
         // Foreign key property
-        public Guid groupId { get; set; }
+        public Guid GroupId { get; set; }
 
         // Navigation property to represent the relationship
         //public ReservationGroup ReservationGroup { get; set; }

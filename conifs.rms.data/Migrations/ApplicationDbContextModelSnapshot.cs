@@ -24,70 +24,68 @@ namespace conifs.rms.data.Migrations
 
             modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("groupName")
+                    b.Property<string>("GroupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("ReservationGroups");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("capacity")
+                    b.Property<string>("Capacity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("durationPerSlot")
+                    b.Property<int>("DurationPerSlot")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("groupId")
+                    b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("itemName")
+                    b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("noOfReservations")
+                    b.Property<string>("NoOfReservations")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("noOfSlots")
+                    b.Property<int>("NoOfSlots")
                         .HasColumnType("int");
 
-                    b.Property<string>("slotDurationType")
+                    b.Property<string>("SlotDurationType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("timeSlotType")
+                    b.Property<string>("TimeSlotType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("groupId");
+                    b.HasIndex("GroupId");
 
                     b.ToTable("ReservationItems");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
                 {
-                    b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
+                    b.HasOne("conifs.rms.data.entities.ReservationGroup", null)
                         .WithMany()
-                        .HasForeignKey("groupId")
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ReservationGroup");
                 });
 #pragma warning restore 612, 618
         }
