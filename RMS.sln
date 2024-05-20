@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "conifs.rms.data", "conifs.r
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "conifs.rms.dto", "conifs.rms.dto\conifs.rms.dto.csproj", "{62F3592B-9D26-422B-9ABC-102355542643}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "conifs.rms.contracts", "conifs.rms.contracts\conifs.rms.contracts.csproj", "{4B218325-19C7-4A71-99CD-846C7F1589BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "conifs.rms.contracts", "conifs.rms.contracts\conifs.rms.contracts.csproj", "{4B218325-19C7-4A71-99CD-846C7F1589BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

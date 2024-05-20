@@ -14,7 +14,8 @@ namespace conifs.rms.data.Migrations
                 name: "Companies",
                 columns: table => new
                 {
-                    CompanyID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CompanyID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyCode = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),

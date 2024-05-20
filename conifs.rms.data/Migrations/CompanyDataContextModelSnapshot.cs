@@ -24,8 +24,8 @@ namespace conifs.rms.data.Migrations
             modelBuilder.Entity("conifs.rms.data.entities.Company", b =>
                 {
                     b.Property<string>("CompanyID")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address01")
                         .IsRequired()
@@ -36,6 +36,11 @@ namespace conifs.rms.data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CompanyCode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()

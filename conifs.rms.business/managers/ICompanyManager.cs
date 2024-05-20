@@ -13,10 +13,15 @@ namespace conifs.rms.business.managers
             throw new NotImplementedException();
         }
 
-        Task<Company> GetCompanyById(Guid companyID)
+        Task<Company> GetCompanyById(string companyID)
         {
             throw new NotImplementedException();
         }
+
+        //bool IfExistCompany(string companyID)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         Task<Company> AddCompany(Company newCompany)
         {
@@ -28,14 +33,9 @@ namespace conifs.rms.business.managers
             throw new NotImplementedException();
         }
 
-        Task DeleteCompany(Guid companyID)
+        Task DeleteCompany(string companyID)
         {
             throw new NotImplementedException();
         }
-        //Task<IEnumerable<Company>> GetAllCompanies();
-        //Task<Company> GetCompanyById(Guid companyId);
-        //Task<Company> AddCompany(Company company);
-        //Task<Company> UpdateCompany(Company company);
-        //Task DeleteCompany(Guid companyId);
     }
 }

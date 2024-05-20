@@ -1,32 +1,28 @@
-﻿//new
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-//new
 
 namespace conifs.rms.data.entities
 {
     public class Company
     {
         [Key]
-        [Required]
-        [StringLength(50)]
-        public Guid? CompanyID { get; set; }
+       // [StringLength(8)]
+        public Guid CompanyID { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string CompanyName { get; set;} = "";
+        public string? CompanyCode { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string CompanyName { get; set; } = "";
 
         [StringLength(50)]
-        public string Description { get; set;} = "";
+        public string Description { get; set; } = "";
 
-         [Required]
+        [Required]
         [StringLength(50)]
         public string Country { get; set; } = "";
-
-     //   public int Country { get; set; } // Foreign key property
-
-        // Navigation property
-      //  public CountryDto? Country { get; set; }
-
 
         [Required]
         [StringLength(3)]
@@ -39,8 +35,12 @@ namespace conifs.rms.data.entities
         [StringLength(50)]
         public string Address02 { get; set; } = "";
 
-        //[Required]
         public bool DefaultCompany { get; set; }
+
+        public Company()
+        {
+            CompanyID = Guid.NewGuid(); // Initialize CompanyID with a new Guid
+        }
 
     }
 }

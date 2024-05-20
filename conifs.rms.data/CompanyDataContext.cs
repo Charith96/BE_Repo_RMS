@@ -2,6 +2,7 @@
 using conifs.rms.data.entities;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Xml;
 
 namespace conifs.rms.data
 {
@@ -26,6 +27,19 @@ namespace conifs.rms.data
         //  .HasForeignKey(c => c.CountryID)
         // .OnDelete(DeleteBehavior.Cascade); // Or choose a different delete behavior
         //  }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Other configurations...
+
+            // Configure the CompanyID property conversion
+            modelBuilder.Entity<Company>()
+                .Property(e => e.CompanyID)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => Guid.Parse(v)
+                );
+        }
 
     }
 }

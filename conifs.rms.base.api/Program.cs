@@ -1,9 +1,12 @@
 using conifs.rms.business.managers;
+//using conifs.rms.business.mappings;
+
 //using conifs.rms.contracts.Company;
 using conifs.rms.data;
 using conifs.rms.data.repositories;
 using conifs.rms.data.repositories.Company;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 //using ICompanyRepository = conifs.rms.data.repositories.Company.ICompanyRepository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+//builder.Services.AddAutoMapper(typeof(CompanyMappingProfile));
 
 builder.Services.AddDbContext<CompanyDataContext>(options =>
 {
