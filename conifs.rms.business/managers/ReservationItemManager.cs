@@ -3,6 +3,8 @@ using conifs.rms.data.repositories.ReservationItems;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using conifs.rms.business.validations;
+using FluentValidation;
 
 namespace conifs.rms.business.managers
 {
@@ -45,6 +47,14 @@ namespace conifs.rms.business.managers
         {
             try
             {
+                var validator = new ReservationItemValidator();
+                var validationResult = await validator.ValidateAsync(item);
+
+                if (!validationResult.IsValid)
+                {
+                    // Handle validation errors
+                    throw new ValidationException(validationResult.Errors);
+                }
                 await _reservationItemRepository.AddReservationItem(item);
             }
             catch (Exception ex)
@@ -58,6 +68,14 @@ namespace conifs.rms.business.managers
         {
             try
             {
+                var validator = new ReservationItemValidator();
+                var validationResult = await validator.ValidateAsync(updatedItem);
+
+                if (!validationResult.IsValid)
+                {
+                    // Handle validation errors
+                    throw new ValidationException(validationResult.Errors);
+                }
                 await _reservationItemRepository.UpdateReservationItem(updatedItem);
             }
             catch (Exception ex)

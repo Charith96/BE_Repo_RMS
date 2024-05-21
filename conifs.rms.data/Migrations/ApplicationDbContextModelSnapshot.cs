@@ -28,9 +28,15 @@ namespace conifs.rms.data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
                     b.Property<string>("GroupName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -53,9 +59,15 @@ namespace conifs.rms.data.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ItemId")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("NoOfReservations")
                         .IsRequired()
@@ -81,11 +93,18 @@ namespace conifs.rms.data.Migrations
 
             modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
                 {
-                    b.HasOne("conifs.rms.data.entities.ReservationGroup", null)
-                        .WithMany()
+                    b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
+                        .WithMany("ReservationItems")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ReservationGroup");
+                });
+
+            modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
+                {
+                    b.Navigation("ReservationItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,7 +16,8 @@ namespace conifs.rms.data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    GroupId = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,7 +29,8 @@ namespace conifs.rms.data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemId = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    ItemName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     TimeSlotType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SlotDurationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DurationPerSlot = table.Column<int>(type: "int", nullable: false),

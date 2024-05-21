@@ -1,5 +1,7 @@
 ﻿using conifs.rms.data.entities;
 using conifs.rms.data.repositories.ReservationGroups;
+using conifs.rms.business.validations;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -45,6 +47,15 @@ namespace conifs.rms.business.managers
         {
             try
             {
+                var validator = new ReservationGroupValidator();
+                var validationResult = await validator.ValidateAsync(group);
+
+                if (!validationResult.IsValid)
+                {
+                    // Handle validation errors
+                    throw new ValidationException(validationResult.Errors);
+                }
+
                 await _reservationGroupRepository.AddReservationGroup(group);
             }
             catch (Exception ex)
@@ -58,6 +69,14 @@ namespace conifs.rms.business.managers
         {
             try
             {
+                var validator = new ReservationGroupValidator();
+                var validationResult = await validator.ValidateAsync(updatedGroup);
+
+                if (!validationResult.IsValid)
+                {
+                    // Handle validation errors
+                    throw new ValidationException(validationResult.Errors);
+                }
                 await _reservationGroupRepository.UpdateReservationGroup(updatedGroup);
             }
             catch (Exception ex)
