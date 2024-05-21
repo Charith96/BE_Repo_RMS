@@ -21,9 +21,9 @@ namespace conifs.rms.data
             return await _context.Roles.ToListAsync();
         }
 
-        public async Task<Role> GetRoleByIdAsync(string roleId)
+        public async Task<Role> GetRoleByIdAsync(Guid roleCode)
         {
-            return await _context.Roles.FindAsync(roleId);
+            return await _context.Roles.FindAsync(roleCode);
         }
 
         public async Task<Role> AddRoleAsync(Role role)
@@ -40,9 +40,9 @@ namespace conifs.rms.data
             return role;
         }
 
-        public async Task<bool> DeleteRoleAsync(string roleId)
+        public async Task<bool> DeleteRoleAsync(Guid roleCode)
         {
-            var role = await _context.Roles.FindAsync(roleId);
+            var role = await _context.Roles.FindAsync(roleCode);
             if (role == null)
             {
                 return false;

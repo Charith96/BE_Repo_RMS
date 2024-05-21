@@ -31,12 +31,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{roleId}")]
-        public async Task<IActionResult> GetRoleById(string roleId)
+        [HttpGet("{roleCode}")]
+        public async Task<IActionResult> GetRoleById(Guid roleCode)
         {
             try
             {
-                var role = await _roleManager.GetRoleByIdAsync(roleId);
+                var role = await _roleManager.GetRoleByIdAsync(roleCode);
                 if (role == null)
                 {
                     return NotFound();
@@ -46,7 +46,7 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (FormatException)
             {
-                return BadRequest("Invalid role ID format.");
+                return BadRequest("Invalid role code format.");
             }
             catch (Exception ex)
             {
@@ -65,7 +65,7 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var addedRole = await _roleManager.AddRoleAsync(newRole);
-                return CreatedAtAction(nameof(GetRoleById), new { roleId = addedRole.RoleID }, addedRole);
+                return CreatedAtAction(nameof(GetRoleById), new { roleCode = addedRole.RoleCode }, addedRole);
             }
             catch (Exception ex)
             {
@@ -73,12 +73,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{roleId}")]
-        public async Task<IActionResult> UpdateRole(string roleId, [FromBody] Role role)
+        [HttpPut("{roleCode}")]
+        public async Task<IActionResult> UpdateRole(Guid roleCode, [FromBody] Role role)
         {
-            if (roleId != role.RoleID)
+            if (roleCode != role.RoleCode)
             {
-                return BadRequest("Role ID mismatch");
+                return BadRequest("Role code mismatch");
             }
 
             if (!ModelState.IsValid)
@@ -102,12 +102,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{roleId}")]
-        public async Task<IActionResult> DeleteRole(string roleId)
+        [HttpDelete("{roleCode}")]
+        public async Task<IActionResult> DeleteRole(Guid roleCode)
         {
             try
             {
-                var result = await _roleManager.DeleteRoleAsync(roleId);
+                var result = await _roleManager.DeleteRoleAsync(roleCode);
                 if (!result)
                 {
                     return NotFound();

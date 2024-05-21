@@ -20,9 +20,9 @@ namespace conifs.rms.business
             return await _roleRepository.GetAllRolesAsync();
         }
 
-        public async Task<Role> GetRoleByIdAsync(string roleId)
+        public async Task<Role> GetRoleByIdAsync(Guid roleCode)
         {
-            return await _roleRepository.GetRoleByIdAsync(roleId);
+            return await _roleRepository.GetRoleByIdAsync(roleCode);
         }
 
         public async Task<Role> AddRoleAsync(Role role)
@@ -35,9 +35,9 @@ namespace conifs.rms.business
             return await _roleRepository.UpdateRoleAsync(role);
         }
 
-        public async Task<bool> DeleteRoleAsync(string roleId)
+        public async Task<bool> DeleteRoleAsync(Guid roleCode)
         {
-            return await _roleRepository.DeleteRoleAsync(roleId);
+            return await _roleRepository.DeleteRoleAsync(roleCode);
         }
     }
 }

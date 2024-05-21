@@ -8,9 +8,9 @@ namespace conifs.rms.business
     public interface IRoleManager
     {
         Task<IEnumerable<Role>> GetAllRolesAsync();
-        Task<Role> GetRoleByIdAsync(string roleId);
+        Task<Role> GetRoleByIdAsync(Guid roleCode);
         Task<Role> AddRoleAsync(Role role);
         Task<Role> UpdateRoleAsync(Role role);
-        Task<bool> DeleteRoleAsync(string roleId);
+        Task<bool> DeleteRoleAsync(Guid roleCode);
     }
 }
