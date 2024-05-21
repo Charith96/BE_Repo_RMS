@@ -21,9 +21,9 @@ namespace conifs.rms.data
             return await _context.Privileges.ToListAsync();
         }
 
-        public async Task<Privilege> GetPrivilegeByIdAsync(string privilegeId)
+        public async Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeCode)
         {
-            return await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeId == privilegeId);
+            return await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeCode == privilegeCode);
         }
 
         public async Task<Privilege> AddPrivilegeAsync(Privilege privilege)
@@ -40,9 +40,9 @@ namespace conifs.rms.data
             return privilege;
         }
 
-        public async Task<bool> DeletePrivilegeAsync(string privilegeId)
+        public async Task<bool> DeletePrivilegeAsync(Guid privilegeCode)
         {
-            var privilege = await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeId == privilegeId);
+            var privilege = await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeCode == privilegeCode);
             if (privilege == null)
             {
                 return false;

@@ -31,12 +31,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{privilegeId}")]
-        public async Task<IActionResult> GetPrivilegeById(string privilegeId)
+        [HttpGet("{privilegeCode}")]
+        public async Task<IActionResult> GetPrivilegeById(Guid privilegeCode)
         {
             try
             {
-                var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeId);
+                var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeCode);
                 if (privilege == null)
                 {
                     return NotFound();
@@ -46,7 +46,7 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (FormatException)
             {
-                return BadRequest("Invalid privilege ID format.");
+                return BadRequest("Invalid privilege code format.");
             }
             catch (Exception ex)
             {
@@ -65,7 +65,7 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var addedPrivilege = await _privilegeManager.AddPrivilegeAsync(newPrivilege);
-                return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeId = addedPrivilege.PrivilegeId }, addedPrivilege);
+                return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeCode = addedPrivilege.PrivilegeCode }, addedPrivilege);
             }
             catch (Exception ex)
             {
@@ -73,12 +73,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{privilegeId}")]
-        public async Task<IActionResult> UpdatePrivilege(string privilegeId, [FromBody] Privilege privilege)
+        [HttpPut("{privilegeCode}")]
+        public async Task<IActionResult> UpdatePrivilege(Guid privilegeCode, [FromBody] Privilege privilege)
         {
-            if (privilegeId != privilege.PrivilegeId)
+            if (privilegeCode != privilege.PrivilegeCode)
             {
-                return BadRequest("Privilege ID mismatch");
+                return BadRequest("Privilege code mismatch");
             }
 
             if (!ModelState.IsValid)
@@ -102,12 +102,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{privilegeId}")]
-        public async Task<IActionResult> DeletePrivilege(string privilegeId)
+        [HttpDelete("{privilegeCode}")]
+        public async Task<IActionResult> DeletePrivilege(Guid privilegeCode)
         {
             try
             {
-                var result = await _privilegeManager.DeletePrivilegeAsync(privilegeId);
+                var result = await _privilegeManager.DeletePrivilegeAsync(privilegeCode);
                 if (!result)
                 {
                     return NotFound();

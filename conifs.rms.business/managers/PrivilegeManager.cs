@@ -20,9 +20,9 @@ namespace conifs.rms.business
             return await _privilegeRepository.GetAllPrivilegesAsync();
         }
 
-        public async Task<Privilege> GetPrivilegeByIdAsync(string privilegeId)
+        public async Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeCode)
         {
-            return await _privilegeRepository.GetPrivilegeByIdAsync(privilegeId);
+            return await _privilegeRepository.GetPrivilegeByIdAsync(privilegeCode);
         }
 
         public async Task<Privilege> AddPrivilegeAsync(Privilege privilege)
@@ -35,9 +35,9 @@ namespace conifs.rms.business
             return await _privilegeRepository.UpdatePrivilegeAsync(privilege);
         }
 
-        public async Task<bool> DeletePrivilegeAsync(string privilegeId)
+        public async Task<bool> DeletePrivilegeAsync(Guid privilegeCode)
         {
-            return await _privilegeRepository.DeletePrivilegeAsync(privilegeId);
+            return await _privilegeRepository.DeletePrivilegeAsync(privilegeCode);
         }
     }
 }

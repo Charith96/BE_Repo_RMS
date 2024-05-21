@@ -8,9 +8,9 @@ namespace conifs.rms.data
     public interface IPrivilegeRepository
     {
         Task<IEnumerable<Privilege>> GetAllPrivilegesAsync();
-        Task<Privilege> GetPrivilegeByIdAsync(string privilegeId);
+        Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeCode);
         Task<Privilege> AddPrivilegeAsync(Privilege privilege);
         Task<Privilege> UpdatePrivilegeAsync(Privilege privilege);
-        Task<bool> DeletePrivilegeAsync(string privilegeId);
+        Task<bool> DeletePrivilegeAsync(Guid privilegeCode);
     }
 }
