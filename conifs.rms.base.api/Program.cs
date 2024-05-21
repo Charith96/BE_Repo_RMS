@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.data;
 using conifs.rms.business;
+using conifs.rms.business.validations;
+using conifs.rms.data.entities;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +15,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+// Add services to the container.
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        // Register validators from the assembly containing RoleValidation
+        fv.RegisterValidatorsFromAssemblyContaining<RoleValidation>();
+    });
+
+// Register FluentValidation validators
+builder.Services.AddScoped<IValidator<Role>, RoleValidation>();
 // Register your repositories and managers
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleManager, RoleManager>();
