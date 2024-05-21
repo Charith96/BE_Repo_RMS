@@ -11,10 +11,9 @@ namespace conifs.rms.data.entities
 
         public string PrivilegeId { get; set; }
 
-        [Required]
         public string PrivilegeName { get; set; }
 
         // Navigation property to RolePrivilege
-      //  public ICollection<RolePrivilege> RolePrivileges { get; set; }
+        // public ICollection<RolePrivilege> RolePrivileges { get; set; }
     }
 }

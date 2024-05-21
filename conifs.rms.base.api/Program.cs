@@ -26,6 +26,18 @@ builder.Services.AddControllers()
 
 // Register FluentValidation validators
 builder.Services.AddScoped<IValidator<Role>, RoleValidation>();
+
+// Add services to the container.
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        // Register validators from the assembly containing PrivilegeValidation
+        fv.RegisterValidatorsFromAssemblyContaining<PrivilegeValidation>();
+    });
+
+// Register FluentValidation validators
+builder.Services.AddScoped<IValidator<Privilege>, PrivilegeValidation>();
+
 // Register your repositories and managers
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleManager, RoleManager>();
