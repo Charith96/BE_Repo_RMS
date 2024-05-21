@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using conifs.rms.data;
 using conifs.rms.data.entities;
-
+using FluentValidation;
 
 namespace conifs.rms.business
 {
     public class CustomerManager : ICustomerManager
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IValidator<Customer> _customerValidator;
 
-        public CustomerManager(ICustomerRepository customerRepository)
+        public CustomerManager(ICustomerRepository customerRepository, IValidator<Customer> customerValidator)
         {
             _customerRepository = customerRepository;
+            _customerValidator = customerValidator;
         }
 
         public async Task<List<Customer>> GetAllCustomersAsync()
@@ -28,11 +30,23 @@ namespace conifs.rms.business
 
         public async Task<Customer> AddCustomerAsync(Customer customer)
         {
+            var validationResult = await _customerValidator.ValidateAsync(customer);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             return await _customerRepository.AddCustomerAsync(customer);
         }
 
         public async Task<Customer> UpdateCustomerAsync(Customer customer)
         {
+            var validationResult = await _customerValidator.ValidateAsync(customer);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var existingCustomer = await _customerRepository.GetCustomerByIdAsync(customer.CustomerCode);
             if (existingCustomer == null)
                 return null; // Return null if customer not found
@@ -55,8 +69,5 @@ namespace conifs.rms.business
         {
             return await _customerRepository.DeleteCustomerAsync(customerId);
         }
-
-       
-
     }
 }
