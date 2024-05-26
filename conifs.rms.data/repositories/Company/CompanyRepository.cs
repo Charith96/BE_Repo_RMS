@@ -22,17 +22,11 @@ namespace conifs.rms.data.repositories.Company
 
         public async Task<entities.Company> GetCompanyById(string id)
         {
-            //if (!Guid.TryParse(id, out var guid))
-            //{
-            //    throw new Exception($"Company with ID {id} not found.");
-            //}
+
 
             var company = await _context.Companies.FirstOrDefaultAsync(c => c.CompanyID.ToString() == id);
-            //if (company == null)
-            //{
-            //    throw new Exception($"Company with ID {id} not found.");
-            //}
-            return company;
+
+            return company ?? new entities.Company();
         }
 
 

@@ -1,12 +1,14 @@
 using conifs.rms.business.managers;
-//using conifs.rms.business.mappings;
-
 //using conifs.rms.contracts.Company;
 using conifs.rms.data;
 using conifs.rms.data.repositories;
 using conifs.rms.data.repositories.Company;
 using Microsoft.EntityFrameworkCore;
+using conifs.rms.dto.Company;
 using AutoMapper;
+using conifs.rms.business.mappers;
+//using conifs.rms.dto.Company;
+
 //using ICompanyRepository = conifs.rms.data.repositories.Company.ICompanyRepository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +21,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-//builder.Services.AddAutoMapper(typeof(CompanyMappingProfile));
+//builder.Services.AddAutoMapper(typeof(Program).Assembly);
+//builder.Services.AddAutoMapper(typeof(Program));
+
+var automapper = new MapperConfiguration(item => item.AddProfile(new CompanyMappers()));
+IMapper mapper = automapper.CreateMapper();
+
+builder.Services.AddSingleton(mapper);
+
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<CompanyDataContext>(options =>
 {

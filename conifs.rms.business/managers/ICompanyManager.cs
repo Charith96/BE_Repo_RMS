@@ -1,34 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using conifs.rms.data.entities;
+using conifs.rms.dto.Company;
 using System.Threading.Tasks;
-using conifs.rms.data.entities;
 
 namespace conifs.rms.business.managers
 {
     public interface ICompanyManager
     {
 
-        Task<IEnumerable<Company>> GetAllCompanies()
+        Task<IEnumerable<CompanyDto>> GetAllCompanies()
         {
             throw new NotImplementedException();
         }
 
-        Task<Company> GetCompanyById(string companyID)
+        Task<CompanyDto> GetCompanyById(string companyID)
         {
             throw new NotImplementedException();
         }
 
-        //bool IfExistCompany(string companyID)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        Task<Company> AddCompany(Company newCompany)
+        Task<CompanyDto> AddCompany(CompanyDto newCompanyDto)
         {
             throw new NotImplementedException();
         }
 
-        Task<Company> UpdateCompany(Company company)
+        Task<CompanyDto> UpdateCompany(CompanyDto updatedCompanyDto)
         {
             throw new NotImplementedException();
         }
@@ -37,5 +31,6 @@ namespace conifs.rms.business.managers
         {
             throw new NotImplementedException();
         }
+
     }
 }

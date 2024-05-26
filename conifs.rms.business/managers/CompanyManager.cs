@@ -1,68 +1,76 @@
-﻿using conifs.rms.data.entities;
-using conifs.rms.data.repositories.Company;
+﻿using AutoMapper;
 using conifs.rms.business.validators;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using conifs.rms.data.entities;
+using conifs.rms.data.repositories.Company;
 using FluentValidation;
+using conifs.rms.dto.Company;
+using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.business.managers
 {
     public class CompanyManager : ICompanyManager
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly IMapper _mapper;
 
-        public CompanyManager(ICompanyRepository companyRepository)
+        public CompanyManager(ICompanyRepository companyRepository, IMapper mapper)
         {
             _companyRepository = companyRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Company>> GetAllCompanies()
+        public async Task<IEnumerable<CompanyDto>> GetAllCompanies()
         {
-            return await _companyRepository.GetAllCompanies();
+
+            var company = await _companyRepository.GetAllCompanies();
+
+            return _mapper.Map<List<CompanyDto>>(company);
+
         }
 
-        public async Task<Company> GetCompanyById(string companyID)
+        public async Task<CompanyDto> GetCompanyById(string companyID)
         {
-            return await _companyRepository.GetCompanyById(companyID);
+            var company = await _companyRepository.GetCompanyById(companyID);
+
+                return _mapper.Map<CompanyDto>(company) ?? new CompanyDto(); ;
         }
 
-        public async Task<Company> AddCompany(Company newCompany)
+        public async Task<CompanyDto> AddCompany(CompanyDto newCompanyDto)
         {
-            // Create an instance of the CompanyValidator
+            Company newCompany = _mapper.Map<Company>(newCompanyDto);
+
             var validator = new CompanyValidator();
 
-            // Validate the new company object
             var validationResult = await validator.ValidateAsync(newCompany);
 
             if (!validationResult.IsValid)
             {
-                // Handle validation errors
                 throw new ValidationException(validationResult.Errors);
             }
 
-            // If validation passes, add the new company
-            return await _companyRepository.AddCompany(newCompany);
+            var addedCompany = await _companyRepository.AddCompany(newCompany);
+
+            newCompanyDto.CompanyID = addedCompany.CompanyID;
+
+            return newCompanyDto;
+
         }
 
-        public async Task<Company> UpdateCompany(Company updatedCompany)
+        public async Task<CompanyDto> UpdateCompany(CompanyDto updatedCompanyDto)
         {
-            var existingCompany = await _companyRepository.GetCompanyById(updatedCompany.CompanyID.ToString());
+            var existingCompany = await _companyRepository.GetCompanyById(updatedCompanyDto.CompanyID.ToString());
 
             if (existingCompany == null)
             {
-                throw new Exception($"Company with ID {updatedCompany.CompanyID} not found.");
+                throw new Exception($"Company with ID {updatedCompanyDto.CompanyID} not found.");
             }
 
-            // Create an instance of the CompanyValidator
+            var updatedCompany = _mapper.Map<Company>(updatedCompanyDto);
             var validator = new CompanyValidator();
-
-            // Validate the updated company object
             var validationResult = await validator.ValidateAsync(updatedCompany);
 
             if (!validationResult.IsValid)
             {
-                // Handle validation errors
                 throw new ValidationException(validationResult.Errors);
             }
 
@@ -75,14 +83,18 @@ namespace conifs.rms.business.managers
             existingCompany.Address02 = updatedCompany.Address02;
             existingCompany.DefaultCompany = updatedCompany.DefaultCompany;
 
-            await _companyRepository.UpdateCompany(existingCompany);
+            // Update the existing company with the new values
+            var updatedCompanyEntity = await _companyRepository.UpdateCompany(existingCompany);
 
-            return existingCompany;
+            // Map the updated entity back to a DTO and return it
+            return _mapper.Map<CompanyDto>(updatedCompanyEntity);
         }
 
         public async Task DeleteCompany(string companyID)
         {
-            await _companyRepository.DeleteCompany(companyID);
+             await _companyRepository.DeleteCompany(companyID);
+
         }
     }
 }
+

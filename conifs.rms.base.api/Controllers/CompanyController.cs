@@ -1,9 +1,8 @@
-﻿using conifs.rms.business.managers;
+﻿using AutoMapper;
+using conifs.rms.business.managers;
 using conifs.rms.data.entities;
+using conifs.rms.dto.Company;
 using Microsoft.AspNetCore.Mvc;
-using conifs.rms.data;
-using conifs.rms.data.repositories.Company;
-using Microsoft.Extensions.Logging;
 
 
 namespace conifs.rms.@base.api.Controllers
@@ -14,20 +13,12 @@ namespace conifs.rms.@base.api.Controllers
     {
 
         private readonly ICompanyManager _companyManager;
-        //  private readonly ILogger<CompanyController> _logger;
-
-        //public CompanyController(ICompanyManager companyManager, ILogger<CompanyController> logger)
-        //{
-        //    _companyManager = companyManager;
-        //    _logger = logger;
-
-        //}
 
         public CompanyController(ICompanyManager companyManager)
         {
-            _companyManager = companyManager;
-
-        }
+          _companyManager = companyManager;
+    //_mapper = mapper;
+         }
 
 
         [HttpGet]
@@ -49,11 +40,6 @@ namespace conifs.rms.@base.api.Controllers
         {
             try
             {
-                //if (!Guid.TryParse(id, out var guid))
-                //{
-                //    return BadRequest("Invalid GUID format.");
-                //}
-
                 var company = await _companyManager.GetCompanyById(id);
                 if (company == null)
                 {
@@ -69,14 +55,14 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-    [HttpPost]
-        public async Task<IActionResult> AddCompany([FromBody] Company newCompany)
+        [HttpPost]
+        public async Task<IActionResult> AddCompany([FromBody] CompanyDto newCompanyDto)
         {
             try
             {
-                var addedCompany = await _companyManager.AddCompany(newCompany);
-               // return CreatedAtAction(nameof(GetCompanyById), new { id = addedCompany.CompanyID }, addedCompany);
-                return CreatedAtAction(nameof(GetCompanyById), new { id = newCompany.CompanyID }, newCompany);
+                var addedCompany = await _companyManager.AddCompany(newCompanyDto);
+                return Ok(addedCompany);
+                //  return CreatedAtAction(nameof(GetCompanyById), new { id = addedCompany.CompanyID }, addedCompany);
             }
             catch (Exception ex)
             {
@@ -85,16 +71,16 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCompany(string id, [FromBody] Company company)
+        public async Task<IActionResult> UpdateCompany(string id, [FromBody] CompanyDto updatedCompanyDto)
         {
             try
             {
-                if (id != company.CompanyID.ToString())
+                if (id != updatedCompanyDto.CompanyID.ToString())
                 {
                     return BadRequest("Company ID mismatch");
                 }
 
-                var updatedCompany = await _companyManager.UpdateCompany(company);
+                var updatedCompany = await _companyManager.UpdateCompany(updatedCompanyDto);
                 if (updatedCompany == null)
                 {
                     return NotFound();

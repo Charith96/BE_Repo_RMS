@@ -1,4 +1,5 @@
 ﻿using conifs.rms.data.entities;
+using conifs.rms.dto.Company;
 
 namespace conifs.rms.data.repositories.Company
 {
@@ -15,12 +16,7 @@ namespace conifs.rms.data.repositories.Company
             throw new NotImplementedException();
         }
 
-    //    bool IfExistCompany(string companyID)
-    //    {
-    //        throw new NotImplementedException();
-    //}
-
-    Task<entities.Company> AddCompany(entities.Company newCompany)
+        Task<entities.Company> AddCompany(entities.Company newCompany)
         {
             throw new NotImplementedException();
         }
@@ -34,5 +30,6 @@ namespace conifs.rms.data.repositories.Company
         {
             throw new NotImplementedException();
         }
+
     }
 }
