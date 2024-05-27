@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
-
+using conifs.rms.dto;
 
 
 namespace conifs.rms.data

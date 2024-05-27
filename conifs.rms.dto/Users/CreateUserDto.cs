@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace conifs.rms.data.entities
+namespace conifs.rms.dto
 {
     public class CreateUserDto
     {
@@ -40,7 +40,7 @@ namespace conifs.rms.data.entities
 
         [Required(ErrorMessage = "Valid till date is required")]
         [DataType(DataType.Date)]
-        [DateGreaterThan("ValidFrom", ErrorMessage = "Valid till date must be greater than valid from date")]
+      
         public DateTime ValidTill { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-
+using conifs.rms.dto;
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]

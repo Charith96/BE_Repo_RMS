@@ -20,6 +20,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\conifs.rms.dto\conifs.rms.dto.csproj" />
+  </ItemGroup>
+
 	
 
 </Project>

@@ -5,7 +5,7 @@ using AutoMapper;
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
 using Microsoft.EntityFrameworkCore;
-
+using conifs.rms.dto;
 
 namespace conifs.rms.data.repositories.User
 {

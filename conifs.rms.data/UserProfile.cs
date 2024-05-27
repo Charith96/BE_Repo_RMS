@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using conifs.rms.data.entities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using conifs.rms.dto;
 
 namespace conifs.rms.data
 {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using conifs.rms.data.entities;
 
-namespace conifs.rms.data.entities
+
+namespace conifs.rms.dto
 {
     public class GetUserDto
     {
