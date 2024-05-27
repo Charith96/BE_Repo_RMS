@@ -4,9 +4,9 @@ namespace conifs.rms.data.repositories.User;
 
 public interface IUserRepository
 {
-    ICollection<UserTable> GetAllUsers();
+    Task<ICollection<GetUserDto>> GetAllUsers();
 
-    UserTable GetUserById(string userCode);
+    GetUserDto GetUserById(string userCode);
 
     bool IfExistUser(string userCode);
 
@@ -16,6 +16,8 @@ public interface IUserRepository
 
     void DeleteUser(string userCode);
 
+
+    void CreateUser(CreateUserDto UserCreateDto);
     IEnumerable<UserCompany> GetUserCompanies(string userCode);
     IEnumerable<UserRoles> GetUserRoles(string userCode);
   

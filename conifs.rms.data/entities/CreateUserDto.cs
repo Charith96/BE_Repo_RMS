@@ -1,17 +1,14 @@
-﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace conifs.rms.data.entities
 {
-   
-   public class UserTable
+    public class CreateUserDto
     {
-        [Key]
-      
-        public Guid Userid { get; set; }
-
-      
-
         [Required(ErrorMessage = "First name is required")]
         [StringLength(20)]
         public string FirstName { get; set; }
@@ -22,7 +19,7 @@ namespace conifs.rms.data.entities
 
         [Required(ErrorMessage = "Default Company is required")]
         [StringLength(50)]
-        public string DefaultCompany { get; set; } 
+        public string DefaultCompany { get; set; }
 
         [Required(ErrorMessage = "Designation is required")]
         [StringLength(40)]
@@ -30,7 +27,7 @@ namespace conifs.rms.data.entities
 
         [Required(ErrorMessage = "Primary Role is required")]
         [StringLength(20)]
-        public string PrimaryRole { get; set; } 
+        public string PrimaryRole { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
@@ -50,16 +47,5 @@ namespace conifs.rms.data.entities
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
         public string Password { get; set; }
 
-        public ICollection<UserCompany>? UserCompanies { get; set; }
-
-        public ICollection<UserRoles>? UserRoles { get; set; }
-        public string ImageData { get; set; } = "default_image";
-        public UserTable()
-        {
-       
-            Userid = Guid.NewGuid();
-        }
     }
-
-   
 }

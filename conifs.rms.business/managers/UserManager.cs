@@ -1,4 +1,5 @@
-﻿using conifs.rms.data.entities;
+﻿
+using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace conifs.rms.business.managers
             throw new NotImplementedException();
         }
 
-        public void DeleteUser(string userCode)
+        public void DeleteUser(string Userid)
         {
             throw new NotImplementedException();
         }
@@ -23,22 +24,22 @@ namespace conifs.rms.business.managers
             throw new NotImplementedException();
         }
 
-        public UserTable GetUserById(string userCode)
+        public UserTable GetUserById(string Userid)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserCompany> GetUserCompanies(string userCode)
+        public IEnumerable<UserCompany> GetUserCompanies(string id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserRoles> GetUserRoles(string userCode)
+        public IEnumerable<UserRoles> GetUserRoles(string id)
         {
             throw new NotImplementedException();
         }
 
-        public bool IfExistUser(string userCode)
+        public bool IfExistUser(string Userid)
         {
             throw new NotImplementedException();
         }
@@ -47,5 +48,9 @@ namespace conifs.rms.business.managers
         {
             throw new NotImplementedException();
         }
+        //public void CreateUser(UserCreateDto UserCreateDto)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

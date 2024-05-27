@@ -15,14 +15,15 @@ namespace conifs.rms.data.entities
 
     
         [ForeignKey("User")]
-        public Guid UserCode { get; set; }
+        public Guid Userid { get; set; }
         public virtual UserTable User { get; set; }
 
       
         [ForeignKey("Company")]
-        public Guid CompanyID { get; set; }
-       
-        
+        public Guid CompanyId { get; set; }
+        public virtual Company Company { get; set; }
+      
+
         public UserCompany()
         {
            
@@ -30,6 +31,6 @@ namespace conifs.rms.data.entities
         }
 
     }
-    //has to complete after integration
+ 
 }
 

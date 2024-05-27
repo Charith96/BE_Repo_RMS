@@ -1,7 +1,9 @@
-﻿using conifs.rms.data.entities;
+﻿
+using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace conifs.rms.@base.api.Controllers
@@ -18,26 +20,30 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             try
             {
-                var users = _userService.GetAllUsers();
+                var users = await _userService.GetAllUsers();
                 return Ok(users);
             }
             catch (Exception ex)
             {
-           
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                var errorResponse = new
+                {
+                    Message = "An error occurred while retrieving all users.",
+                    Details = ex.StackTrace
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(string id)
+        [HttpGet("{Userid}")]
+        public IActionResult GetUserById(string Userid)
         {
             try
             {
-                var user = _userService.GetUserById(id);
+                var user = _userService.GetUserById(Userid);
                 if (user == null)
                 {
                     return NotFound();
@@ -58,7 +64,7 @@ namespace conifs.rms.@base.api.Controllers
             {
                 _userService.AddUser(newUser);
 
-                return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserCode }, newUser);
+                return CreatedAtAction(nameof(GetUserById), new { Userid = newUser.Userid }, newUser);
             }
             catch (Exception ex)
             {
@@ -67,12 +73,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(string id, UserTable user)
+        [HttpPut("{Userid}")]
+        public IActionResult UpdateUser(string Userid, UserTable user)
         {
             try
             {
-                if (id != user.UserCode.ToString())
+                if (Userid != user.Userid.ToString())
                 {
                     return BadRequest();
                 }
@@ -87,12 +93,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUser(string id)
+        [HttpDelete("{Userid}")]
+        public IActionResult DeleteUser(string Userid)
         {
             try
             {
-                _userService.DeleteUser(id);
+                _userService.DeleteUser(Userid);
                 return NoContent();
             }
             catch (Exception ex)
@@ -102,12 +108,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("user-companies/{userCode}")]
-        public IActionResult GetUserCompanies(string userCode)
+        [HttpGet("user-companies/{Userid}")]
+        public IActionResult GetUserCompanies(string Userid)
         {
             try
             {
-                var userCompanies = _userService.GetUserCompanies(userCode);
+                var userCompanies = _userService.GetUserCompanies(Userid);
                 return Ok(userCompanies);
             }
             catch (Exception ex)
@@ -116,12 +122,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("user-roles/{userCode}")]
-        public IActionResult GetUserRoles(string userCode)
+        [HttpGet("user-roles/{Userid}")]
+        public IActionResult GetUserRoles(string Userid)
         {
             try
             {
-                var userRoles = _userService.GetUserRoles(userCode);
+                var userRoles = _userService.GetUserRoles(Userid);
                 return Ok(userRoles);
             }
             catch (Exception ex)
@@ -130,7 +136,25 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-       
+        [HttpPost("create-user")]
+        public IActionResult CreateUser(CreateUserDto userCreateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _userService.CreateUser(userCreateDto);
+
+                return Ok(); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
 
     }
 }

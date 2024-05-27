@@ -9,11 +9,20 @@
   <ItemGroup>
     <Folder Include="Customers\" />
     <Folder Include="Companies\" />
-    <Folder Include="Users\" />
     <Folder Include="Roles\" />
     <Folder Include="Reservation\" />
     <Folder Include="ReservationItem\" />
     <Folder Include="ReservationGroup\" />
+    <Folder Include="Users\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\conifs.rms.data\conifs.rms.data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using conifs.rms.data.repositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 
 namespace conifs.rms.data.entities
 {
@@ -13,18 +13,20 @@ namespace conifs.rms.data.entities
 
         [ForeignKey("User")]
        
-        public Guid UserCode { get; set; }
-        
+        public Guid Userid { get; set; }
+        public virtual UserTable User { get; set; }
+
+
 
 
         [ForeignKey("Role")]
-        public Guid RoleID { get; set; }
-     
+        public Guid RoleId { get; set; }
+        public virtual Roles Role { get; set; }
         public UserRoles()
         {
           
             UserRoleID = Guid.NewGuid();
         }
     }
-    //has to complete after integration
+
 }
