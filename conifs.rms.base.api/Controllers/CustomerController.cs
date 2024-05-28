@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using conifs.rms.business;
-using conifs.rms.data.entities;
+﻿using conifs.rms.business;
+using conifs.rms.dto.Customer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace conifs.rms.@base.api.Controllers
@@ -19,7 +16,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Customer>>> GetAllCustomers()
+        public async Task<ActionResult<List<CustomerDto>>> GetAllCustomers()
         {
             try
             {
@@ -33,7 +30,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet("{customerId}")]
-        public async Task<ActionResult<Customer>> GetCustomer(Guid customerId)
+        public async Task<ActionResult<CustomerDto>> GetCustomer(Guid customerId)
         {
             try
             {
@@ -50,11 +47,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> AddCustomer(Customer customer)
+        public async Task<ActionResult<CustomerDto>> AddCustomer(CustomerDto customerDto)
         {
             try
             {
-                var addedCustomer = await _customerManager.AddCustomerAsync(customer);
+                var addedCustomer = await _customerManager.AddCustomerAsync(customerDto);
                 return CreatedAtAction(nameof(GetCustomer), new { customerId = addedCustomer.CustomerCode }, addedCustomer);
             }
             catch (Exception ex)
@@ -64,14 +61,14 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut("{customerId}")]
-        public async Task<ActionResult<Customer>> UpdateCustomer(Guid customerId, Customer customer)
+        public async Task<ActionResult<CustomerDto>> UpdateCustomer(Guid customerId, CustomerDto customerDto)
         {
             try
             {
-                if (customerId != customer.CustomerCode)
+                if (customerId != customerDto.CustomerCode)
                     return BadRequest("Customer ID mismatch");
 
-                var updatedCustomer = await _customerManager.UpdateCustomerAsync(customer);
+                var updatedCustomer = await _customerManager.UpdateCustomerAsync(customerDto);
                 if (updatedCustomer == null)
                     return NotFound("Customer not found.");
 

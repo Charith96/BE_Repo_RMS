@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using conifs.rms.data.entities;
+﻿using conifs.rms.dto.Customer;
+
 
 namespace conifs.rms.business
 {
     public interface ICustomerManager
     {
-        Task<List<Customer>> GetAllCustomersAsync();
-        Task<Customer> GetCustomerByIdAsync(Guid customerId);
-        Task<Customer> AddCustomerAsync(Customer customer);
-        Task<Customer> UpdateCustomerAsync(Customer customer);
+        Task<List<CustomerDto>> GetAllCustomersAsync();
+        Task<CustomerDto> GetCustomerByIdAsync(Guid customerId);
+        Task<CustomerDto> AddCustomerAsync(CustomerDto customerDto);
+        Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto);
         Task<bool> DeleteCustomerAsync(Guid customerId);
     }
 }

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using conifs.rms.data;
 using conifs.rms.data.entities;
 using FluentValidation;
+using AutoMapper;
+using conifs.rms.dto.Customer;
 
 namespace conifs.rms.business
 {
@@ -11,36 +13,43 @@ namespace conifs.rms.business
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IValidator<Customer> _customerValidator;
+        private readonly IMapper _mapper;
 
-        public CustomerManager(ICustomerRepository customerRepository, IValidator<Customer> customerValidator)
+        public CustomerManager(ICustomerRepository customerRepository, IValidator<Customer> customerValidator, IMapper mapper)
         {
             _customerRepository = customerRepository;
             _customerValidator = customerValidator;
+            _mapper = mapper;
         }
 
-        public async Task<List<Customer>> GetAllCustomersAsync()
+        public async Task<List<CustomerDto>> GetAllCustomersAsync()
         {
-            return await _customerRepository.GetAllCustomersAsync();
+            var customers = await _customerRepository.GetAllCustomersAsync();
+            return _mapper.Map<List<CustomerDto>>(customers);
         }
 
-        public async Task<Customer> GetCustomerByIdAsync(Guid customerId)
+        public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
         {
-            return await _customerRepository.GetCustomerByIdAsync(customerId);
+            var customer = await _customerRepository.GetCustomerByIdAsync(customerId);
+            return _mapper.Map<CustomerDto>(customer);
         }
 
-        public async Task<Customer> AddCustomerAsync(Customer customer)
+        public async Task<CustomerDto> AddCustomerAsync(CustomerDto customerDto)
         {
+            var customer = _mapper.Map<Customer>(customerDto);
             var validationResult = await _customerValidator.ValidateAsync(customer);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
             }
 
-            return await _customerRepository.AddCustomerAsync(customer);
+            var addedCustomer = await _customerRepository.AddCustomerAsync(customer);
+            return _mapper.Map<CustomerDto>(addedCustomer);
         }
 
-        public async Task<Customer> UpdateCustomerAsync(Customer customer)
+        public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
         {
+            var customer = _mapper.Map<Customer>(customerDto);
             var validationResult = await _customerValidator.ValidateAsync(customer);
             if (!validationResult.IsValid)
             {
@@ -52,7 +61,6 @@ namespace conifs.rms.business
                 return null; // Return null if customer not found
 
             // Update properties of the existing customer
-            existingCustomer.CustomerCode = customer.CustomerCode;
             existingCustomer.CustomerID = customer.CustomerID;
             existingCustomer.FullName = customer.FullName;
             existingCustomer.Identifier = customer.Identifier;
@@ -62,7 +70,7 @@ namespace conifs.rms.business
 
             await _customerRepository.UpdateCustomerAsync(existingCustomer); // Save changes
 
-            return existingCustomer;
+            return _mapper.Map<CustomerDto>(existingCustomer);
         }
 
         public async Task<bool> DeleteCustomerAsync(Guid customerId)

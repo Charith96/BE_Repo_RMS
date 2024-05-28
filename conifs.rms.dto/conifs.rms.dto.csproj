@@ -8,12 +8,15 @@
 
   <ItemGroup>
     <Folder Include="Companies\" />
-    <Folder Include="Customers\" />
     <Folder Include="Users\" />
     <Folder Include="Roles\" />
     <Folder Include="ReservationItem\" />
     <Folder Include="ReservationGroup\" />
     <Folder Include="Reservation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

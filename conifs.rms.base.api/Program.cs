@@ -5,6 +5,8 @@ using FluentValidation;
 using conifs.rms.business.validations;
 using conifs.rms.data.entities;
 using FluentValidation.AspNetCore;
+using AutoMapper;
+using conifs.rms.business.mappers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(CustomerMappers));
+
 builder.Services.AddScoped<ICustomerManager, CustomerManager>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddControllers()
