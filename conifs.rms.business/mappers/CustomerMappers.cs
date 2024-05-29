@@ -1,22 +1,46 @@
-﻿using AutoMapper;
-using conifs.rms.data.entities; 
+﻿using conifs.rms.data.entities;
 using conifs.rms.dto.Customer;
 
 namespace conifs.rms.business.mappers
 {
-    public class CustomerMappers : Profile
+    public static class CustomerMappers
     {
-        public CustomerMappers()
+        public static Customer Map(CustomerDto input)
         {
-            CreateMap<CustomerDto, Customer>()
-                .ForMember(dest => dest.CustomerCode, opt => opt.MapFrom(src => src.CustomerCode))
-                .ForMember(dest => dest.CustomerID, opt => opt.MapFrom(src => src.CustomerID))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
-                .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Identifier))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.ContactNo, opt => opt.MapFrom(src => src.ContactNo))
-                .ReverseMap();
+            if (input == null)
+            {
+                return null;
+            }
+
+            return new Customer
+            {
+                CustomerCode = input.CustomerCode,
+                CustomerID = input.CustomerID,
+                FullName = input.FullName,
+                Identifier = input.Identifier,
+                Address = input.Address,
+                Email = input.Email,
+                ContactNo = input.ContactNo
+            };
+        }
+
+        public static CustomerDto Map(Customer input)
+        {
+            if (input == null)
+            {
+                return null;
+            }
+
+            return new CustomerDto
+            {
+                CustomerCode = input.CustomerCode,
+                CustomerID = input.CustomerID,
+                FullName = input.FullName,
+                Identifier = input.Identifier,
+                Address = input.Address,
+                Email = input.Email,
+                ContactNo = input.ContactNo
+            };
         }
     }
 }

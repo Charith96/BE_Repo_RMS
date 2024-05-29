@@ -6,7 +6,7 @@ using conifs.rms.business.validations;
 using conifs.rms.data.entities;
 using FluentValidation.AspNetCore;
 using AutoMapper;
-using conifs.rms.business.mappers;
+using conifs.rms.data.mappers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Register AutoMapper
-builder.Services.AddAutoMapper(typeof(CustomerMappers));
+builder.Services.AddAutoMapper(typeof(CustomerProfile).Assembly);
 
 builder.Services.AddScoped<ICustomerManager, CustomerManager>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
