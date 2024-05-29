@@ -1,6 +1,7 @@
 ﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using conifs.rms.dto.Users;
 namespace conifs.rms.data.entities
 {
    

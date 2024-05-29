@@ -6,6 +6,7 @@ using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.dto;
+using conifs.rms.dto.Users;
 
 namespace conifs.rms.data.repositories.User
 {
@@ -46,15 +47,23 @@ namespace conifs.rms.data.repositories.User
             _context.SaveChanges();
         }
        
-        public void UpdateUser(UserTable user)
+        public void UpdateUser(PutUserDto user, string Userid)
         {
-            _context.User.Update(user);
-            _context.SaveChanges();
+            var userUpdate = _context.User.FirstOrDefault(u => u.Userid.ToString() == Userid);
+            if (userUpdate != null)
+            {
+                _mapper.Map(user, userUpdate);
+                _context.User.Update(userUpdate);
+                _context.SaveChanges();
+            }
+         
+        
         }
 
         public void DeleteUser(string Userid)
         {
             var userToDelete = _context.User.FirstOrDefault(u => u.Userid.ToString() == Userid);
+
             if (userToDelete != null)
             {
                 _context.User.Remove(userToDelete);
@@ -82,6 +91,20 @@ namespace conifs.rms.data.repositories.User
 
             _context.SaveChanges();
         }
+       
+            public void CreateUserCompany(CreateUserCompanyDto userCompany)
+        {
+            var userCompanyEntity = _mapper.Map<UserCompany>(userCompany);
 
+            _context.UserCompany.Add(userCompanyEntity);
+            _context.SaveChanges();
+        }
+        public void CreateUserRole(CreateUserRoleDto userRole)
+        {
+            var userRoleEntity = _mapper.Map<UserRoles>(userRole);
+
+            _context.UserRole.Add(userRoleEntity);
+            _context.SaveChanges();
+        }
     }
 }

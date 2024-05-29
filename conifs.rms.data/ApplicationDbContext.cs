@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
 using conifs.rms.dto;
+using conifs.rms.dto.Users;
 
 
 namespace conifs.rms.data
@@ -50,6 +51,11 @@ namespace conifs.rms.data
 
             modelBuilder.Entity<GetUserDto>().HasNoKey();
             modelBuilder.Entity<CreateUserDto>().HasNoKey();
+            modelBuilder.Entity<CreateUserDto>().HasNoKey();
+            modelBuilder.Entity<CreateUserCompanyDto>().HasNoKey();
+            modelBuilder.Entity<CreateUserRoleDto>().HasNoKey();
+            modelBuilder.Entity<PutUserDto>()
+             .HasKey(r => r.Userid);
             base.OnModelCreating(modelBuilder);
 
            

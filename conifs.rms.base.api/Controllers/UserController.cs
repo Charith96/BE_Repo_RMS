@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using conifs.rms.dto;
+using conifs.rms.dto.Users;
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]
@@ -74,24 +75,20 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut("{Userid}")]
-        public IActionResult UpdateUser(string Userid, UserTable user)
+        public IActionResult UpdateUser(string Userid, PutUserDto user)
         {
             try
             {
-                if (Userid != user.Userid.ToString())
-                {
-                    return BadRequest();
-                }
-
-                _userService.UpdateUser(user);
+               
+                _userService.UpdateUser(user, Userid);
                 return NoContent();
             }
             catch (Exception ex)
             {
-         
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
+
 
         [HttpDelete("{Userid}")]
         public IActionResult DeleteUser(string Userid)
@@ -149,6 +146,44 @@ namespace conifs.rms.@base.api.Controllers
                 _userService.CreateUser(userCreateDto);
 
                 return Ok(); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
+        [HttpPost("create-UserCompany")]
+        public IActionResult CreateUserCompany(CreateUserCompanyDto userCompany)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _userService.CreateUserCompany(userCompany);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
+        [HttpPost("create-UserRole")]
+        public IActionResult CreateUserRole(CreateUserRoleDto userRole)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _userService.CreateUserRole(userRole);
+
+                return Ok();
             }
             catch (Exception ex)
             {

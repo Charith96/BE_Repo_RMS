@@ -1,15 +1,21 @@
-﻿using conifs.rms.data.entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace conifs.rms.dto
+namespace conifs.rms.dto.Users
 {
-    public class CreateUserDto
+   public  class PutUserDto
     {
+
+        [Key]
+
+        public Guid Userid { get; set; }
+
+
+
         [Required(ErrorMessage = "First name is required")]
         [StringLength(20)]
         public string FirstName { get; set; }
@@ -41,12 +47,11 @@ namespace conifs.rms.dto
 
         [Required(ErrorMessage = "Valid till date is required")]
         [DataType(DataType.Date)]
-        [DateGreaterThan("ValidFrom", ErrorMessage = "Valid till date must be greater than valid from date")]
+
         public DateTime ValidTill { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
         public string Password { get; set; }
-
     }
 }
