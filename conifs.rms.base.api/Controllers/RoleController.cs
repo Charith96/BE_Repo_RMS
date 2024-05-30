@@ -1,5 +1,5 @@
 ﻿using conifs.rms.business;
-using conifs.rms.data.entities;
+using conifs.rms.dto.Role;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -55,7 +55,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRole([FromBody] Role newRole)
+        public async Task<IActionResult> AddRole([FromBody] RoleDto newRoleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace conifs.rms.@base.api.Controllers
 
             try
             {
-                var addedRole = await _roleManager.AddRoleAsync(newRole);
+                var addedRole = await _roleManager.AddRoleAsync(newRoleDto);
                 return CreatedAtAction(nameof(GetRoleById), new { roleCode = addedRole.RoleCode }, addedRole);
             }
             catch (Exception ex)
@@ -74,9 +74,9 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut("{roleCode}")]
-        public async Task<IActionResult> UpdateRole(Guid roleCode, [FromBody] Role role)
+        public async Task<IActionResult> UpdateRole(Guid roleCode, [FromBody] RoleDto roleDto)
         {
-            if (roleCode != role.RoleCode)
+            if (roleCode != roleDto.RoleCode)
             {
                 return BadRequest("Role code mismatch");
             }
@@ -88,7 +88,7 @@ namespace conifs.rms.@base.api.Controllers
 
             try
             {
-                var updatedRole = await _roleManager.UpdateRoleAsync(role);
+                var updatedRole = await _roleManager.UpdateRoleAsync(roleDto);
                 if (updatedRole == null)
                 {
                     return NotFound();

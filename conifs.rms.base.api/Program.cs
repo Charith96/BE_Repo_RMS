@@ -3,8 +3,11 @@ using conifs.rms.data;
 using conifs.rms.business;
 using conifs.rms.business.validations;
 using conifs.rms.data.entities;
+using conifs.rms.dto.Role;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using AutoMapper;
+using conifs.rms.data.Profile;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(RoleProfile));
+
 
 
 // Add services to the container.

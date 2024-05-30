@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\conifs.rms.contracts\conifs.rms.contracts.csproj" />
+    <ProjectReference Include="..\conifs.rms.dto\conifs.rms.dto.csproj" />
   </ItemGroup>
 
 </Project>

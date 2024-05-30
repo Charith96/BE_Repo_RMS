@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using conifs.rms.data;
 using conifs.rms.data.entities;
+using conifs.rms.dto.Role;
 using FluentValidation;
 
 namespace conifs.rms.business
@@ -11,47 +13,53 @@ namespace conifs.rms.business
     {
         private readonly IPrivilegeRepository _privilegeRepository;
         private readonly IValidator<Privilege> _privilegeValidator;
+        private readonly IMapper _mapper;
 
-        public PrivilegeManager(IPrivilegeRepository privilegeRepository, IValidator<Privilege> privilegeValidator)
+        public PrivilegeManager(IPrivilegeRepository privilegeRepository, IValidator<Privilege> privilegeValidator, IMapper mapper)
         {
             _privilegeRepository = privilegeRepository;
             _privilegeValidator = privilegeValidator;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Privilege>> GetAllPrivilegesAsync()
+        public async Task<IEnumerable<PrivilegeDto>> GetAllPrivilegesAsync()
         {
-            return await _privilegeRepository.GetAllPrivilegesAsync();
+            var privileges = await _privilegeRepository.GetAllPrivilegesAsync();
+            return _mapper.Map<IEnumerable<PrivilegeDto>>(privileges);
         }
 
-        public async Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeCode)
+        public async Task<PrivilegeDto> GetPrivilegeByIdAsync(Guid privilegeCode)
         {
-            return await _privilegeRepository.GetPrivilegeByIdAsync(privilegeCode);
+            var privilege = await _privilegeRepository.GetPrivilegeByIdAsync(privilegeCode);
+            return _mapper.Map<PrivilegeDto>(privilege);
         }
 
-        public async Task<Privilege> AddPrivilegeAsync(Privilege privilege)
+        public async Task<PrivilegeDto> AddPrivilegeAsync(PrivilegeDto privilegeDto)
         {
+            var privilege = _mapper.Map<Privilege>(privilegeDto);
             var validationResult = _privilegeValidator.Validate(privilege);
 
             if (!validationResult.IsValid)
             {
-                // Handle validation failures
                 throw new ValidationException(validationResult.Errors);
             }
 
-            return await _privilegeRepository.AddPrivilegeAsync(privilege);
+            var addedPrivilege = await _privilegeRepository.AddPrivilegeAsync(privilege);
+            return _mapper.Map<PrivilegeDto>(addedPrivilege);
         }
 
-        public async Task<Privilege> UpdatePrivilegeAsync(Privilege privilege)
+        public async Task<PrivilegeDto> UpdatePrivilegeAsync(PrivilegeDto privilegeDto)
         {
+            var privilege = _mapper.Map<Privilege>(privilegeDto);
             var validationResult = _privilegeValidator.Validate(privilege);
 
             if (!validationResult.IsValid)
             {
-                // Handle validation failures
                 throw new ValidationException(validationResult.Errors);
             }
 
-            return await _privilegeRepository.UpdatePrivilegeAsync(privilege);
+            var updatedPrivilege = await _privilegeRepository.UpdatePrivilegeAsync(privilege);
+            return _mapper.Map<PrivilegeDto>(updatedPrivilege);
         }
 
         public async Task<bool> DeletePrivilegeAsync(Guid privilegeCode)
