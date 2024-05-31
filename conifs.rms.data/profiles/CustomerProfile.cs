@@ -2,7 +2,7 @@
 using conifs.rms.data.entities;
 using conifs.rms.dto.Customer;
 
-namespace conifs.rms.data.mappers
+namespace conifs.rms.data.profiles
 {
     public class CustomerProfile : Profile
     {
