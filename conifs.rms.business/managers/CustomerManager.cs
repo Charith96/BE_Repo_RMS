@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using conifs.rms.data;
 using conifs.rms.data.entities;
-using FluentValidation;
-using AutoMapper;
 using conifs.rms.dto.Customer;
+using FluentValidation;
 
 namespace conifs.rms.business
 {
