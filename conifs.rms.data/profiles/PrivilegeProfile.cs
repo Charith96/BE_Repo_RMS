@@ -2,7 +2,7 @@
 using conifs.rms.dto.Role;
 using conifs.rms.data.entities;
 
-namespace conifs.rms.data.Profile
+namespace conifs.rms.data.profiles
 {
     public class PrivilegeProfile : Profile
     {
