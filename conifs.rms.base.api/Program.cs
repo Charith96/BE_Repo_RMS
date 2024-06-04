@@ -6,7 +6,7 @@ using conifs.rms.business.validations;
 using conifs.rms.data.entities;
 using FluentValidation.AspNetCore;
 using AutoMapper;
-using conifs.rms.data.mappers;
+using conifs.rms.data.profiles;
 
 
 var builder = WebApplication.CreateBuilder(args);
