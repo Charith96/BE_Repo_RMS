@@ -6,6 +6,7 @@ using conifs.rms.data.repositories.User;
 using System.Collections.Generic;
 using conifs.rms.business.managers;
 using AutoMapper;
+using conifs.rms.@base.api.Profiles;
 
 
 var builder = WebApplication.CreateBuilder(args);

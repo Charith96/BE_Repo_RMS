@@ -1,12 +1,8 @@
 ﻿
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using conifs.rms.dto;
-using conifs.rms.dto.Users;
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]
@@ -18,6 +14,20 @@ namespace conifs.rms.@base.api.Controllers
         public UserController(IUserRepository userService)
         {
             _userService = userService;
+        }
+        [HttpGet("UserByID/{id}")]
+        public async Task<ActionResult<GetUserDto>> GetUserByIdFull(String id)
+        {
+            var user = await _userService.GetUserByIdFull(id);
+
+
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         [HttpGet]
@@ -81,7 +91,7 @@ namespace conifs.rms.@base.api.Controllers
             {
                
                 _userService.UpdateUser(user, Userid);
-                return NoContent();
+                return Ok(new { message = "Saved successfully" });
             }
             catch (Exception ex)
             {
@@ -90,13 +100,15 @@ namespace conifs.rms.@base.api.Controllers
         }
 
 
-        [HttpDelete("{Userid}")]
-        public IActionResult DeleteUser(string Userid)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(string id)
         {
             try
             {
-                _userService.DeleteUser(Userid);
-                return NoContent();
+                _userService.DeleteUser(id);
+                _userService.DeleteUserCompany(id);
+                _userService.DeleteUserRole(id);
+                return Ok(new { message = "Deleted successfully" });
             }
             catch (Exception ex)
             {
@@ -115,7 +127,7 @@ namespace conifs.rms.@base.api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
 
@@ -163,8 +175,7 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 _userService.CreateUserCompany(userCompany);
-
-                return Ok();
+                return Ok(new { message = "added successfully" });
             }
             catch (Exception ex)
             {
@@ -183,11 +194,41 @@ namespace conifs.rms.@base.api.Controllers
             {
                 _userService.CreateUserRole(userRole);
 
-                return Ok();
+                return Ok(new { message = "added successfully" });
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
+
+
+        [HttpDelete("userCompanies/{id}")]
+        public IActionResult DeleteUserCompany(string id)
+        {
+            try
+            {
+                _userService.DeleteUserCompany(id);
+                return Ok(new { message = "Deleted User Companies successfully" });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+        [HttpDelete("userRoles/{id}")]
+        public IActionResult DeleteUserRoles(string id)
+        {
+            try
+            {
+                _userService.DeleteUserRole(id);
+                return Ok(new { message = "Deleted User Companies successfully" });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
 

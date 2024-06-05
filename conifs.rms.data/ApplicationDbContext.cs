@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
 using conifs.rms.dto;
-using conifs.rms.dto.Users;
+
 
 
 namespace conifs.rms.data
@@ -62,7 +62,7 @@ namespace conifs.rms.data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-6VTO6PFL;Initial Catalog=BE;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False", b => b.MigrationsAssembly("conifs.rms.base.api"));
+            optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-6VTO6PFL;Initial Catalog=New;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False", b => b.MigrationsAssembly("conifs.rms.base.api"));
 
         }
     }

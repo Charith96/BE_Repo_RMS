@@ -1,7 +1,7 @@
 ﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using conifs.rms.dto.Users;
+using conifs.rms.dto;
 namespace conifs.rms.data.entities
 {
    
@@ -51,9 +51,7 @@ namespace conifs.rms.data.entities
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
         public string Password { get; set; }
 
-        public ICollection<UserCompany>? UserCompanies { get; set; }
-
-        public ICollection<UserRoles>? UserRoles { get; set; }
+        
         public string ImageData { get; set; } = "default_image";
         public UserTable()
         {

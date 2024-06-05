@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using conifs.rms.data.entities;
-using conifs.rms.data.repositories.User;
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.dto;
-using conifs.rms.dto.Users;
+using System.Linq;
+
 
 namespace conifs.rms.data.repositories.User
 {
@@ -19,6 +16,39 @@ namespace conifs.rms.data.repositories.User
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<GetUserDto> GetUserByIdFull(string userId)
+        {
+            // Fetch the user entity
+            var userEntity = await _context.User
+                .FirstOrDefaultAsync(u => u.Userid.ToString() == userId);
+
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            // Map user entity to UserTable
+            var userResponse = _mapper.Map<GetUserDto>(userEntity);
+
+            // Fetch user companies
+            var userCompanies = await _context.UserCompany
+                .Where(uc => uc.Userid.ToString() == userId)
+                .Select(uc => uc.CompanyId.ToString()) // Use .ToString() to convert GUID to string if needed
+                .ToListAsync();
+
+            // Fetch user roles
+            var userRoles = await _context.UserRole
+                .Where(ur => ur.Userid.ToString() == userId)
+                .Select(ur => ur.RoleId.ToString()) // Use .ToString() to convert GUID to string if needed
+                .ToListAsync();
+
+            // Map the results to the response
+            userResponse.Companies = userCompanies;
+            userResponse.Roles = userRoles;
+
+            return userResponse;
         }
 
         public async Task<ICollection<GetUserDto>> GetAllUsers()
@@ -60,9 +90,9 @@ namespace conifs.rms.data.repositories.User
         
         }
 
-        public void DeleteUser(string Userid)
+        public void DeleteUser(string id)
         {
-            var userToDelete = _context.User.FirstOrDefault(u => u.Userid.ToString() == Userid);
+            var userToDelete = _context.User.FirstOrDefault(u => u.Userid.ToString() == id);
 
             if (userToDelete != null)
             {
@@ -105,6 +135,26 @@ namespace conifs.rms.data.repositories.User
 
             _context.UserRole.Add(userRoleEntity);
             _context.SaveChanges();
+        }
+        public void DeleteUserCompany(string id)
+        {
+            var userCompanyToDelete = _context.UserCompany.FirstOrDefault(u => u.Userid.ToString() == id);
+
+            if (userCompanyToDelete != null)
+            {
+                _context.UserCompany.Remove(userCompanyToDelete);
+                _context.SaveChanges();
+            }
+        }
+        public void DeleteUserRole(string id)
+        {
+            var userRoleToDelete = _context.UserRole.FirstOrDefault(u => u.Userid.ToString() == id);
+
+            if (userRoleToDelete != null)
+            {
+                _context.UserRole.Remove(userRoleToDelete);
+                _context.SaveChanges();
+            }
         }
     }
 }

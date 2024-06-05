@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace conifs.rms.@base.api.Migrations
 {
     /// <inheritdoc />
-    public partial class MyMigration : Migration
+    public partial class AddUserCompanyAndUserRoleRelations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,17 @@ namespace conifs.rms.@base.api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.CompanyId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CreateUserCompanyDto",
+                columns: table => new
+                {
+                    Userid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -42,18 +53,52 @@ namespace conifs.rms.@base.api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CreateUserRoleDto",
+                columns: table => new
+                {
+                    Userid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GetUserDto",
                 columns: table => new
                 {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     DefaultCompany = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Designation = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     PrimaryRole = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PutUserDto",
+                columns: table => new
+                {
+                    Userid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    DefaultCompany = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Designation = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    PrimaryRole = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PutUserDto", x => x.Userid);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,7 +139,9 @@ namespace conifs.rms.@base.api.Migrations
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageData = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Companies = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Roles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,10 +243,19 @@ namespace conifs.rms.@base.api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CreateUserCompanyDto");
+
+            migrationBuilder.DropTable(
                 name: "CreateUserDto");
 
             migrationBuilder.DropTable(
+                name: "CreateUserRoleDto");
+
+            migrationBuilder.DropTable(
                 name: "GetUserDto");
+
+            migrationBuilder.DropTable(
+                name: "PutUserDto");
 
             migrationBuilder.DropTable(
                 name: "ReservationItems");
