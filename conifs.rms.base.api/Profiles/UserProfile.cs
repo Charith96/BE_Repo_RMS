@@ -27,6 +27,17 @@ namespace conifs.rms.@base.api.Profiles
                .ForMember(dest => dest.Companies, opt => opt.Ignore())
                .ForMember(dest => dest.Roles, opt => opt.Ignore());
 
+            CreateMap<UserTable, GetUserDtoList>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PrimaryRole, opt => opt.MapFrom(src => src.PrimaryRole))
+                .ForMember(dest => dest.Designation, opt => opt.MapFrom(src => src.Designation))
+                .ForMember(dest => dest.DefaultCompany, opt => opt.MapFrom(src => src.DefaultCompany))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+               .ForMember(dest => dest.ValidFrom, opt => opt.MapFrom(src => src.ValidFrom))
+               .ForMember(dest => dest.ValidTill, opt => opt.MapFrom(src => src.ValidTill))
+               .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Userid));
+               
 
 
             CreateMap<CreateUserDto,UserTable>()

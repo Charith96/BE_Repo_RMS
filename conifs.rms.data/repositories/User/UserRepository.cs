@@ -51,10 +51,10 @@ namespace conifs.rms.data.repositories.User
             return userResponse;
         }
 
-        public async Task<ICollection<GetUserDto>> GetAllUsers()
+        public async Task<ICollection<GetUserDtoList>> GetAllUsers()
         {
             var users = await _context.User
-                .Select(u => _mapper.Map<GetUserDto>(u))
+                .Select(u => _mapper.Map<GetUserDtoList>(u))
                 .ToListAsync();
 
             return users;

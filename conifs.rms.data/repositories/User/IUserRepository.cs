@@ -5,7 +5,7 @@ namespace conifs.rms.data.repositories.User;
 
 public interface IUserRepository
 {
-    Task<ICollection<GetUserDto>> GetAllUsers();
+    Task<ICollection<GetUserDtoList>> GetAllUsers();
 
  
 
