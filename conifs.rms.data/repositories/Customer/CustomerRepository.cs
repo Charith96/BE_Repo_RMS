@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using conifs.rms.data.entities;
+﻿using conifs.rms.data.entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.data
@@ -42,11 +38,11 @@ namespace conifs.rms.data
             existingCustomer.Email = customer.Email;
             existingCustomer.ContactNo = customer.ContactNo;
 
+            _context.Customers.Update(existingCustomer);
             await _context.SaveChangesAsync(); // Save changes
 
             return existingCustomer;
         }
-
 
         public async Task<Customer> GetCustomerByIdAsync(Guid customerId)
         {

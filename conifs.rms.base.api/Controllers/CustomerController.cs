@@ -52,7 +52,7 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var addedCustomer = await _customerManager.AddCustomerAsync(customerDto);
-                return CreatedAtAction(nameof(GetCustomer), new { customerId = addedCustomer.CustomerCode }, addedCustomer);
+                return CreatedAtAction(nameof(GetCustomer), new { customerId = addedCustomer.CustomerID }, addedCustomer);
             }
             catch (Exception ex)
             {
@@ -65,10 +65,7 @@ namespace conifs.rms.@base.api.Controllers
         {
             try
             {
-                if (customerId != customerDto.CustomerCode)
-                    return BadRequest("Customer ID mismatch");
-
-                var updatedCustomer = await _customerManager.UpdateCustomerAsync(customerDto);
+                var updatedCustomer = await _customerManager.UpdateCustomerAsync(customerId, customerDto);
                 if (updatedCustomer == null)
                     return NotFound("Customer not found.");
 

@@ -14,7 +14,6 @@ namespace conifs.rms.business.mappers
 
             return new Customer
             {
-                CustomerCode = input.CustomerCode,
                 CustomerID = input.CustomerID,
                 FullName = input.FullName,
                 Identifier = input.Identifier,
@@ -33,7 +32,6 @@ namespace conifs.rms.business.mappers
 
             return new CustomerDto
             {
-                CustomerCode = input.CustomerCode,
                 CustomerID = input.CustomerID,
                 FullName = input.FullName,
                 Identifier = input.Identifier,

@@ -9,7 +9,7 @@ namespace conifs.rms.data.profiles
         public CustomerProfile()
         {
             CreateMap<CustomerDto, Customer>()
-                .ForMember(dest => dest.CustomerCode, opt => opt.MapFrom(src => src.CustomerCode))
+                .ForMember(dest => dest.CustomerCode, opt => opt.Ignore()) // Ignore CustomerCode
                 .ForMember(dest => dest.CustomerID, opt => opt.MapFrom(src => src.CustomerID))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Identifier))

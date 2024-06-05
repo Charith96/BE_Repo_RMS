@@ -44,16 +44,18 @@ namespace conifs.rms.business
             return _mapper.Map<CustomerDto>(addedCustomer);
         }
 
-        public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
+        public async Task<CustomerDto> UpdateCustomerAsync(Guid customerId, CustomerDto customerDto)
         {
             var customer = _mapper.Map<Customer>(customerDto);
+            customer.CustomerCode = customerId; // Set the internal CustomerCode
+
             var validationResult = await _customerValidator.ValidateAsync(customer);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var existingCustomer = await _customerRepository.GetCustomerByIdAsync(customer.CustomerCode);
+            var existingCustomer = await _customerRepository.GetCustomerByIdAsync(customerId);
             if (existingCustomer == null)
                 return null; // Return null if customer not found
 
@@ -65,9 +67,9 @@ namespace conifs.rms.business
             existingCustomer.Email = customer.Email;
             existingCustomer.ContactNo = customer.ContactNo;
 
-            await _customerRepository.UpdateCustomerAsync(existingCustomer); // Save changes
+            var updatedCustomer = await _customerRepository.UpdateCustomerAsync(existingCustomer); // Save changes
 
-            return _mapper.Map<CustomerDto>(existingCustomer);
+            return _mapper.Map<CustomerDto>(updatedCustomer);
         }
 
         public async Task<bool> DeleteCustomerAsync(Guid customerId)
