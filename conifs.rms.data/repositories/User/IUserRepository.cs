@@ -7,7 +7,7 @@ public interface IUserRepository
 {
     Task<ICollection<GetUserDto>> GetAllUsers();
 
-    GetUserDto GetUserById(string userCode);
+ 
 
     bool IfExistUser(string userCode);
 

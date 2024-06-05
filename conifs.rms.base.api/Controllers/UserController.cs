@@ -49,24 +49,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{Userid}")]
-        public IActionResult GetUserById(string Userid)
-        {
-            try
-            {
-                var user = _userService.GetUserById(Userid);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-             
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
-            }
-        }
+  
 
         [HttpPost]
         public IActionResult AddUser([FromBody] UserTable newUser)
@@ -75,7 +58,7 @@ namespace conifs.rms.@base.api.Controllers
             {
                 _userService.AddUser(newUser);
 
-                return CreatedAtAction(nameof(GetUserById), new { Userid = newUser.Userid }, newUser);
+                return CreatedAtAction(nameof(GetUserByIdFull), new { Userid = newUser.Userid }, newUser);
             }
             catch (Exception ex)
             {

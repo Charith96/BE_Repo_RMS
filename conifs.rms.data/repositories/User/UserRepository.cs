@@ -60,11 +60,6 @@ namespace conifs.rms.data.repositories.User
             return users;
         }
 
-        public GetUserDto GetUserById(string Userid)
-        {
-            var user = _context.User.FirstOrDefault(u => u.Userid.ToString() == Userid);
-            return _mapper.Map<GetUserDto>(user);
-        }
 
         public bool IfExistUser(string Userid)
         {
