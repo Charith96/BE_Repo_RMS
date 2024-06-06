@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace conifs.rms.data.entities
 {
@@ -24,9 +22,9 @@ namespace conifs.rms.data.entities
         [Required(ErrorMessage = "TimeSlotType is required.")]
         public string TimeSlotType { get; set; }
 
-        
         public string SlotDurationType { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "DurationPerSlot must be a positive number.")]
         public int DurationPerSlot { get; set; }
 
         [Range(0, 20, ErrorMessage = "NoOfSlots must be between 0 and 20.")]
@@ -38,9 +36,12 @@ namespace conifs.rms.data.entities
         [Required(ErrorMessage = "Capacity is required.")]
         public string Capacity { get; set; }
 
-        // Foreign key property
         [ForeignKey("ReservationGroup")]
         public Guid GroupId { get; set; }
+
+        // Navigation property
+        [JsonIgnore]
+        public virtual ReservationGroup ReservationGroup { get; set; }
 
         
     }

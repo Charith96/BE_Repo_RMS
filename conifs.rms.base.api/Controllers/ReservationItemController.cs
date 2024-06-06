@@ -1,8 +1,10 @@
 ﻿using conifs.rms.business.managers;
 using conifs.rms.data.entities;
 using Microsoft.AspNetCore.Mvc;
+using conifs.rms.dto.ReservationItem;
 using System;
 using System.Threading.Tasks;
+using FluentValidation;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -46,12 +48,16 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddItem(ReservationItem item)
+        public async Task<IActionResult> AddItem(ReservationItemDto item)
         {
             try
             {
                 await _reservationItemManager.AddReservationItem(item);
                 return Ok();
+            }
+            catch (ValidationException vex)
+            {
+                return BadRequest(new { errors = vex.Errors.Select(e => e.ErrorMessage) });
             }
             catch (Exception ex)
             {
@@ -59,8 +65,9 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+
         [HttpPut]
-        public async Task<IActionResult> UpdateItem(ReservationItem updatedItem)
+        public async Task<IActionResult> UpdateItem(ReservationItemDto updatedItem)
         {
             try
             {

@@ -1,5 +1,6 @@
 ﻿using conifs.rms.business.managers;
 using conifs.rms.data.entities;
+using conifs.rms.dto.ReservationGroup;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGroup(ReservationGroup group)
+        public async Task<IActionResult> AddGroup(ReservationGroupDto group)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateGroup(ReservationGroup updatedGroup)
+        public async Task<IActionResult> UpdateGroup(ReservationGroupDto updatedGroup)
         {
             try
             {

@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\conifs.rms.business",
+    "\\conifs.rms.business\\managers",
+    "\\conifs.rms.data",
+    "\\conifs.rms.data\\Profiles"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\conifs.rms.data\\Profiles\\TimeSlotProfile.cs",
   "PreviewInSolutionExplorer": false
 }

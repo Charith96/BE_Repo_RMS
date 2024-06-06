@@ -1,25 +1,32 @@
 ﻿using conifs.rms.data.entities;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using conifs.rms.dto.ReservationGroup;
+using System.Text.RegularExpressions;
 
 namespace conifs.rms.data.repositories.ReservationGroups
 {
     public class ReservationGroupRepository : IReservationGroupRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper; 
 
-        public ReservationGroupRepository(ApplicationDbContext context)
+        public ReservationGroupRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<List<ReservationGroup>> GetReservationGroup()
+        public async Task<List<ReservationGroupDto>> GetReservationGroup()
         {
             try
             {
-                return await _context.ReservationGroups.ToListAsync();
+                var groups=await _context.ReservationGroups.ToListAsync();
+                return _mapper.Map<List<ReservationGroupDto>>(groups);
             }
             catch (Exception ex)
             {
@@ -28,11 +35,12 @@ namespace conifs.rms.data.repositories.ReservationGroups
             }
         }
 
-        public async Task<ReservationGroup> GetReservationGroupById(Guid id)
+        public async Task<ReservationGroupDto> GetReservationGroupById(Guid id)
         {
             try
             {
-                return await _context.ReservationGroups.FindAsync(id);
+                var groups = await _context.ReservationGroups.FindAsync(id);
+                return _mapper.Map<ReservationGroupDto>(groups);
             }
             catch (Exception ex)
             {
@@ -41,11 +49,12 @@ namespace conifs.rms.data.repositories.ReservationGroups
             }
         }
 
-        public async Task AddReservationGroup(ReservationGroup group)
+        public async Task AddReservationGroup(ReservationGroupDto group)
         {
             try
             {
-                _context.ReservationGroups.Add(group);
+                var reservationGroup = _mapper.Map<ReservationGroup>(group);
+                _context.ReservationGroups.Add(reservationGroup);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -55,7 +64,7 @@ namespace conifs.rms.data.repositories.ReservationGroups
             }
         }
 
-        public async Task UpdateReservationGroup(ReservationGroup UpdatedGroup)
+        public async Task UpdateReservationGroup(ReservationGroupDto UpdatedGroup)
         {
             try
             {

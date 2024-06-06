@@ -12,8 +12,7 @@
     <Folder Include="Users\" />
     <Folder Include="Roles\" />
     <Folder Include="Reservation\" />
-    <Folder Include="ReservationItem\" />
-    <Folder Include="ReservationGroup\" />
+    
   </ItemGroup>
 
 </Project>

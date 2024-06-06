@@ -1,4 +1,7 @@
-﻿using conifs.rms.data.entities;
+﻿using AutoMapper;
+using conifs.rms.data.entities;
+using conifs.rms.dto.ReservationGroup;
+using conifs.rms.dto.ReservationItem;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,17 +12,20 @@ namespace conifs.rms.data.repositories.ReservationItems
     public class ReservationItemRepository : IReservationItemRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ReservationItemRepository(ApplicationDbContext context)
+        public ReservationItemRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<List<ReservationItem>> GetReservationItem()
+        public async Task<List<ReservationItemDto>> GetReservationItem()
         {
             try
             {
-                return await _context.ReservationItems.ToListAsync();
+                var items = await _context.ReservationItems.ToListAsync();
+                return _mapper.Map<List<ReservationItemDto>>(items);
             }
             catch (Exception ex)
             {
@@ -28,11 +34,12 @@ namespace conifs.rms.data.repositories.ReservationItems
             }
         }
 
-        public async Task<ReservationItem> GetReservationItemById(Guid id)
+        public async Task<ReservationItemDto> GetReservationItemById(Guid id)
         {
             try
             {
-                return await _context.ReservationItems.FindAsync(id);
+                var items = await _context.ReservationItems.FindAsync(id);
+                return _mapper.Map<ReservationItemDto>(items);
             }
             catch (Exception ex)
             {
@@ -41,11 +48,14 @@ namespace conifs.rms.data.repositories.ReservationItems
             }
         }
 
-        public async Task AddReservationItem(ReservationItem item)
+        public async Task AddReservationItem(ReservationItemDto item)
         {
             try
             {
-                _context.ReservationItems.Add(item);
+                var reservationItem = _mapper.Map<ReservationItem>(item);
+
+                
+                _context.ReservationItems.Add(reservationItem);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -55,10 +65,12 @@ namespace conifs.rms.data.repositories.ReservationItems
             }
         }
 
-        public async Task UpdateReservationItem(ReservationItem updatedItem)
+
+        public async Task UpdateReservationItem(ReservationItemDto updatedItem)
         {
             try
             {
+                
                 var item = await _context.ReservationItems.FindAsync(updatedItem.Id);
                 if (item == null)
                 {
@@ -71,6 +83,8 @@ namespace conifs.rms.data.repositories.ReservationItems
                 item.NoOfSlots = updatedItem.NoOfSlots;
                 item.NoOfReservations = updatedItem.NoOfReservations;
                 item.Capacity = updatedItem.Capacity;
+
+                _context.Entry(item).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

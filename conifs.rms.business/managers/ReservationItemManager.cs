@@ -3,21 +3,26 @@ using conifs.rms.data.repositories.ReservationItems;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using conifs.rms.business.validations;
+using conifs.rms.business.validators;
 using FluentValidation;
+using conifs.rms.dto.ReservationItem;
+using conifs.rms.dto.ReservationGroup;
+using AutoMapper;
 
 namespace conifs.rms.business.managers
 {
     public class ReservationItemManager : IReservationItemManager
     {
         private readonly IReservationItemRepository _reservationItemRepository;
+        private readonly IMapper _mapper;
 
-        public ReservationItemManager(IReservationItemRepository reservationItemRepository)
+        public ReservationItemManager(IReservationItemRepository reservationItemRepository, IMapper mapper)
         {
             _reservationItemRepository = reservationItemRepository;
+            _mapper = mapper;
         }
 
-        public Task<List<ReservationItem>> GetReservationItem()
+        public Task<List<ReservationItemDto>> GetReservationItem()
         {
             try
             {
@@ -30,7 +35,7 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public Task<ReservationItem> GetReservationItemById(Guid id)
+        public Task<ReservationItemDto> GetReservationItemById(Guid id)
         {
             try
             {
@@ -43,18 +48,19 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public async Task AddReservationItem(ReservationItem item)
+        public async Task AddReservationItem(ReservationItemDto item)
         {
+            var validator = new ReservationItemValidator();
+            var validationResult = await validator.ValidateAsync(item);
+
+            if (!validationResult.IsValid)
+            {
+                // Handle validation errors
+                throw new ValidationException(validationResult.Errors);
+            }
+
             try
             {
-                var validator = new ReservationItemValidator();
-                var validationResult = await validator.ValidateAsync(item);
-
-                if (!validationResult.IsValid)
-                {
-                    // Handle validation errors
-                    throw new ValidationException(validationResult.Errors);
-                }
                 await _reservationItemRepository.AddReservationItem(item);
             }
             catch (Exception ex)
@@ -64,19 +70,24 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public async Task UpdateReservationItem(ReservationItem updatedItem)
+
+        public async Task UpdateReservationItem(ReservationItemDto item)
         {
+            
+            var validator = new ReservationItemValidator();
+            var validationResult = await validator.ValidateAsync(item);
+            
+
+            if (!validationResult.IsValid)
+            {
+                // Handle validation errors
+                throw new ValidationException(validationResult.Errors);
+            }
+
             try
             {
-                var validator = new ReservationItemValidator();
-                var validationResult = await validator.ValidateAsync(updatedItem);
-
-                if (!validationResult.IsValid)
-                {
-                    // Handle validation errors
-                    throw new ValidationException(validationResult.Errors);
-                }
-                await _reservationItemRepository.UpdateReservationItem(updatedItem);
+                
+                await _reservationItemRepository.UpdateReservationItem(item);
             }
             catch (Exception ex)
             {

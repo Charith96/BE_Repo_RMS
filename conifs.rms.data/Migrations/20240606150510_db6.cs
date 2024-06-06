@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace conifs.rms.data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class db6 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,28 +42,34 @@ namespace conifs.rms.data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReservationItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReservationItems_ReservationGroups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "ReservationGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ReservationItems_GroupId",
-                table: "ReservationItems",
-                column: "GroupId");
+            migrationBuilder.CreateTable(
+                name: "TimeSlots",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeSlots", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ReservationGroups");
+
+            migrationBuilder.DropTable(
                 name: "ReservationItems");
 
             migrationBuilder.DropTable(
-                name: "ReservationGroups");
+                name: "TimeSlots");
         }
     }
 }

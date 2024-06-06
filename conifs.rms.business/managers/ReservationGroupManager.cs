@@ -1,23 +1,29 @@
 ﻿using conifs.rms.data.entities;
 using conifs.rms.data.repositories.ReservationGroups;
-using conifs.rms.business.validations;
+using conifs.rms.business.validators;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using conifs.rms.dto.ReservationGroup;
+using AutoMapper;
+using System.Text.RegularExpressions;
 
 namespace conifs.rms.business.managers
 {
     public class ReservationGroupManager : IReservationGroupManager
     {
         private readonly IReservationGroupRepository _reservationGroupRepository;
+        private readonly IMapper _mapper;
 
-        public ReservationGroupManager(IReservationGroupRepository reservationGroupRepository)
+        public ReservationGroupManager(IReservationGroupRepository reservationGroupRepository, IMapper mapper)
         {
             _reservationGroupRepository = reservationGroupRepository;
+            _mapper = mapper;
+
         }
 
-        public Task<List<ReservationGroup>> GetReservationGroup()
+        public Task<List<ReservationGroupDto>> GetReservationGroup()
         {
             try
             {
@@ -30,7 +36,7 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public Task<ReservationGroup> GetReservationGroupById(Guid id)
+        public Task<ReservationGroupDto> GetReservationGroupById(Guid id)
         {
             try
             {
@@ -43,19 +49,20 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public async Task AddReservationGroup(ReservationGroup group)
+        public async Task AddReservationGroup(ReservationGroupDto group)
         {
+
+            var validator = new ReservationGroupValidator();
+            var validationResult = await validator.ValidateAsync(group);
+
+            if (!validationResult.IsValid)
+            {
+                // Handle validation errors
+                throw new ValidationException(validationResult.Errors);
+            }
+
             try
             {
-                var validator = new ReservationGroupValidator();
-                var validationResult = await validator.ValidateAsync(group);
-
-                if (!validationResult.IsValid)
-                {
-                    // Handle validation errors
-                    throw new ValidationException(validationResult.Errors);
-                }
-
                 await _reservationGroupRepository.AddReservationGroup(group);
             }
             catch (Exception ex)
@@ -65,19 +72,22 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public async Task UpdateReservationGroup(ReservationGroup updatedGroup)
+        public async Task UpdateReservationGroup(ReservationGroupDto group)
         {
+            
+            var validator = new ReservationGroupValidator();
+            var validationResult = await validator.ValidateAsync(group);
+
+            if (!validationResult.IsValid)
+            {
+                // Handle validation errors
+                throw new ValidationException(validationResult.Errors);
+            }
+
             try
             {
-                var validator = new ReservationGroupValidator();
-                var validationResult = await validator.ValidateAsync(updatedGroup);
-
-                if (!validationResult.IsValid)
-                {
-                    // Handle validation errors
-                    throw new ValidationException(validationResult.Errors);
-                }
-                await _reservationGroupRepository.UpdateReservationGroup(updatedGroup);
+                
+                await _reservationGroupRepository.UpdateReservationGroup(group);
             }
             catch (Exception ex)
             {

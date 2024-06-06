@@ -86,25 +86,27 @@ namespace conifs.rms.data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
-
                     b.ToTable("ReservationItems");
                 });
 
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
+            modelBuilder.Entity("conifs.rms.data.entities.TimeSlot", b =>
                 {
-                    b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
-                        .WithMany("ReservationItems")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Navigation("ReservationGroup");
-                });
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
-                {
-                    b.Navigation("ReservationItems");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeSlots");
                 });
 #pragma warning restore 612, 618
         }

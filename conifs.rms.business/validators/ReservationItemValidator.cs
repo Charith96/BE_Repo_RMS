@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using conifs.rms.data.entities;
+using conifs.rms.dto.ReservationItem;
 using FluentValidation;
 
-namespace conifs.rms.business.validations
+namespace conifs.rms.business.validators
 {
-    public class ReservationItemValidator : AbstractValidator<ReservationItem>
+    public class ReservationItemValidator : AbstractValidator<ReservationItemDto>
     {
         public ReservationItemValidator()
         {
             RuleFor(ri => ri.ItemId)
                 .NotEmpty().WithMessage("Item ID is required.")
-                .Length(8).WithMessage("Group ID must be 8 characters long.");
+                .MaximumLength(8).WithMessage("Item ID cannot be longer than 8 characters.");
 
             RuleFor(ri => ri.ItemName)
                 .NotEmpty().WithMessage("Item Name is required.")

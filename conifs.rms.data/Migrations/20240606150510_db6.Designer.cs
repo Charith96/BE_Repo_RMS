@@ -12,8 +12,8 @@ using conifs.rms.data;
 namespace conifs.rms.data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240520051208_Initial")]
-    partial class Initial
+    [Migration("20240606150510_db6")]
+    partial class db6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,25 +89,27 @@ namespace conifs.rms.data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
-
                     b.ToTable("ReservationItems");
                 });
 
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
+            modelBuilder.Entity("conifs.rms.data.entities.TimeSlot", b =>
                 {
-                    b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
-                        .WithMany("ReservationItems")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Navigation("ReservationGroup");
-                });
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
-                {
-                    b.Navigation("ReservationItems");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeSlots");
                 });
 #pragma warning restore 612, 618
         }
