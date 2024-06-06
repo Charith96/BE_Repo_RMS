@@ -6,14 +6,13 @@ using conifs.rms.data.repositories.Company;
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.dto.Company;
 using AutoMapper;
-using conifs.rms.business.mappers;
+//using conifs.rms.business.mappers;
+using conifs.rms.data.Profiles;
 //using conifs.rms.dto.Company;
 
 //using ICompanyRepository = conifs.rms.data.repositories.Company.ICompanyRepository;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,13 +20,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-//builder.Services.AddAutoMapper(typeof(Program).Assembly);
-//builder.Services.AddAutoMapper(typeof(Program));
 
-var automapper = new MapperConfiguration(item => item.AddProfile(new CompanyMappers()));
-IMapper mapper = automapper.CreateMapper();
 
-builder.Services.AddSingleton(mapper);
+///////
+builder.Services.AddAutoMapper(typeof(CompanyProfile).Assembly);
+
+//var automapper = new MapperConfiguration(item => item.AddProfile(new CompanyMappers()));
+//IMapper mapper = automapper.CreateMapper();
+
+//builder.Services.AddSingleton(mapper);
+///////
 
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
