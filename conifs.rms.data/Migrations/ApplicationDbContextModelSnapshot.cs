@@ -21,93 +21,137 @@ namespace conifs.rms.data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            
 
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
+    
+                
+                      modelBuilder.Entity("conifs.rms.data.entities.Customer", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CustomerCode")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("GroupId")
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ContactNo")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("CustomerID")
                         .IsRequired()
                         .HasMaxLength(8)
                         .HasColumnType("nvarchar(8)");
 
-                    b.Property<string>("GroupName")
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Identifier")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CustomerCode");
 
-                    b.ToTable("ReservationGroups");
+                    b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+               modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
+        {
+            b.Property<Guid>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Capacity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+            b.Property<string>("GroupId")
+                .IsRequired()
+                .HasMaxLength(8)
+                .HasColumnType("nvarchar(8)");
 
-                    b.Property<int>("DurationPerSlot")
-                        .HasColumnType("int");
+            b.Property<string>("GroupName")
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+            b.HasKey("Id");
 
-                    b.Property<string>("ItemId")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+            b.ToTable("ReservationGroups");
+        });
 
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+    modelBuilder.Entity("conifs.rms.data.entities.ReservationItem", b =>
+        {
+            b.Property<Guid>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("NoOfReservations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+            b.Property<string>("Capacity")
+                .IsRequired()
+                .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NoOfSlots")
-                        .HasColumnType("int");
+            b.Property<int>("DurationPerSlot")
+                .HasColumnType("int");
 
-                    b.Property<string>("SlotDurationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+            b.Property<Guid>("GroupId")
+                .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TimeSlotType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+            b.Property<string>("ItemId")
+                .IsRequired()
+                .HasMaxLength(8)
+                .HasColumnType("nvarchar(8)");
 
-                    b.HasKey("Id");
+            b.Property<string>("ItemName")
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnType("nvarchar(20)");
 
-                    b.ToTable("ReservationItems");
-                });
+            b.Property<string>("NoOfReservations")
+                .IsRequired()
+                .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity("conifs.rms.data.entities.TimeSlot", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+            b.Property<int>("NoOfSlots")
+                .HasColumnType("int");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+            b.Property<string>("SlotDurationType")
+                .IsRequired()
+                .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+            b.Property<string>("TimeSlotType")
+                .IsRequired()
+                .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+            b.HasKey("Id");
 
-                    b.HasKey("Id");
+            b.ToTable("ReservationItems");
+        });
 
-                    b.ToTable("TimeSlots");
-                });
+    modelBuilder.Entity("conifs.rms.data.entities.TimeSlot", b =>
+        {
+            b.Property<Guid>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier");
+
+            b.Property<DateTime>("EndTime")
+                .HasColumnType("datetime2");
+
+            b.Property<Guid>("ItemId")
+                .HasColumnType("uniqueidentifier");
+
+            b.Property<DateTime>("StartTime")
+                .HasColumnType("datetime2");
+
+            b.HasKey("Id");
+
+            b.ToTable("TimeSlots");
+        });
 #pragma warning restore 612, 618
         }
     }

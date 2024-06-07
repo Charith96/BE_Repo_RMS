@@ -1,4 +1,4 @@
-﻿using conifs.rms.business.managers;
+using conifs.rms.business.managers;
 using conifs.rms.data.entities;
 using conifs.rms.dto.ReservationGroup;
 using Microsoft.AspNetCore.Mvc;

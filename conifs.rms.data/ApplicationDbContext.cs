@@ -1,10 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
 
 namespace conifs.rms.data
 {
     public class ApplicationDbContext : DbContext
     {
+
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<ReservationGroup> ReservationGroups { get; set; }
         public DbSet<ReservationItem> ReservationItems { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
@@ -16,6 +24,7 @@ namespace conifs.rms.data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<ReservationItem>(entity =>
             {
                 entity.HasOne(e => e.ReservationGroup)
@@ -42,3 +51,4 @@ namespace conifs.rms.data
         }
     }
 }
+

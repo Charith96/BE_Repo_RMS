@@ -7,12 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< feature-ishini
+    <Folder Include="Companies\" />
+    <Folder Include="Users\" />
+    <Folder Include="Roles\" />
+    <Folder Include="ReservationItem\" />
+    <Folder Include="ReservationGroup\" />
+    <Folder Include="Reservation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+=======
     <Folder Include="Customers\" />
     <Folder Include="Companies\" />
     <Folder Include="Users\" />
     <Folder Include="Roles\" />
     <Folder Include="Reservation\" />
     
+>>>>>>> integration
   </ItemGroup>
 
 </Project>

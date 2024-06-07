@@ -7,16 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+
     <PackageReference Include="FluentValidation" Version="11.9.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\conifs.rms.contracts\conifs.rms.contracts.csproj" />
+    <ProjectReference Include="..\conifs.rms.data\conifs.rms.data.csproj" />
+    <ProjectReference Include="..\conifs.rms.dto\conifs.rms.dto.csproj" />
+
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="mappers\" />
-	
+
   </ItemGroup>
 
 </Project>
