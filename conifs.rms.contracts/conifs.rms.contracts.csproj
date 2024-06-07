@@ -6,8 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+
   <ItemGroup>
     <Folder Include="Customer\" />
   </ItemGroup>
+
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\conifs.rms.data\conifs.rms.data.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -1,29 +1,30 @@
-using conifs.rms.business.managers;
+﻿using conifs.rms.business.managers;
 using conifs.rms.data.entities;
-using conifs.rms.dto.ReservationGroup;
 using Microsoft.AspNetCore.Mvc;
+using conifs.rms.dto.ReservationItem;
 using System;
 using System.Threading.Tasks;
+using FluentValidation;
 
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReservationGroupController : ControllerBase
+    public class ReservationItemController : ControllerBase
     {
-        private readonly IReservationGroupManager _reservationGroupManager;
+        private readonly IReservationItemManager _reservationItemManager;
 
-        public ReservationGroupController(IReservationGroupManager reservationGroupManager)
+        public ReservationItemController(IReservationItemManager reservationItemManager)
         {
-            _reservationGroupManager = reservationGroupManager;
+            _reservationItemManager = reservationItemManager;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGroups()
+        public async Task<IActionResult> GetAllItems()
         {
             try
             {
-                var result = await _reservationGroupManager.GetReservationGroup();
+                var result = await _reservationItemManager.GetReservationItem();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -33,11 +34,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGroup(Guid id)
+        public async Task<IActionResult> GetItem(Guid id)
         {
             try
             {
-                var result = await _reservationGroupManager.GetReservationGroupById(id);
+                var result = await _reservationItemManager.GetReservationItemById(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -47,12 +48,16 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGroup(ReservationGroupDto group)
+        public async Task<IActionResult> AddItem(ReservationItemDto item)
         {
             try
             {
-                await _reservationGroupManager.AddReservationGroup(group);
+                await _reservationItemManager.AddReservationItem(item);
                 return Ok();
+            }
+            catch (ValidationException vex)
+            {
+                return BadRequest(new { errors = vex.Errors.Select(e => e.ErrorMessage) });
             }
             catch (Exception ex)
             {
@@ -60,12 +65,13 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+
         [HttpPut]
-        public async Task<IActionResult> UpdateGroup(ReservationGroupDto updatedGroup)
+        public async Task<IActionResult> UpdateItem(ReservationItemDto updatedItem)
         {
             try
             {
-                await _reservationGroupManager.UpdateReservationGroup(updatedGroup);
+                await _reservationItemManager.UpdateReservationItem(updatedItem);
                 return Ok();
             }
             catch (Exception ex)
@@ -75,11 +81,11 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGroup(Guid id)
+        public async Task<IActionResult> DeleteItem(Guid id)
         {
             try
             {
-                await _reservationGroupManager.DeleteReservationGroup(id);
+                await _reservationItemManager.DeleteReservationItem(id);
                 return Ok();
             }
             catch (Exception ex)
