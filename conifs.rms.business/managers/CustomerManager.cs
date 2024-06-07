@@ -60,7 +60,6 @@ namespace conifs.rms.business
                 return null; // Return null if customer not found
 
             // Update properties of the existing customer
-            existingCustomer.CustomerID = customer.CustomerID;
             existingCustomer.FullName = customer.FullName;
             existingCustomer.Identifier = customer.Identifier;
             existingCustomer.Address = customer.Address;

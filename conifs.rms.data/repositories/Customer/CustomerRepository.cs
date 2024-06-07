@@ -30,8 +30,7 @@ namespace conifs.rms.data
             if (existingCustomer == null)
                 return null; // Return null if customer not found
 
-            // Update properties of the existing customer
-            existingCustomer.CustomerID = customer.CustomerID;
+            // Update properties of the existing customer excluding CustomerID
             existingCustomer.FullName = customer.FullName;
             existingCustomer.Identifier = customer.Identifier;
             existingCustomer.Address = customer.Address;
