@@ -1,12 +1,11 @@
 using conifs.rms.business;
-using conifs.rms.data;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation;
 using conifs.rms.business.validations;
+using conifs.rms.data;
 using conifs.rms.data.entities;
+using conifs.rms.data.Profiles;
+using FluentValidation;
 using FluentValidation.AspNetCore;
-using AutoMapper;
-using conifs.rms.data.profiles;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
