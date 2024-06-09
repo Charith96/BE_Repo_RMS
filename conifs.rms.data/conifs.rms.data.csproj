@@ -8,6 +8,7 @@
 
   <ItemGroup>
 
+
     <None Remove="entities\ib2fuywr.0eq~" />
   </ItemGroup>
 
@@ -29,7 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <ProjectReference Include="..\conifs.rms.contracts\conifs.rms.contracts.csproj" />
+
     <ProjectReference Include="..\conifs.rms.dto\conifs.rms.dto.csproj" />
   </ItemGroup>
 

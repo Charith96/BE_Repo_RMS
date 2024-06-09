@@ -1,3 +1,4 @@
+
 using conifs.rms.business;
 using conifs.rms.business.validations;
 using conifs.rms.data;
@@ -14,15 +15,32 @@ using conifs.rms.data.repositories.TimeSlots;
 
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddControllers().AddFluentValidation();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Register DbContext with SQL Server configuration
+
 
 builder.Services.AddControllers();
        
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register your repositories and managers
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleManager, RoleManager>();
+builder.Services.AddScoped<IPrivilegeRepository, PrivilegeRepository>();
+builder.Services.AddScoped<IPrivilegeManager, PrivilegeManager>();
+
+// Register the RoleValidator
+builder.Services.AddScoped<IValidator<Role>, RoleValidation>();
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(CustomerProfile).Assembly);
@@ -48,6 +66,7 @@ builder.Services.AddScoped<IReservationItemRepository, ReservationItemRepository
 builder.Services.AddScoped<ITimeSlotManager, TimeSlotManager>();
 builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -21,6 +21,7 @@ namespace conifs.rms.data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
             
 
     
@@ -65,7 +66,39 @@ namespace conifs.rms.data.Migrations
 
                     b.ToTable("Customers");
                 });
+     modelBuilder.Entity("conifs.rms.data.entities.Privilege", b =>
+                {
+                    b.Property<Guid>("PrivilegeCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PrivilegeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PrivilegeCode");
+
+                    b.ToTable("Privileges");
+                });
+
+            modelBuilder.Entity("conifs.rms.data.entities.Role", b =>
+                {
+                    b.Property<Guid>("RoleCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RoleID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleCode");
+
+                    b.ToTable("Roles");
+                });
                modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
         {
             b.Property<Guid>("Id")
@@ -152,6 +185,7 @@ namespace conifs.rms.data.Migrations
 
             b.ToTable("TimeSlots");
         });
+
 #pragma warning restore 612, 618
         }
     }
