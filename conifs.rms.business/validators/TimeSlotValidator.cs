@@ -3,7 +3,7 @@ using System.Linq;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
-
+using conifs.rms.data;
 namespace conifs.rms.business.validators
 {
     public class TimeSlotValidator : AbstractValidator<TimeSlot>

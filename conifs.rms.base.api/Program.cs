@@ -6,7 +6,6 @@ using conifs.rms.data.Profiles;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using conifs.rms.data;
 using Microsoft.Extensions.DependencyInjection;
 using conifs.rms.business.managers;
 using conifs.rms.data.repositories.ReservationGroups;
@@ -20,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+       
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -29,12 +29,12 @@ builder.Services.AddAutoMapper(typeof(CustomerProfile).Assembly);
 
 builder.Services.AddScoped<ICustomerManager, CustomerManager>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddControllers()
-    .AddFluentValidation(fv =>
-    {
-        // Register validators from the assembly containing CustomerValidation
-        fv.RegisterValidatorsFromAssemblyContaining<CustomerValidation>();
-    });
+
+//builder.Services.AddFluentValidation(fv =>
+//{
+    // Register validators from the assembly containing CustomerValidation
+//    fv.RegisterValidatorsFromAssemblyContaining<CustomerValidation>();
+//});
 
 // Register FluentValidation validators
 builder.Services.AddScoped<IValidator<Customer>, CustomerValidation>();

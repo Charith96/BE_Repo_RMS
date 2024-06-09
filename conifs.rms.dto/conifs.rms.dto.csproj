@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Customers\**" />
+    <EmbeddedResource Remove="Customers\**" />
+    <None Remove="Customers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <Folder Include="Companies\" />
     <Folder Include="Users\" />
@@ -18,8 +24,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-
-    <Folder Include="Customers\" />
+    <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <Folder Include="Companies\" />
     <Folder Include="Users\" />
     <Folder Include="Roles\" />
