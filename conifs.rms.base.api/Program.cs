@@ -5,8 +5,12 @@ using conifs.rms.data.repositories;
 using conifs.rms.data.repositories.User;
 using System.Collections.Generic;
 using conifs.rms.business.managers;
+using conifs.rms.business.validations;
 using AutoMapper;
-using conifs.rms.@base.api.Profiles;
+using conifs.rms.data.Profiles;
+using FluentValidation;
+using conifs.rms.data.entities;
+using conifs.rms.dto;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserManager, UserManager>();
+
 
 // Register AutoMapper and scan for profiles in the assembly containing UserProfile
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);

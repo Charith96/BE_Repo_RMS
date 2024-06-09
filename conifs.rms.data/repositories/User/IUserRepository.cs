@@ -11,7 +11,7 @@ public interface IUserRepository
 
     bool IfExistUser(string userCode);
 
-    void AddUser(UserTable newUser);
+
 
     void UpdateUser(PutUserDto user,string userid);
 

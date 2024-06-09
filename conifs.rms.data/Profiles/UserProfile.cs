@@ -6,8 +6,8 @@ using conifs.rms.data.repositories.User;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
-namespace conifs.rms.@base.api.Profiles
-    
+namespace conifs.rms.data.Profiles
+
 {
 
     public class UserProfile : Profile

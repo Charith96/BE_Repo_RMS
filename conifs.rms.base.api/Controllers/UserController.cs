@@ -3,6 +3,10 @@ using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
 using Microsoft.AspNetCore.Mvc;
 using conifs.rms.dto;
+using conifs.rms.business.validations;
+using FluentValidation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace conifs.rms.@base.api.Controllers
 {
     [Route("api/[controller]")]
@@ -16,7 +20,7 @@ namespace conifs.rms.@base.api.Controllers
             _userService = userService;
         }
         [HttpGet("UserByID/{id}")]
-        public async Task<ActionResult<GetUserDto>> GetUserByIdFull(String id)
+        public async Task<ActionResult<GetUserDto>> GetUserByIdFull(string id)
         {
             var user = await _userService.GetUserByIdFull(id);
 
@@ -51,36 +55,32 @@ namespace conifs.rms.@base.api.Controllers
 
   
 
-        [HttpPost]
-        public IActionResult AddUser([FromBody] UserTable newUser)
-        {
-            try
-            {
-                _userService.AddUser(newUser);
-
-                return CreatedAtAction(nameof(GetUserByIdFull), new { Userid = newUser.Userid }, newUser);
-            }
-            catch (Exception ex)
-            {
-              
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
-            }
-        }
+  
 
         [HttpPut("{Userid}")]
         public IActionResult UpdateUser(string Userid, PutUserDto user)
         {
             try
             {
-               
-                _userService.UpdateUser(user, Userid);
-                return Ok(new { message = "Saved successfully" });
+                var validator = new DateRangeValidator();
+                var result = validator.Validate(user);
+                if (result.IsValid)
+                {
+                    _userService.UpdateUser(user, Userid);
+                    return Ok(new { message = "Saved successfully" });
+                }
+                else
+                {
+                    var errors = result.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }).ToList();
+                    return BadRequest(new { errors });
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
+
 
 
         [HttpDelete("{id}")]
@@ -138,9 +138,18 @@ namespace conifs.rms.@base.api.Controllers
 
             try
             {
-                _userService.CreateUser(userCreateDto);
-
-                return Ok(); 
+                var validator = new DateRangeValidator();
+                var result = validator.Validate(userCreateDto);
+                if (result.IsValid)
+                {
+                    _userService.CreateUser(userCreateDto);
+                     return Ok(new { message = "Saved successfully" });
+                }
+                else
+                {
+                    var errors = result.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }).ToList();
+                    return BadRequest(new { errors });
+                }
             }
             catch (Exception ex)
             {
