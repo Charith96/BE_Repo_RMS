@@ -39,6 +39,12 @@ namespace conifs.rms.data
                     v => v.ToString(),
                     v => Guid.Parse(v)
                 );
+
+            modelBuilder.Entity<Country>()
+        .Property(c => c.CountryID)
+        .ValueGeneratedOnAdd();
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

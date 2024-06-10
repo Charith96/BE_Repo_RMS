@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+//using conifs.rms.api;
 using conifs.rms.data.entities;
 using conifs.rms.dto.Company;
 
@@ -22,7 +23,17 @@ namespace conifs.rms.data.Profiles
                 .ForMember(dest => dest.DefaultCompany, opt => opt.MapFrom(src => src.DefaultCompany))
                 .ReverseMap();
 
-
         }
     }
+
+    //public class CountryProfile : Profile
+    //{
+    //    public CountryProfile()
+    //    {
+    //        CreateMap<Country, CountryDto>()
+    //            .ForMember(dest => dest.CountryID, opt => opt.Ignore())
+    //            .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.CountryName))
+    //            .ReverseMap();
+    //    }
+    //}
 }

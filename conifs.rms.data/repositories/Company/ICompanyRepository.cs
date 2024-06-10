@@ -1,5 +1,7 @@
 ﻿using conifs.rms.data.entities;
 using conifs.rms.dto.Company;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace conifs.rms.data.repositories.Company
 {

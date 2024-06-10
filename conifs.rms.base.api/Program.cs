@@ -8,9 +8,8 @@ using conifs.rms.dto.Company;
 using AutoMapper;
 //using conifs.rms.business.mappers;
 using conifs.rms.data.Profiles;
+using conifs.rms.business;
 //using conifs.rms.dto.Company;
-
-//using ICompanyRepository = conifs.rms.data.repositories.Company.ICompanyRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +19,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<ICountryManager, CountryManager>();
+builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<ICurrencyManager, CurrencyManager>();
 
 
 ///////
 builder.Services.AddAutoMapper(typeof(CompanyProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(CountryProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(CurrencyProfile).Assembly);
 
 //var automapper = new MapperConfiguration(item => item.AddProfile(new CompanyMappers()));
 //IMapper mapper = automapper.CreateMapper();
