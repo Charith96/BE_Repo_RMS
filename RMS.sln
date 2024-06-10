@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 
+
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "conifs.rms.base.api", "conifs.rms.base.api\conifs.rms.base.api.csproj", "{7FF06CE5-C2F7-406B-80B5-C31FFFD0FB6A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "conifs.rms.business", "conifs.rms.business\conifs.rms.business.csproj", "{817568FE-D4CE-4927-9BD3-A8D490253EF5}"
@@ -23,6 +24,7 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+
 		{7FF06CE5-C2F7-406B-80B5-C31FFFD0FB6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7FF06CE5-C2F7-406B-80B5-C31FFFD0FB6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FF06CE5-C2F7-406B-80B5-C31FFFD0FB6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +53,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+
 		SolutionGuid = {AC712658-38C1-4A26-BCA8-E6DAD27234A3}
+
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,17 @@
 
+using conifs.rms.business.managers;
+//using conifs.rms.contracts.Company;
+using conifs.rms.data;
+using conifs.rms.data.repositories;
+using conifs.rms.data.repositories.Company;
+using Microsoft.EntityFrameworkCore;
+using conifs.rms.dto.Company;
+using AutoMapper;
+//using conifs.rms.business.mappers;
+using conifs.rms.data.Profiles;
+using conifs.rms.business;
+//using conifs.rms.dto.Company;
+
 using conifs.rms.business;
 using conifs.rms.business.validations;
 using conifs.rms.data;
@@ -12,6 +25,9 @@ using conifs.rms.business.managers;
 using conifs.rms.data.repositories.ReservationGroups;
 using conifs.rms.data.repositories.ReservationItems;
 using conifs.rms.data.repositories.TimeSlots;
+
+
+
 
 
 
@@ -32,7 +48,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ICompanyManager, CompanyManager>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<ICountryManager, CountryManager>();
+builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<ICurrencyManager, CurrencyManager>();
 
+
+///////
+builder.Services.AddAutoMapper(typeof(CompanyProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(CountryProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(CurrencyProfile).Assembly);
 // Register your repositories and managers
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleManager, RoleManager>();
@@ -70,6 +97,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
+
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
