@@ -7,9 +7,9 @@ namespace conifs.rms.data.repositories
 {
     public class CountryRepository : ICountryRepository
     {
-        private readonly CompanyDataContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CountryRepository(CompanyDataContext context)
+        public CountryRepository(ApplicationDbContext context)
         {
             _context = context;
         }

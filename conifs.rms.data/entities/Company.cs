@@ -41,6 +41,6 @@ namespace conifs.rms.data.entities
         {
             CompanyID = Guid.NewGuid(); // Initialize CompanyID with a new Guid
         }
-
+        public ICollection<UserCompany> UserCompanies { get; set; }
     }
 }

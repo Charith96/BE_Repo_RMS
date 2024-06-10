@@ -5,26 +5,25 @@ using conifs.rms.data;
 using conifs.rms.data.repositories;
 using conifs.rms.data.repositories.Company;
 using Microsoft.EntityFrameworkCore;
-using conifs.rms.dto.Company;
-using AutoMapper;
+
 //using conifs.rms.business.mappers;
 using conifs.rms.data.Profiles;
 using conifs.rms.business;
 //using conifs.rms.dto.Company;
 
-using conifs.rms.business;
+
 using conifs.rms.business.validations;
-using conifs.rms.data;
 using conifs.rms.data.entities;
-using conifs.rms.data.Profiles;
+
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using conifs.rms.business.managers;
+
 using conifs.rms.data.repositories.ReservationGroups;
 using conifs.rms.data.repositories.ReservationItems;
 using conifs.rms.data.repositories.TimeSlots;
+using conifs.rms.data.repositories.User;
+using Microsoft.Extensions.Configuration;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 
@@ -37,13 +36,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers().AddFluentValidation();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Register DbContext with SQL Server configuration
 
 
-builder.Services.AddControllers();
+
+    // Other service configurations...
+
+
+    // Other service configurations...
+
+    builder.Services.AddControllers();
        
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -55,6 +58,12 @@ builder.Services.AddScoped<ICountryManager, CountryManager>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<ICurrencyManager, CurrencyManager>();
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserManager, UserManager>();
+
+
+// Register AutoMapper and scan for profiles in the assembly containing UserProfile
+builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 
 ///////
 builder.Services.AddAutoMapper(typeof(CompanyProfile).Assembly);
@@ -100,6 +109,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer("DefaultConnection", b => b.MigrationsAssembly("conifs.rms.base.api"));
+
 });
 
 var app = builder.Build();

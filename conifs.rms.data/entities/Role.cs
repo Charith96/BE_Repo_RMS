@@ -9,5 +9,7 @@ namespace conifs.rms.data.entities
         public Guid RoleCode { get; set; }
         public string RoleID { get; set; }
         public string RoleName { get; set; }
+
+        public ICollection<UserRoles> UserRoles { get; set; }
     }
 }

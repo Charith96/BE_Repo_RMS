@@ -8,9 +8,9 @@ namespace conifs.rms.data.repositories.Company
 {
     public class CompanyRepository : ICompanyRepository
     {
-        private readonly CompanyDataContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CompanyRepository(CompanyDataContext context)
+        public CompanyRepository(ApplicationDbContext context)
         {
             _context = context;
         }

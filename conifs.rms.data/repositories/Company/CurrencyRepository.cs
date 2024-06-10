@@ -8,9 +8,9 @@ namespace conifs.rms.data.repositories
 {
     public class CurrencyRepository : ICurrencyRepository
     {
-        private readonly CompanyDataContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CurrencyRepository(CompanyDataContext context)
+        public CurrencyRepository(ApplicationDbContext context)
         {
             _context = context;
         }
