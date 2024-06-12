@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace conifs.rms.@base.api.Migrations
+namespace conifs.rms.data.Migrations
 {
     /// <inheritdoc />
-    public partial class company_and_users : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

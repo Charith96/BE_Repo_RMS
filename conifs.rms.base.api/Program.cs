@@ -106,11 +106,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.UseSqlServer("DefaultConnection", b => b.MigrationsAssembly("conifs.rms.base.api"));
-
 });
 
 var app = builder.Build();

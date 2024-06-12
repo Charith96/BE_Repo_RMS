@@ -9,11 +9,11 @@ using conifs.rms.data;
 
 #nullable disable
 
-namespace conifs.rms.@base.api.Migrations
+namespace conifs.rms.data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240610191109_company_and_users")]
-    partial class company_and_users
+    [Migration("20240611082827_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
