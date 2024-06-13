@@ -71,18 +71,76 @@ namespace conifs.rms.data.repositories.User
             _context.User.Add(newUser);
             _context.SaveChanges();
         }
-       
+
         public void UpdateUser(PutUserDto user, string Userid)
         {
             var userUpdate = _context.User.FirstOrDefault(u => u.Userid.ToString() == Userid);
             if (userUpdate != null)
             {
+                var userCompanies = user.Companies;
+                var userRoles = user.Roles;
+                Guid userId = Guid.Parse(Userid);
+                DeleteUserCompany(Userid);
+                DeleteUserRole(Userid);
+                foreach (var userCompany in userCompanies)
+                {
+                    var companyID = _context.Companies
+                        .Where(c => c.CompanyName == userCompany)
+                        .Select(c => c.CompanyID)
+                        .First();
+
+                    // Check if the userCompany already exists in the database
+                    var existingUserCompany = _context.UserCompany
+                        .FirstOrDefault(uc => uc.Userid == userId && uc.CompanyId == companyID);
+
+                    if (existingUserCompany == null)
+                    {
+                        // If it doesn't exist, create a new UserCompany entity
+                        var userCompanyEntity = new CreateUserCompanyDto
+                        {
+                            id = userId,
+                            CompanyId = companyID
+                        };
+                        var userCompanyUpdate = _mapper.Map<UserCompany>(userCompanyEntity);
+                        _context.UserCompany.Add(userCompanyUpdate);
+                    }
+
+
+
+                }
+                foreach (var userRole in userRoles)
+                {
+                    var RoleID = _context.Roles
+                        .Where(c => c.RoleName == userRole)
+                        .Select(c => c.RoleCode)
+                        .First();
+
+                    // Check if the userCompany already exists in the database
+                    var existingUserRole = _context.UserRole
+                        .FirstOrDefault(uc => uc.Userid == userId && uc.RoleId == RoleID);
+
+                    if (existingUserRole == null)
+                    {
+
+
+                        // If it doesn't exist, create a new UserCompany entity
+                        var userRoleEntity = new CreateUserRoleDto
+                        {
+                            id = userId,
+                            RoleId = RoleID
+                        };
+                        var userRoleUpdate = _mapper.Map<UserRoles>(userRoleEntity);
+                        _context.UserRole.Add(userRoleUpdate);
+                    }
+
+
+
+                }
                 _mapper.Map(user, userUpdate);
                 _context.User.Update(userUpdate);
                 _context.SaveChanges();
+
             }
-         
-        
         }
 
         public void DeleteUser(string id)
@@ -110,14 +168,14 @@ namespace conifs.rms.data.repositories.User
 
             var userEntity = _mapper.Map<UserTable>(userCreateDto);
 
-       
+
             _context.User.Add(userEntity);
 
 
             _context.SaveChanges();
         }
-       
-            public void CreateUserCompany(CreateUserCompanyDto userCompany)
+
+        public void CreateUserCompany(CreateUserCompanyDto userCompany)
         {
             var userCompanyEntity = _mapper.Map<UserCompany>(userCompany);
 
@@ -133,23 +191,22 @@ namespace conifs.rms.data.repositories.User
         }
         public void DeleteUserCompany(string id)
         {
-            var userCompanyToDelete = _context.UserCompany.FirstOrDefault(u => u.Userid.ToString() == id);
+            var userCompanyToDelete = _context.UserCompany.Where(u => u.Userid.ToString() == id).ToList();
 
-            if (userCompanyToDelete != null)
-            {
-                _context.UserCompany.Remove(userCompanyToDelete);
+            
+                _context.UserCompany.RemoveRange(userCompanyToDelete);
                 _context.SaveChanges();
-            }
+           
         }
         public void DeleteUserRole(string id)
         {
-            var userRoleToDelete = _context.UserRole.FirstOrDefault(u => u.Userid.ToString() == id);
+            var userGuid = Guid.Parse(id);
+            var userRoleToDelete = _context.UserRole.Where(u => u.Userid == userGuid).ToList();
 
-            if (userRoleToDelete != null)
-            {
-                _context.UserRole.Remove(userRoleToDelete);
+            
+                _context.UserRole.RemoveRange(userRoleToDelete);
                 _context.SaveChanges();
-            }
+            
         }
     }
 }

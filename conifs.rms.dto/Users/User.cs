@@ -158,6 +158,9 @@ namespace conifs.rms.dto
 
 
         public string Password { get; set; }
+        public List<String> Companies { get; set; }
+
+        public List<String> Roles { get; set; }
     }
 }
  
