@@ -1,5 +1,5 @@
 ﻿using conifs.rms.data.entities;
-using conifs.rms.dto;
+using conifs.rms.dto.Users;
 
 
 namespace conifs.rms.business.managers;

@@ -2,7 +2,7 @@
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories.User;
 using Microsoft.AspNetCore.Mvc;
-using conifs.rms.dto;
+using conifs.rms.dto.Users;
 using conifs.rms.business.validations;
 using FluentValidation;
 using static System.Runtime.InteropServices.JavaScript.JSType;

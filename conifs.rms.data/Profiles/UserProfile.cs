@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using conifs.rms.data.entities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using conifs.rms.dto;
+using conifs.rms.dto.Users;
 using conifs.rms.data.repositories.User;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 

@@ -1,4 +1,4 @@
-﻿using conifs.rms.dto;
+﻿using conifs.rms.dto.Users;
 using FluentValidation;
 using FluentValidation.Results;
 

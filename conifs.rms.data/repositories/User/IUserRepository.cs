@@ -1,5 +1,5 @@
 ﻿using conifs.rms.data.entities;
-using conifs.rms.dto;
+using conifs.rms.dto.Users;
 
 namespace conifs.rms.data.repositories.User;
 
@@ -7,13 +7,13 @@ public interface IUserRepository
 {
     Task<ICollection<GetUserDtoList>> GetAllUsers();
 
- 
+
 
     bool IfExistUser(string userCode);
 
 
 
-    void UpdateUser(PutUserDto user,string userid);
+    void UpdateUser(PutUserDto user, string userid);
 
     void DeleteUser(string userCode);
     Task<GetUserDto> GetUserByIdFull(string userId);

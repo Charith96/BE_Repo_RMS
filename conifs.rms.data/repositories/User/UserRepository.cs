@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using conifs.rms.data.entities;
 using Microsoft.EntityFrameworkCore;
-using conifs.rms.dto;
+using conifs.rms.dto.Users;
 using System.Linq;
 
 
@@ -35,21 +35,50 @@ namespace conifs.rms.data.repositories.User
             // Fetch user companies
             var userCompanies = await _context.UserCompany
                 .Where(uc => uc.Userid.ToString() == userId)
-                .Select(uc => uc.CompanyId.ToString()) // Use .ToString() to convert GUID to string if needed
+                .Select(uc => uc.CompanyId.ToString())
                 .ToListAsync();
 
             // Fetch user roles
             var userRoles = await _context.UserRole
                 .Where(ur => ur.Userid.ToString() == userId)
-                .Select(ur => ur.RoleId.ToString()) // Use .ToString() to convert GUID to string if needed
+                .Select(ur => ur.RoleId)
                 .ToListAsync();
 
-            // Map the results to the response
-            userResponse.Companies = userCompanies;
-            userResponse.Roles = userRoles;
+            var userNames = new List<string>();
+
+
+            foreach (var userCompany in userCompanies)
+            {
+                var companyName = _context.Companies
+                    .Where(c => c.CompanyID.ToString() == userCompany)
+                    .Select(c => c.CompanyName)
+                    .FirstOrDefault();
+
+                if (companyName != null)
+                {
+                    userNames.Add(companyName);
+                }
+            }
+            var roleNames = new List<string>();
+
+            foreach (var userRole in userRoles)
+            {
+                var roleName = await _context.Roles
+                    .Where(c => c.RoleCode == userRole) // Ensure RoleID is correctly compared
+                    .Select(c => c.RoleName)
+                    .FirstOrDefaultAsync();
+
+                if (roleName != null)
+                {
+                    roleNames.Add(roleName);
+                }
+            }
+            userResponse.Companies = userNames;
+            userResponse.Roles = roleNames;
 
             return userResponse;
         }
+
 
         public async Task<ICollection<GetUserDtoList>> GetAllUsers()
         {
@@ -193,20 +222,20 @@ namespace conifs.rms.data.repositories.User
         {
             var userCompanyToDelete = _context.UserCompany.Where(u => u.Userid.ToString() == id).ToList();
 
-            
-                _context.UserCompany.RemoveRange(userCompanyToDelete);
-                _context.SaveChanges();
-           
+
+            _context.UserCompany.RemoveRange(userCompanyToDelete);
+            _context.SaveChanges();
+
         }
         public void DeleteUserRole(string id)
         {
             var userGuid = Guid.Parse(id);
             var userRoleToDelete = _context.UserRole.Where(u => u.Userid == userGuid).ToList();
 
-            
-                _context.UserRole.RemoveRange(userRoleToDelete);
-                _context.SaveChanges();
-            
+
+            _context.UserRole.RemoveRange(userRoleToDelete);
+            _context.SaveChanges();
+
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
 using System.Data;
-using conifs.rms.dto;
+using conifs.rms.dto.Users;
 
 
 
