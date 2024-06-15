@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using conifs.rms.data;
 using conifs.rms.data.entities;
-using conifs.rms.dto.Role;
+using conifs.rms.business.validations;
 using FluentValidation;
+using FluentValidation.Results;
+using conifs.rms.dto.Privilege;
 
 namespace conifs.rms.business
 {
@@ -13,58 +14,49 @@ namespace conifs.rms.business
     {
         private readonly IPrivilegeRepository _privilegeRepository;
         private readonly IValidator<Privilege> _privilegeValidator;
-        private readonly IMapper _mapper;
 
-        public PrivilegeManager(IPrivilegeRepository privilegeRepository, IValidator<Privilege> privilegeValidator, IMapper mapper)
+        public PrivilegeManager(IPrivilegeRepository privilegeRepository)
         {
             _privilegeRepository = privilegeRepository;
-            _privilegeValidator = privilegeValidator;
-            _mapper = mapper;
+            _privilegeValidator = new PrivilegeValidation(); // Initialize the validator
         }
 
-        public async Task<IEnumerable<PrivilegeDto>> GetAllPrivilegesAsync()
+        public async Task<IEnumerable<Privilege>> GetAllPrivilegesAsync()
         {
-            var privileges = await _privilegeRepository.GetAllPrivilegesAsync();
-            return _mapper.Map<IEnumerable<PrivilegeDto>>(privileges);
+            return await _privilegeRepository.GetAllPrivilegesAsync();
         }
 
-        public async Task<PrivilegeDto> GetPrivilegeByIdAsync(Guid privilegeCode)
+        public async Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeId)
         {
-            var privilege = await _privilegeRepository.GetPrivilegeByIdAsync(privilegeCode);
-            return _mapper.Map<PrivilegeDto>(privilege);
+            return await _privilegeRepository.GetPrivilegeByIdAsync(privilegeId);
         }
 
-        public async Task<PrivilegeDto> AddPrivilegeAsync(PrivilegeDto privilegeDto)
+        public async Task<Privilege> AddPrivilegeAsync(Privilege privilege)
         {
-            var privilege = _mapper.Map<Privilege>(privilegeDto);
-            var validationResult = _privilegeValidator.Validate(privilege);
-
-            if (!validationResult.IsValid)
+            privilege.PrivilegeCode = Guid.NewGuid(); // Generate a new PrivilegeCode internally
+            ValidationResult result = _privilegeValidator.Validate(privilege);
+            if (!result.IsValid)
             {
-                throw new ValidationException(validationResult.Errors);
+                throw new ValidationException(result.Errors);
             }
 
-            var addedPrivilege = await _privilegeRepository.AddPrivilegeAsync(privilege);
-            return _mapper.Map<PrivilegeDto>(addedPrivilege);
+            return await _privilegeRepository.AddPrivilegeAsync(privilege);
         }
 
-        public async Task<PrivilegeDto> UpdatePrivilegeAsync(PrivilegeDto privilegeDto)
+        public async Task<Privilege> UpdatePrivilegeAsync(Privilege privilege)
         {
-            var privilege = _mapper.Map<Privilege>(privilegeDto);
-            var validationResult = _privilegeValidator.Validate(privilege);
-
-            if (!validationResult.IsValid)
+            ValidationResult result = _privilegeValidator.Validate(privilege);
+            if (!result.IsValid)
             {
-                throw new ValidationException(validationResult.Errors);
+                throw new ValidationException(result.Errors);
             }
 
-            var updatedPrivilege = await _privilegeRepository.UpdatePrivilegeAsync(privilege);
-            return _mapper.Map<PrivilegeDto>(updatedPrivilege);
+            return await _privilegeRepository.UpdatePrivilegeAsync(privilege);
         }
 
-        public async Task<bool> DeletePrivilegeAsync(Guid privilegeCode)
+        public async Task DeletePrivilegeAsync(Guid privilegeId)
         {
-            return await _privilegeRepository.DeletePrivilegeAsync(privilegeCode);
+            await _privilegeRepository.DeletePrivilegeAsync(privilegeId);
         }
     }
 }

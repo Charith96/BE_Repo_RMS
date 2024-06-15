@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace conifs.rms.data.entities
 {
+
+
     public class Privilege
     {
-        [Key]
-        public Guid PrivilegeCode { get; set; } // Table row ID
-
-        public string PrivilegeId { get; set; }
-
+        public Guid PrivilegeID { get; set; }
         public string PrivilegeName { get; set; }
-
-        // Navigation property to RolePrivilege
-        // public ICollection<RolePrivilege> RolePrivileges { get; set; }
+        public ICollection<Role> Roles { get; set; } // Navigation propert
+        public object PrivilegeCode { get; set; }
     }
+
+
 }

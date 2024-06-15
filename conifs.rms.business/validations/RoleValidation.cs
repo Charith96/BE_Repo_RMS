@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using conifs.rms.data.entities;
+﻿using conifs.rms.data.entities;
+using FluentValidation;
 
 namespace conifs.rms.business.validations
 {
@@ -8,12 +8,12 @@ namespace conifs.rms.business.validations
         public RoleValidation()
         {
             RuleFor(role => role.RoleID)
-                .NotEmpty().WithMessage("RoleID is required.")
-                .Length(1, 8).WithMessage("RoleID must be between 1 and 8 characters.");
+                .NotEmpty().WithMessage("Role ID is required.")
+                .Length(1, 8).WithMessage("Role ID must be between 1 and 8 characters.");
 
             RuleFor(role => role.RoleName)
-                .NotEmpty().WithMessage("RoleName is required.")
-                .Length(1, 20).WithMessage("RoleName must be between 1 and 20 characters.");
+                .NotEmpty().WithMessage("Role Name is required.")
+                .Length(1, 20).WithMessage("Role Name must be between 1 and 20 characters.");
         }
     }
 }

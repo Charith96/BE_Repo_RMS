@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.data
 {
@@ -21,36 +21,33 @@ namespace conifs.rms.data
             return await _context.Privileges.ToListAsync();
         }
 
-        public async Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeCode)
+        public async Task<Privilege> GetPrivilegeByIdAsync(Guid privilegeId)
         {
-            return await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeCode == privilegeCode);
+            return await _context.Privileges.FindAsync(privilegeId);
         }
 
         public async Task<Privilege> AddPrivilegeAsync(Privilege privilege)
         {
-            await _context.Privileges.AddAsync(privilege);
+            _context.Privileges.Add(privilege);
             await _context.SaveChangesAsync();
             return privilege;
         }
 
         public async Task<Privilege> UpdatePrivilegeAsync(Privilege privilege)
         {
-            _context.Privileges.Update(privilege);
+            _context.Entry(privilege).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return privilege;
         }
 
-        public async Task<bool> DeletePrivilegeAsync(Guid privilegeCode)
+        public async Task DeletePrivilegeAsync(Guid privilegeId)
         {
-            var privilege = await _context.Privileges.FirstOrDefaultAsync(p => p.PrivilegeCode == privilegeCode);
-            if (privilege == null)
+            var privilege = await _context.Privileges.FindAsync(privilegeId);
+            if (privilege != null)
             {
-                return false;
+                _context.Privileges.Remove(privilege);
+                await _context.SaveChangesAsync();
             }
-
-            _context.Privileges.Remove(privilege);
-            await _context.SaveChangesAsync();
-            return true;
         }
     }
 }

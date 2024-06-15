@@ -1,5 +1,7 @@
 ﻿using conifs.rms.business;
 using conifs.rms.data.entities;
+using conifs.rms.dto.Privilege;
+using conifs.rms.business.mappers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -23,7 +25,8 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var privileges = await _privilegeManager.GetAllPrivilegesAsync();
-                return Ok(privileges);
+                var privilegeDtos = privileges.Select(PrivilegeMappers.ToDto);
+                return Ok(privilegeDtos);
             }
             catch (Exception ex)
             {
@@ -31,22 +34,22 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{privilegeCode}")]
-        public async Task<IActionResult> GetPrivilegeById(Guid privilegeCode)
+        [HttpGet("{privilegeId}")]
+        public async Task<IActionResult> GetPrivilegeById(Guid privilegeId)
         {
             try
             {
-                var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeCode);
+                var privilege = await _privilegeManager.GetPrivilegeByIdAsync(privilegeId);
                 if (privilege == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(privilege);
+                return Ok(PrivilegeMappers.ToDto(privilege));
             }
             catch (FormatException)
             {
-                return BadRequest("Invalid privilege code format.");
+                return BadRequest("Invalid privilege ID format.");
             }
             catch (Exception ex)
             {
@@ -55,7 +58,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPrivilege([FromBody] Privilege newPrivilege)
+        public async Task<IActionResult> AddPrivilege([FromBody] PrivilegeDto newPrivilegeDto)
         {
             if (!ModelState.IsValid)
             {
@@ -64,8 +67,9 @@ namespace conifs.rms.@base.api.Controllers
 
             try
             {
+                var newPrivilege = PrivilegeMappers.ToEntity(newPrivilegeDto);
                 var addedPrivilege = await _privilegeManager.AddPrivilegeAsync(newPrivilege);
-                return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeCode = addedPrivilege.PrivilegeCode }, addedPrivilege);
+                return CreatedAtAction(nameof(GetPrivilegeById), new { privilegeId = addedPrivilege.PrivilegeCode }, PrivilegeMappers.ToDto(addedPrivilege));
             }
             catch (Exception ex)
             {
@@ -73,13 +77,11 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{privilegeCode}")]
-        public async Task<IActionResult> UpdatePrivilege(Guid privilegeCode, [FromBody] Privilege privilege)
+        [HttpPut("{privilegeId}")]
+        public async Task<IActionResult> UpdatePrivilege(Guid privilegeId, [FromBody] PrivilegeDto privilegeDto)
         {
-            if (privilegeCode != privilege.PrivilegeCode)
-            {
-                return BadRequest("Privilege code mismatch");
-            }
+            var privilege = PrivilegeMappers.ToEntity(privilegeDto);
+            privilege.PrivilegeCode = privilegeId;
 
             if (!ModelState.IsValid)
             {
@@ -94,7 +96,7 @@ namespace conifs.rms.@base.api.Controllers
                     return NotFound();
                 }
 
-                return Ok(updatedPrivilege);
+                return Ok(PrivilegeMappers.ToDto(updatedPrivilege));
             }
             catch (Exception ex)
             {
@@ -102,17 +104,12 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{privilegeCode}")]
-        public async Task<IActionResult> DeletePrivilege(Guid privilegeCode)
+        [HttpDelete("{privilegeId}")]
+        public async Task<IActionResult> DeletePrivilege(Guid privilegeId)
         {
             try
             {
-                var result = await _privilegeManager.DeletePrivilegeAsync(privilegeCode);
-                if (!result)
-                {
-                    return NotFound();
-                }
-
+                await _privilegeManager.DeletePrivilegeAsync(privilegeId);
                 return NoContent();
             }
             catch (Exception ex)

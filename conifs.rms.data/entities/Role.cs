@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace conifs.rms.data.entities
 {
     public class Role
     {
-        [Key]
-        public Guid RoleCode { get; set; }
-
-        public string RoleID { get; set; }
-
+        public Guid RoleID { get; set; }
         public string RoleName { get; set; }
-
-        // Navigation property to RolePrivilege
-        // public ICollection<RolePrivilege> RolePrivileges { get; set; }
+        public ICollection<Privilege> Privileges { get; set; } // Navigation property
+        public Guid RoleCode { get; set; }
     }
+
+
 }

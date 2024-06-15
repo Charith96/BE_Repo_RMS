@@ -1,27 +1,23 @@
-﻿using conifs.rms.dto.Role;
-using conifs.rms.data.entities;
+﻿using conifs.rms.data.entities;
+using conifs.rms.dto.Privilege;
 
-namespace conifs.rms.business.Mappers
+namespace conifs.rms.business.mappers
 {
-    public class PrivilegeMapper
+    public static class PrivilegeMappers
     {
-        public Privilege Map(PrivilegeDto input)
+        public static PrivilegeDto ToDto(Privilege privilege)
         {
-            return new Privilege()
+            return new PrivilegeDto
             {
-                PrivilegeCode = input?.PrivilegeCode ?? Guid.Empty,
-                PrivilegeId = input?.PrivilegeId,
-                PrivilegeName = input?.PrivilegeName
+                PrivilegeName = privilege.PrivilegeName
             };
         }
 
-        public PrivilegeDto Map(Privilege input)
+        public static Privilege ToEntity(PrivilegeDto privilegeDto)
         {
-            return new PrivilegeDto()
+            return new Privilege
             {
-                PrivilegeCode = input?.PrivilegeCode ?? Guid.Empty,
-                PrivilegeId = input?.PrivilegeId,
-                PrivilegeName = input?.PrivilegeName
+                PrivilegeName = privilegeDto.PrivilegeName
             };
         }
     }

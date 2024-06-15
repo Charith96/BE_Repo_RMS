@@ -1,7 +1,10 @@
 ﻿using conifs.rms.business;
+using conifs.rms.data.entities;
+using conifs.rms.dto;
 using conifs.rms.dto.Role;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace conifs.rms.@base.api.Controllers
@@ -23,7 +26,13 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var roles = await _roleManager.GetAllRolesAsync();
-                return Ok(roles);
+                var roleDtos = roles.Select(role => new RoleDto
+                {
+                    RoleID = role.RoleID,
+                    RoleName = role.RoleName
+                });
+
+                return Ok(roleDtos);
             }
             catch (Exception ex)
             {
@@ -31,22 +40,28 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{roleCode}")]
-        public async Task<IActionResult> GetRoleById(Guid roleCode)
+        [HttpGet("{RoleCode}")]
+        public async Task<IActionResult> GetRoleById(Guid RoleCode)
         {
             try
             {
-                var role = await _roleManager.GetRoleByIdAsync(roleCode);
+                var role = await _roleManager.GetRoleByIdAsync(RoleCode);
                 if (role == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(role);
+                var roleDto = new RoleDto
+                {
+                    RoleID = role.RoleID,
+                    RoleName = role.RoleName
+                };
+
+                return Ok(roleDto);
             }
             catch (FormatException)
             {
-                return BadRequest("Invalid role code format.");
+                return BadRequest("Invalid role ID format.");
             }
             catch (Exception ex)
             {
@@ -64,8 +79,22 @@ namespace conifs.rms.@base.api.Controllers
 
             try
             {
-                var addedRole = await _roleManager.AddRoleAsync(newRoleDto);
-                return CreatedAtAction(nameof(GetRoleById), new { roleCode = addedRole.RoleCode }, addedRole);
+                var newRole = new Role
+                {
+                    RoleCode = Guid.NewGuid(),
+                    RoleID = newRoleDto.RoleID,
+                    RoleName = newRoleDto.RoleName
+                };
+
+                var addedRole = await _roleManager.AddRoleAsync(newRole);
+
+                var addedRoleDto = new RoleDto
+                {
+                    RoleID = addedRole.RoleID,
+                    RoleName = addedRole.RoleName
+                };
+
+                return CreatedAtAction(nameof(GetRoleById), new { RoleCode = addedRole.RoleCode }, addedRoleDto);
             }
             catch (Exception ex)
             {
@@ -73,14 +102,9 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{roleCode}")]
-        public async Task<IActionResult> UpdateRole(Guid roleCode, [FromBody] RoleDto roleDto)
+        [HttpPut("{RoleCode}")]
+        public async Task<IActionResult> UpdateRole(Guid RoleCode, [FromBody] RoleDto roleDto)
         {
-            if (roleCode != roleDto.RoleCode)
-            {
-                return BadRequest("Role code mismatch");
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -88,13 +112,24 @@ namespace conifs.rms.@base.api.Controllers
 
             try
             {
-                var updatedRole = await _roleManager.UpdateRoleAsync(roleDto);
-                if (updatedRole == null)
+                var existingRole = await _roleManager.GetRoleByIdAsync(RoleCode);
+                if (existingRole == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(updatedRole);
+                existingRole.RoleID = roleDto.RoleID;
+                existingRole.RoleName = roleDto.RoleName;
+
+                var updatedRole = await _roleManager.UpdateRoleAsync(existingRole);
+
+                var updatedRoleDto = new RoleDto
+                {
+                    RoleID = updatedRole.RoleID,
+                    RoleName = updatedRole.RoleName
+                };
+
+                return Ok(updatedRoleDto);
             }
             catch (Exception ex)
             {
@@ -102,18 +137,33 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{roleCode}")]
-        public async Task<IActionResult> DeleteRole(Guid roleCode)
+        [HttpDelete("{RoleCode}")]
+        public async Task<IActionResult> DeleteRole(Guid RoleCode)
         {
             try
             {
-                var result = await _roleManager.DeleteRoleAsync(roleCode);
-                if (!result)
+                await _roleManager.DeleteRoleAsync(RoleCode);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // New endpoint to get role with privileges
+        [HttpGet("{RoleCode}/privileges")]
+        public async Task<IActionResult> GetRoleWithPrivileges(Guid RoleCode)
+        {
+            try
+            {
+                var roleWithPrivileges = await _roleManager.GetRoleWithPrivilegesAsync(RoleCode);
+                if (roleWithPrivileges == null)
                 {
                     return NotFound();
                 }
-
-                return NoContent();
+                a
+                return Ok(roleWithPrivileges);
             }
             catch (Exception ex)
             {
@@ -122,3 +172,4 @@ namespace conifs.rms.@base.api.Controllers
         }
     }
 }
+

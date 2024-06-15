@@ -1,27 +1,25 @@
-﻿using conifs.rms.dto.Role;
-using conifs.rms.data.entities;
+﻿using conifs.rms.data.entities;
+using conifs.rms.dto.Role;
 
-namespace conifs.rms.business.Mappers
+namespace conifs.rms.business.mappers
 {
-    public class RoleMapper
+    public static class RoleMappers
     {
-        public Role Map(RoleDto input)
+        public static RoleDto ToDto(Role role)
         {
-            return new Role()
+            return new RoleDto
             {
-                RoleCode = input?.RoleCode ?? Guid.Empty,
-                RoleID = input?.RoleID,
-                RoleName = input?.RoleName
+                RoleID = role.RoleID,
+                RoleName = role.RoleName
             };
         }
 
-        public RoleDto Map(Role input)
+        public static Role ToEntity(RoleDto roleDto)
         {
-            return new RoleDto()
+            return new Role
             {
-                RoleCode = input?.RoleCode ?? Guid.Empty,
-                RoleID = input?.RoleID,
-                RoleName = input?.RoleName
+                RoleID = roleDto.RoleID,
+                RoleName = roleDto.RoleName
             };
         }
     }

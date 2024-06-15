@@ -1,72 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using conifs.rms.data;
+﻿using conifs.rms.data;
 using conifs.rms.data.entities;
-using conifs.rms.dto.Role;
+using conifs.rms.dto;
 using FluentValidation;
-using AutoMapper;
+using FluentValidation.Results;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace conifs.rms.business
 {
     public class RoleManager : IRoleManager
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IValidator<RoleDto> _roleDtoValidator;
-        private readonly IMapper _mapper;
+        private readonly IValidator<Role> _roleValidator;
 
-        public RoleManager(IRoleRepository roleRepository, IValidator<RoleDto> roleDtoValidator, IMapper mapper)
+        public RoleManager(IRoleRepository roleRepository, IValidator<Role> roleValidator)
         {
             _roleRepository = roleRepository;
-            _roleDtoValidator = roleDtoValidator;
-            _mapper = mapper;
+            _roleValidator = roleValidator;
         }
 
-        public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
+        public async Task<IEnumerable<Role>> GetAllRolesAsync()
         {
-            var roles = await _roleRepository.GetAllRolesAsync();
-            return _mapper.Map<IEnumerable<RoleDto>>(roles);
+            return await _roleRepository.GetAllRolesAsync();
         }
 
-        public async Task<RoleDto> GetRoleByIdAsync(Guid roleCode)
+        public async Task<Role> GetRoleByIdAsync(Guid roleId)
         {
-            var role = await _roleRepository.GetRoleByIdAsync(roleCode);
-            return _mapper.Map<RoleDto>(role);
+            return await _roleRepository.GetRoleByIdAsync(roleId);
         }
 
-        public async Task<RoleDto> AddRoleAsync(RoleDto roleDto)
+        public async Task<Role> AddRoleAsync(Role role)
         {
-            var validationResult = _roleDtoValidator.Validate(roleDto);
-
+            role.RoleCode = Guid.NewGuid(); // Ensure RoleCode is set internally
+            ValidationResult validationResult = _roleValidator.Validate(role);
             if (!validationResult.IsValid)
             {
-                // Handle validation failures
-                throw new ValidationException(validationResult.Errors);
+                throw new ArgumentException(string.Join("; ", validationResult.Errors));
             }
 
-            var role = _mapper.Map<Role>(roleDto);
-            var addedRole = await _roleRepository.AddRoleAsync(role);
-            return _mapper.Map<RoleDto>(addedRole);
+            return await _roleRepository.AddRoleAsync(role);
         }
 
-        public async Task<RoleDto> UpdateRoleAsync(RoleDto roleDto)
+        public async Task<Role> UpdateRoleAsync(Role role)
         {
-            var validationResult = _roleDtoValidator.Validate(roleDto);
-
+            ValidationResult validationResult = _roleValidator.Validate(role);
             if (!validationResult.IsValid)
             {
-                // Handle validation failures
-                throw new ValidationException(validationResult.Errors);
+                throw new ArgumentException(string.Join("; ", validationResult.Errors));
             }
 
-            var role = _mapper.Map<Role>(roleDto);
-            var updatedRole = await _roleRepository.UpdateRoleAsync(role);
-            return _mapper.Map<RoleDto>(updatedRole);
+            return await _roleRepository.UpdateRoleAsync(role);
         }
 
-        public async Task<bool> DeleteRoleAsync(Guid roleCode)
+        public async Task DeleteRoleAsync(Guid roleId)
         {
-            return await _roleRepository.DeleteRoleAsync(roleCode);
+            await _roleRepository.DeleteRoleAsync(roleId);
         }
+
+        public async Task<RoleWithPrivilegesDto> GetRoleWithPrivilegesAsync(Guid roleId)
+        {
+            var role = await _roleRepository.GetRoleByIdAsync(roleId);
+            if (role == null || role.Privileges == null) return null;
+
+            var roleWithPrivilegesDto = new RoleWithPrivilegesDto
+            {
+                RoleID = role.RoleID,
+                RoleName = role.RoleName,
+                PrivilegeNames = role.Privileges.Select(p => p.PrivilegeName).ToList()
+            };
+
+            return roleWithPrivilegesDto;
+        }
+
+
     }
 }

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using conifs.rms.data.entities;
+using conifs.rms.dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.data
 {
@@ -21,36 +22,53 @@ namespace conifs.rms.data
             return await _context.Roles.ToListAsync();
         }
 
-        public async Task<Role> GetRoleByIdAsync(Guid roleCode)
+        public async Task<Role> GetRoleByIdAsync(Guid roleId)
         {
-            return await _context.Roles.FindAsync(roleCode);
+            return await _context.Roles
+                                 .Include(r => r.Privileges) // Ensure Privileges are loaded
+                                 .FirstOrDefaultAsync(r => r.RoleID == roleId);
         }
+
 
         public async Task<Role> AddRoleAsync(Role role)
         {
-            await _context.Roles.AddAsync(role);
+            _context.Roles.Add(role);
             await _context.SaveChangesAsync();
             return role;
         }
 
         public async Task<Role> UpdateRoleAsync(Role role)
         {
-            _context.Roles.Update(role);
+            _context.Entry(role).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return role;
         }
 
-        public async Task<bool> DeleteRoleAsync(Guid roleCode)
+        public async Task DeleteRoleAsync(Guid roleId)
         {
-            var role = await _context.Roles.FindAsync(roleCode);
-            if (role == null)
+            var role = await _context.Roles.FindAsync(roleId);
+            if (role != null)
             {
-                return false;
+                _context.Roles.Remove(role);
+                await _context.SaveChangesAsync();
             }
+        }
 
-            _context.Roles.Remove(role);
-            await _context.SaveChangesAsync();
-            return true;
+        public async Task<RoleWithPrivilegesDto> GetRoleWithPrivilegesAsync(Guid roleId)
+        {
+            var role = await _context.Roles
+                .Include(r => r.RolePrivileges)
+                .ThenInclude(rp => rp.Privilege)
+                .FirstOrDefaultAsync(r => r.RoleCode == roleId);
+
+            if (role == null) return null;
+
+            return new RoleWithPrivilegesDto
+            {
+                RoleID = role.RoleID,
+                RoleName = role.RoleName,
+                PrivilegeNames = role.RolePrivileges.Select(rp => rp.Privilege.PrivilegeName).ToList()
+            };
         }
     }
 }
