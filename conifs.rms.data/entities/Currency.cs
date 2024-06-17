@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace conifs.rms.data.entities
 {
@@ -12,6 +7,7 @@ namespace conifs.rms.data.entities
         [Key]
         public int CurrencyID { get; set; }
 
+        [StringLength(3) ]
         public string CurrencyName { get; set; } = "";
     }
 }

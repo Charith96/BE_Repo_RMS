@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace conifs.rms.dto.Company
 {
@@ -9,7 +7,7 @@ namespace conifs.rms.dto.Company
         // [JsonIgnore]
          [Required]
 
-      //  [Key]
+      // [Key]
        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CountryID { get; set; }
        

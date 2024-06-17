@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
-using conifs.rms.data.repositories;
-using conifs.rms.data.entities;
-using conifs.rms.dto.Company;
+﻿using AutoMapper;
 using conifs.rms.business.managers;
+using conifs.rms.data.entities;
+using conifs.rms.data.repositories;
+using conifs.rms.dto.Company;
 
 namespace conifs.rms.business
 {
@@ -19,39 +17,55 @@ namespace conifs.rms.business
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CountryDto>> GetAllCountriesAsync()
+        public async Task<IEnumerable<CountryDto>> GetAllCountries()
         {
-            var countries = await _countryRepository.GetAllCountriesAsync();
-            return _mapper.Map<IEnumerable<CountryDto>>(countries);
+            var country = await _countryRepository.GetAllCountries();
+            return _mapper.Map<List<CountryDto>>(country);
         }
 
-        public async Task<CountryDto> GetCountryByIdAsync(int countryId)
+        public async Task<CountryDto> GetCountryById(int countryId)
         {
-            var country = await _countryRepository.GetCountryByIdAsync(countryId);
-            return _mapper.Map<CountryDto>(country);
+            var country = await _countryRepository.GetCountryById(countryId);
+            return _mapper.Map<CountryDto>(country) ?? new CountryDto();
         }
 
-        public async Task AddCountryAsync(CountryDto countryDto)
+        public async Task<CountryDto> AddCountry(CountryDto newCountryDto)
         {
             // Ensure that the CountryID is not set before mapping
            // countryDto.CountryID = 0; // or default(int) if the type is nullable
+           Country newCountry = _mapper.Map<Country>(newCountryDto);
 
-            var country = _mapper.Map<Country>(countryDto);
-            await _countryRepository.AddCountryAsync(country);
+            var addedCountry = await _countryRepository.AddCountry(newCountry);
+            newCountryDto.CountryID = addedCountry.CountryID;
+
+            return newCountryDto;
+            //    _mapper.Map<Country>(countryDto);
+           // await _countryRepository.AddCountryAsync(country);
         }
 
-        public async Task UpdateCountryAsync(CountryDto countryDto)
+        public async Task<CountryDto> UpdateCountry(CountryDto updatedCountryDto)
         {
             // Ensure that the CountryID is not set before mapping
           //  countryDto.CountryID = 0; // or default(int) if the type is nullable
 
-            var country = _mapper.Map<Country>(countryDto);
-            await _countryRepository.UpdateCountryAsync(country);
+            var existingCountry = await _countryRepository.GetCountryById(updatedCountryDto.CountryID);
+            if (existingCountry == null) {
+                throw new Exception($"Company with ID {updatedCountryDto.CountryID} not found.");
+            }
+
+            var updatedCountry = _mapper.Map<Country>(updatedCountryDto);
+
+            existingCountry.CountryName = updatedCountry.CountryName;
+
+            
+            var updatedCountryEntitiy = await _countryRepository.UpdateCountry(existingCountry);
+
+            return _mapper.Map<CountryDto>(updatedCountryEntitiy);
         }
 
-        public async Task DeleteCountryAsync(int countryId)
+        public async Task DeleteCountry(int countryId)
         {
-            await _countryRepository.DeleteCountryAsync(countryId);
+            await _countryRepository.DeleteCountry(countryId);
         }
     }
 }

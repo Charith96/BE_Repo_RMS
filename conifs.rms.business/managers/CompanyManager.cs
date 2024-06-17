@@ -32,7 +32,7 @@ namespace conifs.rms.business.managers
         {
             var company = await _companyRepository.GetCompanyById(companyID);
 
-                return _mapper.Map<CompanyDto>(company) ?? new CompanyDto(); ;
+                return _mapper.Map<CompanyDto>(company) ?? new CompanyDto(); 
         }
 
         public async Task<CompanyDto> AddCompany(CompanyDto newCompanyDto)

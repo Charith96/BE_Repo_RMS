@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using conifs.rms.business;
-using conifs.rms.business.managers;
+﻿using conifs.rms.business.managers;
 using conifs.rms.dto.Company;
+using Microsoft.AspNetCore.Mvc;
 
 namespace conifs.rms.api.Controllers
 {
@@ -19,46 +16,91 @@ namespace conifs.rms.api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CountryDto>>> GetAllCountries()
+        public async Task<IActionResult> GetAllCountries()
         {
-            var countries = await _countryManager.GetAllCountriesAsync();
-            return Ok(countries);
+            try
+            {
+                var countries = await _countryManager.GetAllCountries();
+                return Ok(countries);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CountryDto>> GetCountryById(int id)
+        public async Task<IActionResult> GetCountryById(int id)
         {
-            var country = await _countryManager.GetCountryByIdAsync(id);
-            if (country == null)
+            try
             {
-                return NotFound();
+                var country = await _countryManager.GetCountryById(id);
+                if (country == null)
+                {
+                    return NotFound();
+                }
+                return Ok(country);
             }
-            return Ok(country);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCountry([FromBody] CountryDto countryDto)
+        public async Task<IActionResult> AddCountry([FromBody] CountryDto newCountryDto)
         {
-            await _countryManager.AddCountryAsync(countryDto);
-            return CreatedAtAction(nameof(GetCountryById), new { id = countryDto.CountryID }, countryDto);
+            try
+            {
+                var addedCountry = await _countryManager.AddCountry(newCountryDto);
+                return Ok(addedCountry);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            
+           // return CreatedAtAction(nameof(GetCountryById), new { id = countryDto.CountryID }, countryDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCountry(int id, [FromBody] CountryDto countryDto)
+        public async Task<IActionResult> UpdateCountry(int id, [FromBody] CountryDto updatedCountryDto)
         {
-            if (id != countryDto.CountryID)
+            try
             {
-                return BadRequest();
+                if (id != updatedCountryDto.CountryID)
+                {
+                    return BadRequest("Country ID mismatch");
+                }
+               var updatedCountry = await _countryManager.UpdateCountry(updatedCountryDto);
+                if(updatedCountry != null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedCountry);
             }
-            await _countryManager.UpdateCountryAsync(countryDto);
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+           
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCountry(int id)
+        public async Task<IActionResult> DeleteCountry(int id)
         {
-            await _countryManager.DeleteCountryAsync(id);
-            return NoContent();
+            try
+            {
+                await _countryManager.DeleteCountry(id);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            
         }
     }
 }

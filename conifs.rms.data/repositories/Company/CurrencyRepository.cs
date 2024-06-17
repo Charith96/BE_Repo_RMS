@@ -15,33 +15,40 @@ namespace conifs.rms.data.repositories
             _context = context;
         }
 
-        public async Task<List<Currency>> GetAllCurrenciesAsync()
+        public async Task<IEnumerable<Currency>> GetAllCurrencies()
         {
             return await _context.Currencies.ToListAsync();
         }
 
-        public async Task<Currency> GetCurrencyByIdAsync(int id)
+        public async Task<Currency> GetCurrencyById(int currencyID)
         {
-            return await _context.Currencies.FindAsync(id);
+            var currency = await _context.Currencies.FindAsync(currencyID);
+            return currency ?? new Currency();
         }
 
-        public async Task AddCurrencyAsync(Currency currency)
+        public async Task<Currency> AddCurrency(Currency newCurrency)
         {
-            _context.Currencies.Add(currency);
+            _context.Currencies.Add(newCurrency);
             await _context.SaveChangesAsync();
+            return newCurrency;
         }
 
-        public async Task UpdateCurrencyAsync(Currency currency)
+        public async Task<Currency> UpdateCurrency(Currency currency)
         {
-            _context.Entry(currency).State = EntityState.Modified;
+            _context.Currencies.Update(currency);
             await _context.SaveChangesAsync();
+            return currency;
         }
 
-        public async Task DeleteCurrencyAsync(int id)
+        public async Task DeleteCurrency(int currencyID)
         {
-            var currency = await _context.Currencies.FindAsync(id);
-            _context.Currencies.Remove(currency);
-            await _context.SaveChangesAsync();
+            var currency = await _context.Currencies.FindAsync(currencyID);
+            if(currency != null)
+            {
+                _context.Currencies.Remove(currency);
+                await _context.SaveChangesAsync();
+            }
+
         }
     }
 }

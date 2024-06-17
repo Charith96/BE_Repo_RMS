@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace conifs.rms.data.entities
 {
@@ -37,10 +39,20 @@ namespace conifs.rms.data.entities
 
         public bool DefaultCompany { get; set; }
 
+        //[ForeignKey("Country")]
+        //public int CountryID { get; set; }
+
+        //[ForeignKey("Currency")]
+        //public int CurrencyID { get; set; }
+
         public Company()
         {
             CompanyID = Guid.NewGuid(); // Initialize CompanyID with a new Guid
         }
+
+        //[JsonIgnore]
+        //public virtual Country Country { get; set; }
+        //[JsonIgnore]    
 
     }
 }

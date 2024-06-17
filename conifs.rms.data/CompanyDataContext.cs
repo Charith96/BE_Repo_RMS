@@ -44,6 +44,26 @@ namespace conifs.rms.data
         .Property(c => c.CountryID)
         .ValueGeneratedOnAdd();
 
+        //    modelBuilder.Entity<Company>(entity =>
+        //        { 
+        //        entity.HasOne(c => c.Country)
+        //        .WithMany()
+        //        .HasForeignKey(c => c.CountryID)
+        //        .OnDelete(DeleteBehavior.Restrict);
+
+        //         entity.Ignore(c => c.Country);
+        //});
+
+        //    modelBuilder.Entity<Company>(entity =>
+        //    {
+        //        entity.HasOne(c => c.Currency)
+        //        .WithMany()
+        //        .HasForeignKey(c => c.CurrencyID)
+        //        .OnDelete(DeleteBehavior.Restrict);
+
+        //        entity.Ignore(c => c.Currency);
+        //    });
+
             base.OnModelCreating(modelBuilder);
         }
 

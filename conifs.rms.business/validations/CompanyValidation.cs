@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using conifs.rms.data.entities;
+﻿using conifs.rms.data.entities;
 using FluentValidation;
 
 namespace conifs.rms.business.validators
