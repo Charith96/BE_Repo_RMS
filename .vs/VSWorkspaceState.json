@@ -1,11 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+    "\\conifs.rms.base.api",
+    "\\conifs.rms.base.api\\Controllers",
     "\\conifs.rms.business",
     "\\conifs.rms.business\\managers",
     "\\conifs.rms.data",
-    "\\conifs.rms.data\\Profiles"
+    "\\conifs.rms.data\\entities",
+    "\\conifs.rms.data\\Migrations",
+    "\\conifs.rms.dto",
+    "\\conifs.rms.dto\\Reservation",
+    "\\conifs.rms.dto\\ReservationGroup"
   ],
-  "SelectedNode": "\\conifs.rms.data\\Profiles\\TimeSlotProfile.cs",
+  "SelectedNode": "\\RMS.sln",
   "PreviewInSolutionExplorer": false
 }

@@ -10,13 +10,11 @@
 
   <ItemGroup>
     <Compile Remove="Companies\**" />
-    <Compile Remove="Reservation\**" />
     <Compile Remove="Roles\**" />
     <EmbeddedResource Remove="Companies\**" />
-    <EmbeddedResource Remove="Reservation\**" />
     <EmbeddedResource Remove="Roles\**" />
     <None Remove="Companies\**" />
-    <None Remove="Reservation\**" />
+
     <None Remove="Roles\**" />
   </ItemGroup>
 
@@ -26,6 +24,10 @@
     <Compile Remove="Customers\**" />
     <EmbeddedResource Remove="Customers\**" />
     <None Remove="Customers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Reservation\ReservationDto.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,24 +5,29 @@ namespace conifs.rms.data.repositories.User;
 
 public interface IUserRepository
 {
+    Task<UserTable> GetUserByIdFull(string userId);
+
     Task<ICollection<GetUserDtoList>> GetAllUsers();
 
-
-
-    bool IfExistUser(string userCode);
+    bool IfExistUser(string userId);
 
 
 
-    void UpdateUser(PutUserDto user, string userid);
+    void UpdateUser(UserTable user);
 
-    void DeleteUser(string userCode);
-    Task<GetUserDto> GetUserByIdFull(string userId);
-    void CreateUser(CreateUserDto UserCreateDto);
-    void CreateUserCompany(CreateUserCompanyDto userCompany);
-    void CreateUserRole(CreateUserRoleDto userRole);
-    IEnumerable<UserCompany> GetUserCompanies(string userCode);
-    IEnumerable<UserRoles> GetUserRoles(string userCode);
+    void DeleteUser(string id);
+
+    IEnumerable<UserCompany> GetUserCompanies(string userId);
+
+    IEnumerable<UserRoles> GetUserRoles(string userId);
+
+    void CreateUser(UserTable userCreate);
+
+    void CreateUserCompany(UserCompany userCompany);
+
+    void CreateUserRole(UserRoles userRole);
 
     void DeleteUserCompany(string id);
+
     void DeleteUserRole(string id);
 }

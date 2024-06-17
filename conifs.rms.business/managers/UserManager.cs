@@ -1,104 +1,219 @@
-﻿
+﻿using AutoMapper;
+using conifs.rms.data;
 using conifs.rms.data.entities;
+using conifs.rms.data.repositories.TimeSlots;
 using conifs.rms.data.repositories.User;
 using conifs.rms.dto.Users;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace conifs.rms.business.managers
 {
     public class UserManager : IUserManager
     {
-        public void AddUser(UserTable newUser)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IUserRepository _UserReopsitory;
+
+        public UserManager(ApplicationDbContext context, IMapper mapper,IUserRepository userRepository)
         {
-            throw new NotImplementedException();
+            _UserReopsitory= userRepository;
+            _context = context;
+            _mapper = mapper;
         }
 
-        public void DeleteUser(string Userid)
+        public async Task<GetUserDto> GetUserByIdFull(string userId)
         {
-            throw new NotImplementedException();
+            // Fetch the user entity
+            var userEntity = await _UserReopsitory.GetUserByIdFull(userId);
+
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            // Map user entity to UserTable
+            var userResponse = _mapper.Map<GetUserDto>(userEntity);
+
+            // Fetch user companies
+            var userCompanies = await _context.UserCompany
+                .Where(uc => uc.Userid.ToString() == userId)
+                .Select(uc => uc.CompanyId.ToString())
+                .ToListAsync();
+
+            // Fetch user roles
+            var userRoles = await _context.UserRole
+                .Where(ur => ur.Userid.ToString() == userId)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
+
+            var userNames = new List<string>();
+
+
+            foreach (var userCompany in userCompanies)
+            {
+                var companyName = _context.Companies
+                    .Where(c => c.CompanyID.ToString() == userCompany)
+                    .Select(c => c.CompanyName)
+                    .FirstOrDefault();
+
+                if (companyName != null)
+                {
+                    userNames.Add(companyName);
+                }
+            }
+            var roleNames = new List<string>();
+
+            foreach (var userRole in userRoles)
+            {
+                var roleName = await _context.Roles
+                    .Where(c => c.RoleCode == userRole) // Ensure RoleID is correctly compared
+                    .Select(c => c.RoleName)
+                    .FirstOrDefaultAsync();
+
+                if (roleName != null)
+                {
+                    roleNames.Add(roleName);
+                }
+            }
+            userResponse.Companies = userNames;
+            userResponse.Roles = roleNames;
+
+            return userResponse;
         }
 
-        public ICollection<UserTable> GetAllUsers()
+
+        public async Task<ICollection<GetUserDtoList>> GetAllUsers()
         {
-            throw new NotImplementedException();
+            var users = await _UserReopsitory.GetAllUsers();
+
+            return users;
         }
 
-        public UserTable GetUserById(string Userid)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserCompany> GetUserCompanies(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserRoles> GetUserRoles(string id)
-        {
-            throw new NotImplementedException();
-        }
 
         public bool IfExistUser(string Userid)
         {
-            throw new NotImplementedException();
+            return _UserReopsitory.IfExistUser(Userid);
         }
 
-        public void UpdateUser(UserTable user)
+   
+        public void UpdateUser(PutUserDto user, string Userid)
         {
-            throw new NotImplementedException();
+            var userUpdate = _context.User.FirstOrDefault(u => u.Userid.ToString() == Userid);
+            if (userUpdate != null)
+            {
+                var userCompanies = user.Companies;
+                var userRoles = user.Roles;
+                Guid userId = Guid.Parse(Userid);
+                DeleteUserCompany(Userid);
+                DeleteUserRole(Userid);
+                foreach (var userCompany in userCompanies)
+                {
+                    var companyID = _context.Companies
+                        .Where(c => c.CompanyName == userCompany)
+                        .Select(c => c.CompanyID)
+                        .First();
+
+                    // Check if the userCompany already exists in the database
+                    var existingUserCompany = _context.UserCompany
+                        .FirstOrDefault(uc => uc.Userid == userId && uc.CompanyId == companyID);
+
+                    if (existingUserCompany == null)
+                    {
+                        // If it doesn't exist, create a new UserCompany entity
+                        var userCompanyEntity = new CreateUserCompanyDto
+                        {
+                            id = userId,
+                            CompanyId = companyID
+                        };
+                        var userCompanyUpdate = _mapper.Map<UserCompany>(userCompanyEntity);
+                        _context.UserCompany.Add(userCompanyUpdate);
+                    }
+
+
+
+                }
+                foreach (var userRole in userRoles)
+                {
+                    var RoleID = _context.Roles
+                        .Where(c => c.RoleName == userRole)
+                        .Select(c => c.RoleCode)
+                        .First();
+
+                    // Check if the userCompany already exists in the database
+                    var existingUserRole = _context.UserRole
+                        .FirstOrDefault(uc => uc.Userid == userId && uc.RoleId == RoleID);
+
+                    if (existingUserRole == null)
+                    {
+
+
+                        // If it doesn't exist, create a new UserCompany entity
+                        var userRoleEntity = new CreateUserRoleDto
+                        {
+                            id = userId,
+                            RoleId = RoleID
+                        };
+                        var userRoleUpdate = _mapper.Map<UserRoles>(userRoleEntity);
+                        _context.UserRole.Add(userRoleUpdate);
+                    }
+
+
+
+                }
+                _mapper.Map(user, userUpdate);
+                _UserReopsitory.UpdateUser(userUpdate);
+            }
         }
 
-        void IUserManager.AddUser(UserTable newUser)
+        public void DeleteUser(string id)
         {
-            throw new NotImplementedException();
+            _UserReopsitory.DeleteUser(id);
+        }
+        public IEnumerable<UserCompany> GetUserCompanies(string Userid)
+        {
+
+            return _UserReopsitory.GetUserCompanies(Userid);
+        }
+        public IEnumerable<UserRoles> GetUserRoles(string Userid)
+        {
+
+            return _UserReopsitory.GetUserRoles(Userid);
+        }
+        public void CreateUser(CreateUserDto userCreateDto)
+        {
+
+            var userEntity = _mapper.Map<UserTable>(userCreateDto);
+
+            _UserReopsitory.CreateUser(userEntity);
         }
 
-        void IUserManager.CreateUser(CreateUserDto UserCreateDto)
+        public void CreateUserCompany(CreateUserCompanyDto userCompany)
         {
-            throw new NotImplementedException();
-        }
+            var userCompanyEntity = _mapper.Map<UserCompany>(userCompany);
 
-        void IUserManager.CreateUserCompany(CreateUserCompanyDto userCompany)
-        {
-            throw new NotImplementedException();
+            _UserReopsitory.CreateUserCompany(userCompanyEntity);
         }
+        public void CreateUserRole(CreateUserRoleDto userRole)
+        {
+            var userRoleEntity = _mapper.Map<UserRoles>(userRole);
 
-        void IUserManager.DeleteUser(string userCode)
-        {
-            throw new NotImplementedException();
+            _UserReopsitory.CreateUserRole(userRoleEntity);
         }
+        public void DeleteUserCompany(string id)
+        {
+           
 
-        Task<ICollection<GetUserDto>> IUserManager.GetAllUsers()
-        {
-            throw new NotImplementedException();
-        }
+            _UserReopsitory.DeleteUserCompany(id);
 
-        GetUserDto IUserManager.GetUserById(string userCode)
-        {
-            throw new NotImplementedException();
-        }
 
-        IEnumerable<UserCompany> IUserManager.GetUserCompanies(string userCode)
-        {
-            throw new NotImplementedException();
         }
-
-        IEnumerable<UserRoles> IUserManager.GetUserRoles(string userCode)
+        public void DeleteUserRole(string id)
         {
-            throw new NotImplementedException();
+           
+            _UserReopsitory.DeleteUserRole(id);
         }
-
-        bool IUserManager.IfExistUser(string userCode)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IUserManager.UpdateUser(PutUserDto user, string userid)
-        {
-            throw new NotImplementedException();
-        }
-    
     }
 }

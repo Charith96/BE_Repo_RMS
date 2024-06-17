@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using conifs.rms.dto.Users;
 using conifs.rms.business.validations;
 using FluentValidation;
+using conifs.rms.business.managers;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace conifs.rms.@base.api.Controllers
@@ -13,9 +14,9 @@ namespace conifs.rms.@base.api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userService;
+        private readonly IUserManager _userService;
 
-        public UserController(IUserRepository userService)
+        public UserController(IUserManager userService)
         {
             _userService = userService;
         }

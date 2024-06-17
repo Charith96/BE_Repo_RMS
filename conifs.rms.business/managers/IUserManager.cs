@@ -1,27 +1,41 @@
 ﻿using conifs.rms.data.entities;
 using conifs.rms.dto.Users;
+using Microsoft.EntityFrameworkCore;
 
 
-namespace conifs.rms.business.managers;
-
-public interface IUserManager
+namespace conifs.rms.business.managers
 {
-    Task<ICollection<GetUserDto>> GetAllUsers();
 
-    GetUserDto GetUserById(string userCode);
+    public interface IUserManager
+    {
 
-    bool IfExistUser(string userCode);
+        public  Task<ICollection<GetUserDtoList>> GetAllUsers();
 
-    void AddUser(UserTable newUser);
+        public  Task<GetUserDto> GetUserByIdFull(string userId);
 
-    void UpdateUser(PutUserDto user, string userid);
-
-    void DeleteUser(string userCode);
+        public bool IfExistUser(string Userid);
 
 
-    void CreateUser(CreateUserDto UserCreateDto);
-    void CreateUserCompany(CreateUserCompanyDto userCompany);
-    IEnumerable<UserCompany> GetUserCompanies(string userCode);
-    IEnumerable<UserRoles> GetUserRoles(string userCode);
 
+        public void UpdateUser(PutUserDto user, string Userid);
+
+
+        public void DeleteUser(string id);
+
+        public IEnumerable<UserCompany> GetUserCompanies(string Userid);
+
+        public IEnumerable<UserRoles> GetUserRoles(string Userid);
+
+        public void CreateUser(CreateUserDto userCreateDto);
+
+
+        public void CreateUserCompany(CreateUserCompanyDto userCompany);
+
+        public void CreateUserRole(CreateUserRoleDto userRole);
+
+        public void DeleteUserCompany(string id);
+
+        public void DeleteUserRole(string id);
+     
+    }
 }

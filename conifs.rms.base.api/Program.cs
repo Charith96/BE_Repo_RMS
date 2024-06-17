@@ -25,12 +25,6 @@ using conifs.rms.data.repositories.User;
 using Microsoft.Extensions.Configuration;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-
-
-
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -60,6 +54,13 @@ builder.Services.AddScoped<ICurrencyManager, CurrencyManager>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserManager, UserManager>();
+
+
+// Register Reservation manager, repository, and validator
+
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+
+builder.Services.AddScoped<IReservationManager, ReservationManager>();
 
 
 // Register AutoMapper and scan for profiles in the assembly containing UserProfile
