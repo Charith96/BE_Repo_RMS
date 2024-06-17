@@ -28,10 +28,6 @@ namespace conifs.rms.data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PrivilegeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PrivilegeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -49,34 +45,15 @@ namespace conifs.rms.data.Migrations
 
                     b.Property<string>("RoleID")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RoleCode");
 
                     b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("conifs.rms.data.entities.RolePrivilege", b =>
-                {
-                    b.Property<Guid>("RolePrivilegeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PrivilegeCode")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleCode")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RolePrivilegeId");
-
-                    b.ToTable("RolePrivileges");
                 });
 #pragma warning restore 612, 618
         }

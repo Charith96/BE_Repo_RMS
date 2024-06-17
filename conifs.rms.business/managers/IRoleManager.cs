@@ -1,8 +1,7 @@
-﻿using conifs.rms.dto;
-using conifs.rms.data.entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using conifs.rms.data.entities;
 
 namespace conifs.rms.business
 {
@@ -13,6 +12,5 @@ namespace conifs.rms.business
         Task<Role> AddRoleAsync(Role role);
         Task<Role> UpdateRoleAsync(Role role);
         Task DeleteRoleAsync(Guid roleId);
-        Task<RoleWithPrivilegesDto> GetRoleWithPrivilegesAsync(Guid roleId);
     }
 }

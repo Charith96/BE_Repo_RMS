@@ -1,12 +1,11 @@
-﻿using conifs.rms.data;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using conifs.rms.data;
 using conifs.rms.data.entities;
-using conifs.rms.dto;
+using conifs.rms.business.validations;
 using FluentValidation;
 using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace conifs.rms.business
 {
@@ -58,22 +57,5 @@ namespace conifs.rms.business
         {
             await _roleRepository.DeleteRoleAsync(roleId);
         }
-
-        public async Task<RoleWithPrivilegesDto> GetRoleWithPrivilegesAsync(Guid roleId)
-        {
-            var role = await _roleRepository.GetRoleByIdAsync(roleId);
-            if (role == null || role.Privileges == null) return null;
-
-            var roleWithPrivilegesDto = new RoleWithPrivilegesDto
-            {
-                RoleID = role.RoleID,
-                RoleName = role.RoleName,
-                PrivilegeNames = role.Privileges.Select(p => p.PrivilegeName).ToList()
-            };
-
-            return roleWithPrivilegesDto;
-        }
-
-
     }
 }

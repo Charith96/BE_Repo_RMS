@@ -6,10 +6,5 @@ namespace conifs.rms.dto.Role
     {
         public string RoleID { get; set; }
         public string RoleName { get; set; }
-
-        public static implicit operator RoleDto(RoleDto v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

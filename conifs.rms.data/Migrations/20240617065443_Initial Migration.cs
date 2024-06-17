@@ -16,7 +16,6 @@ namespace conifs.rms.data.Migrations
                 columns: table => new
                 {
                     PrivilegeCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PrivilegeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PrivilegeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -25,25 +24,12 @@ namespace conifs.rms.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePrivileges",
-                columns: table => new
-                {
-                    RolePrivilegeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PrivilegeCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolePrivileges", x => x.RolePrivilegeId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     RoleCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleID = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    RoleID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,9 +42,6 @@ namespace conifs.rms.data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Privileges");
-
-            migrationBuilder.DropTable(
-                name: "RolePrivileges");
 
             migrationBuilder.DropTable(
                 name: "Roles");

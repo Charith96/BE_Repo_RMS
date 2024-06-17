@@ -1,6 +1,5 @@
 ﻿using conifs.rms.business;
 using conifs.rms.data.entities;
-using conifs.rms.dto;
 using conifs.rms.dto.Role;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -150,26 +149,5 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-        // New endpoint to get role with privileges
-        [HttpGet("{RoleCode}/privileges")]
-        public async Task<IActionResult> GetRoleWithPrivileges(Guid RoleCode)
-        {
-            try
-            {
-                var roleWithPrivileges = await _roleManager.GetRoleWithPrivilegesAsync(RoleCode);
-                if (roleWithPrivileges == null)
-                {
-                    return NotFound();
-                }
-                a
-                return Ok(roleWithPrivileges);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
     }
 }
-
