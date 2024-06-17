@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using conifs.rms.data.entities;
+using conifs.rms.dto;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace conifs.rms.data
 {
     public class RoleRepository : IRoleRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public RoleRepository(ApplicationDbContext context)
+        public RoleRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Role>> GetAllRolesAsync()
@@ -47,6 +51,90 @@ namespace conifs.rms.data
             {
                 _context.Roles.Remove(role);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        // rolePrivilege methods
+        public async Task<IEnumerable<RolePrivilegeDto>> GetAllRolePrivilege()
+        {
+            try
+            {
+                var privi = await _context.RolePrivileges.ToListAsync();
+                return _mapper.Map<List<RolePrivilegeDto>>(privi);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception($"Error getting reservation groups: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<RolePrivilegeDto> GetRolePrivilege(Guid id)
+        {
+            try
+            {
+                var privi = await _context.RolePrivileges.FindAsync(id);
+                return _mapper.Map<RolePrivilegeDto>(privi);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception($"Error getting reservation group by id: {ex.Message}", ex);
+            }
+        }
+
+        public async Task AddRolePrivilege(RolePrivilegeDto rolePrivilegeDto)
+        {
+            try
+            {
+                var privi = _mapper.Map<RolePrivilege>(rolePrivilegeDto);
+                _context.RolePrivileges.Add(privi);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception($"Error adding reservation group: {ex.Message}", ex);
+            }
+        }
+
+        public async Task UpdateRolePrivilege(RolePrivilegeDto updatedRolePrivilege)
+        {
+            try
+            {
+                var privi = await _context.RolePrivileges.FindAsync(updatedRolePrivilege.RolePrivilegeCode);
+                if (privi == null)
+                {
+                    throw new KeyNotFoundException("Group not found");
+                }
+                
+                privi.RoleCode = updatedRolePrivilege.RoleCode;
+                privi.PrivilegeCode = updatedRolePrivilege.PrivilegeCode;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception($"Error updating reservation group: {ex.Message}", ex);
+            }
+        }
+
+        public async Task DeleteRolePrivilege(Guid id)
+        {
+            try
+            {
+                var privi = await _context.RolePrivileges.FindAsync(id);
+                if (privi == null)
+                {
+                    throw new KeyNotFoundException("Group not found");
+                }
+                _context.RolePrivileges.Remove(privi);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception($"Error deleting reservation group: {ex.Message}", ex);
             }
         }
     }
