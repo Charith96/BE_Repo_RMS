@@ -55,6 +55,46 @@ namespace conifs.rms.data.Migrations
 
                     b.ToTable("Roles");
                 });
+
+            modelBuilder.Entity("conifs.rms.data.entities.RolePrivilege", b =>
+                {
+                    b.Property<Guid>("RolePrivilegeCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PrivilegeCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolePrivilegeCode");
+
+                    b.HasIndex("PrivilegeCode");
+
+                    b.HasIndex("RoleCode");
+
+                    b.ToTable("RolePrivileges");
+                });
+
+            modelBuilder.Entity("conifs.rms.data.entities.RolePrivilege", b =>
+                {
+                    b.HasOne("conifs.rms.data.entities.Privilege", "Privilege")
+                        .WithMany()
+                        .HasForeignKey("PrivilegeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Privilege");
+
+                    b.Navigation("Role");
+                });
 #pragma warning restore 612, 618
         }
     }

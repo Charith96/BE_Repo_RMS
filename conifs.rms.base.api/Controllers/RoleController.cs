@@ -40,7 +40,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{RoleCode}")]
+        [HttpGet("{RoleCode:guid}")]
         public async Task<IActionResult> GetRoleById(Guid RoleCode)
         {
             try
@@ -102,7 +102,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{RoleCode}")]
+        [HttpPut("{RoleCode:guid}")]
         public async Task<IActionResult> UpdateRole(Guid RoleCode, [FromBody] RoleDto roleDto)
         {
             if (!ModelState.IsValid)
@@ -137,7 +137,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{RoleCode}")]
+        [HttpDelete("{RoleCode:guid}")]
         public async Task<IActionResult> DeleteRole(Guid RoleCode)
         {
             try
@@ -152,9 +152,9 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         // RolePrivilege methods
-        [HttpPost]
-        [Route("AddRolePrivilege")]
-        public async Task<IActionResult> AddRolePrivilege(RolePrivilegeDto rolePrivilegeDto)
+
+        [HttpPost("AddRolePrivilege")]
+        public async Task<IActionResult> AddRolePrivilege([FromBody] RolePrivilegeDto rolePrivilegeDto)
         {
             if (!ModelState.IsValid)
             {
@@ -165,7 +165,6 @@ namespace conifs.rms.@base.api.Controllers
             {
                 await _roleManager.AddRolePrivilege(rolePrivilegeDto);
                 return Ok();
-
             }
             catch (Exception ex)
             {
@@ -173,9 +172,8 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("GetRolePrivileges")]
-        public async Task<IActionResult> GetAllRolePrivilege()
+        [HttpGet("GetRolePrivileges")]
+        public async Task<IActionResult> GetAllRolePrivileges()
         {
             try
             {
@@ -188,9 +186,8 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        [Route("GetRolePrivilegeById")]
-        public async Task<IActionResult> GetRolePrivilege(Guid id)
+        [HttpGet("GetRolePrivilegeById/{id:guid}")]
+        public async Task<IActionResult> GetRolePrivilegeById(Guid id)
         {
             try
             {
@@ -203,10 +200,14 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("UpdateRolePrivilege")]
-        public async Task<IActionResult> UpdateRolePrivilege(RolePrivilegeDto updatedRolePrivilege)
+        [HttpPut("UpdateRolePrivilege")]
+        public async Task<IActionResult> UpdateRolePrivilege([FromBody] RolePrivilegeDto updatedRolePrivilege)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 await _roleManager.UpdateRolePrivilege(updatedRolePrivilege);
@@ -218,15 +219,13 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        [Route("DeleteRolePrivilege")]
-        
+        [HttpDelete("DeleteRolePrivilege/{id:guid}")]
         public async Task<IActionResult> DeleteRolePrivilege(Guid id)
         {
             try
             {
                 await _roleManager.DeleteRolePrivilege(id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

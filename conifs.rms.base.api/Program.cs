@@ -19,6 +19,10 @@ builder.Services.AddScoped<IRoleManager, RoleManager>();
 builder.Services.AddScoped<IPrivilegeRepository, PrivilegeRepository>();
 builder.Services.AddScoped<IPrivilegeManager, PrivilegeManager>();
 
+// Register AutoMapper and scan for profiles in the assembly containing roleProfile
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 // Register the RoleValidator
 builder.Services.AddScoped<IValidator<Role>, RoleValidation>();
 

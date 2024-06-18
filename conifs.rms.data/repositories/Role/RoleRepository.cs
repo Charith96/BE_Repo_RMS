@@ -65,7 +65,7 @@ namespace conifs.rms.data
             catch (Exception ex)
             {
                 // Log or handle the exception accordingly
-                throw new Exception($"Error getting reservation groups: {ex.Message}", ex);
+                throw new Exception($"Error getting rolePrivilege: {ex.Message}", ex);
             }
         }
 
@@ -79,7 +79,7 @@ namespace conifs.rms.data
             catch (Exception ex)
             {
                 // Log or handle the exception accordingly
-                throw new Exception($"Error getting reservation group by id: {ex.Message}", ex);
+                throw new Exception($"Error getting rolePrivilege by id: {ex.Message}", ex);
             }
         }
 
@@ -94,7 +94,7 @@ namespace conifs.rms.data
             catch (Exception ex)
             {
                 // Log or handle the exception accordingly
-                throw new Exception($"Error adding reservation group: {ex.Message}", ex);
+                throw new Exception($"Error adding rolePrivilege: {ex.Message}", ex);
             }
         }
 
@@ -105,7 +105,7 @@ namespace conifs.rms.data
                 var privi = await _context.RolePrivileges.FindAsync(updatedRolePrivilege.RolePrivilegeCode);
                 if (privi == null)
                 {
-                    throw new KeyNotFoundException("Group not found");
+                    throw new KeyNotFoundException("rolePrivilege not found");
                 }
                 
                 privi.RoleCode = updatedRolePrivilege.RoleCode;
@@ -115,7 +115,7 @@ namespace conifs.rms.data
             catch (Exception ex)
             {
                 // Log or handle the exception accordingly
-                throw new Exception($"Error updating reservation group: {ex.Message}", ex);
+                throw new Exception($"Error updating rolePrivilege: {ex.Message}", ex);
             }
         }
 
@@ -126,7 +126,7 @@ namespace conifs.rms.data
                 var privi = await _context.RolePrivileges.FindAsync(id);
                 if (privi == null)
                 {
-                    throw new KeyNotFoundException("Group not found");
+                    throw new KeyNotFoundException("rolePrivilege not found");
                 }
                 _context.RolePrivileges.Remove(privi);
                 await _context.SaveChangesAsync();
@@ -134,7 +134,7 @@ namespace conifs.rms.data
             catch (Exception ex)
             {
                 // Log or handle the exception accordingly
-                throw new Exception($"Error deleting reservation group: {ex.Message}", ex);
+                throw new Exception($"Error deleting rolePrivilege: {ex.Message}", ex);
             }
         }
     }
