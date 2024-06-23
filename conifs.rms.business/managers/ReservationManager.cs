@@ -65,12 +65,12 @@ namespace conifs.rms.business
                 .FirstOrDefaultAsync();
 
             var GroupID = await _context.ReservationGroups
-                .Where(uc => uc.GroupId.ToString() == reservationDTO.GroupId)
+                .Where(uc => uc.Id.ToString() == reservationDTO.GroupId)
                 .Select(uc => uc.Id)
                 .FirstOrDefaultAsync();
 
             var ItemID = await _context.ReservationItems
-                .Where(uc => uc.ItemId.ToString() == reservationDTO.ItemId)
+                .Where(uc => uc.Id.ToString() == reservationDTO.ItemId)
                 .Select(uc => uc.Id)
                 .FirstOrDefaultAsync();
 
@@ -78,15 +78,7 @@ namespace conifs.rms.business
             reservation.GroupId = GroupID;
             reservation.ItemId = ItemID;
          
-            var Customer = _customerManager.GetCustomerByIdAsync(reservation.CustomerID).Result;
-            var Group = _reservationGroupManager.GetReservationGroupById(reservation.GroupId).Result;
-            var Item = _reservationItemManager.GetReservationItemById(reservation.ItemId).Result;
-            var customer = _mapper.Map<Customer>(Customer);
-            var gruop = _mapper.Map<ReservationGroup>(Group);
-            var item = _mapper.Map<ReservationItem>(Item);
-            reservation.Customer = customer;
-            reservation.ReservationGroup = gruop;
-            reservation.ReservationItem = item;
+            
             await _reservationRepository.AddReservationAsync(reservation);
             return await _reservationRepository.GetAllReservationsAsync();
         }
@@ -103,5 +95,6 @@ namespace conifs.rms.business
             await _reservationRepository.DeleteReservationAsync(id);
             return await _reservationRepository.GetAllReservationsAsync();
         }
+
     }
 }

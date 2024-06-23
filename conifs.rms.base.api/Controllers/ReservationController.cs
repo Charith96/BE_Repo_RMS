@@ -19,12 +19,12 @@ namespace conifs.rms.@base.api.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationManager _reservationManager;
-  
+
 
         public ReservationController(IReservationManager reservationManager)
         {
             _reservationManager = reservationManager;
-        
+
         }
 
         [HttpGet]
@@ -33,6 +33,15 @@ namespace conifs.rms.@base.api.Controllers
             var reservations = await _reservationManager.GetAllReservationsAsync();
             var reservationDtos = reservations.Select(r => MapToReservationDto(r)).ToList();
             return Ok(reservationDtos);
+        }
+
+        [HttpGet("ByItem/{Item}")]
+        public async Task<ActionResult<List<ReservationDto>>> GetReservationsByItem(Guid Item)
+        {
+            var reservations = await _reservationManager.GetAllReservationsAsync();
+            var reservationDtos = reservations.Select(r => MapToReservationDto(r)).ToList();
+            var ReservationByItem = reservationDtos.Where(dto => dto.ItemId == Item).ToList();
+            return Ok(ReservationByItem);
         }
 
      

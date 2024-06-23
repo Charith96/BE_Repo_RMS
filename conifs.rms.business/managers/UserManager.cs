@@ -163,6 +163,7 @@ namespace conifs.rms.business.managers
 
 
                 }
+                userUpdate.Userid = userId;
                 _mapper.Map(user, userUpdate);
                 _UserReopsitory.UpdateUser(userUpdate);
             }

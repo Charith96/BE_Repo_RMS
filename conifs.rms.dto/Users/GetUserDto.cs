@@ -34,6 +34,7 @@ namespace conifs.rms.dto.Users
 
         public DateTime ValidFrom { get; set; }
 
+        public string Password { get; set; }
 
         public DateTime ValidTill { get; set; }
         public List<String> Companies { get; set; } = new List<string>();

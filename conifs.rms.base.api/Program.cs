@@ -5,7 +5,8 @@ using conifs.rms.data;
 using conifs.rms.data.repositories;
 using conifs.rms.data.repositories.Company;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 //using conifs.rms.business.mappers;
 using conifs.rms.data.Profiles;
 using conifs.rms.business;
@@ -103,9 +104,16 @@ builder.Services.AddScoped<IReservationItemRepository, ReservationItemRepository
 builder.Services.AddScoped<ITimeSlotManager, TimeSlotManager>();
 builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddCors(options =>
+{
+    var frontendUrl = builder.Configuration.GetValue<string>("FrontendUrl");
 
-
-
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -122,6 +130,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
 
 app.MapControllers();

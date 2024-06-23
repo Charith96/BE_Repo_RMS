@@ -20,7 +20,7 @@ namespace conifs.rms.@base.api.Controllers
         {
             _userService = userService;
         }
-        [HttpGet("UserByID/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<GetUserDto>> GetUserByIdFull(string id)
         {
             var user = await _userService.GetUserByIdFull(id);
@@ -129,7 +129,7 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-        [HttpPost("create-user")]
+        [HttpPost]
         public IActionResult CreateUser(CreateUserDto userCreateDto)
         {
             if (!ModelState.IsValid)

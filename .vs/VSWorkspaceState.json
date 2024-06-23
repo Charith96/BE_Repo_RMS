@@ -1,17 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\conifs.rms.base.api",
-    "\\conifs.rms.base.api\\Controllers",
     "\\conifs.rms.business",
-    "\\conifs.rms.business\\managers",
-    "\\conifs.rms.data",
-    "\\conifs.rms.data\\entities",
-    "\\conifs.rms.data\\Migrations",
-    "\\conifs.rms.dto",
-    "\\conifs.rms.dto\\Reservation",
-    "\\conifs.rms.dto\\ReservationGroup"
+    "\\conifs.rms.business\\managers"
   ],
-  "SelectedNode": "\\RMS.sln",
+  "SelectedNode": "\\conifs.rms.business\\managers\\RoleManager.cs",
   "PreviewInSolutionExplorer": false
 }

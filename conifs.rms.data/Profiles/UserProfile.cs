@@ -25,7 +25,9 @@ namespace conifs.rms.data.Profiles
                .ForMember(dest => dest.ValidTill, opt => opt.MapFrom(src => src.ValidTill))
                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Userid))
                .ForMember(dest => dest.Companies, opt => opt.Ignore())
+               .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
                .ForMember(dest => dest.Roles, opt => opt.Ignore());
+
 
             CreateMap<UserTable, GetUserDtoList>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))

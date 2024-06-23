@@ -25,8 +25,8 @@ namespace conifs.rms.data.repositories
         {
             return await _context.Reservations.ToListAsync();
         }
-
-
+  
+   
         public async Task<entities.Reservation> GetReservationAsync(Guid id)
         {
             var  reservation =  await _context.Reservations.FindAsync(id);
