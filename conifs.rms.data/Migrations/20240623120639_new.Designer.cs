@@ -12,8 +12,8 @@ using conifs.rms.data;
 namespace conifs.rms.data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240611082827_First")]
-    partial class First
+    [Migration("20240623120639_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,6 +159,48 @@ namespace conifs.rms.data.Migrations
                     b.ToTable("Privileges");
                 });
 
+            modelBuilder.Entity("conifs.rms.data.entities.Reservation", b =>
+                {
+                    b.Property<Guid>("ReservationCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NoOfPeople")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReservationID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time1")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Time2")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ReservationCode");
+
+                    b.HasIndex("CustomerID");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Reservations");
+                });
+
             modelBuilder.Entity("conifs.rms.data.entities.ReservationGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -190,8 +232,9 @@ namespace conifs.rms.data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationPerSlot")
-                        .HasColumnType("int");
+                    b.Property<string>("DurationPerSlot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
@@ -356,7 +399,7 @@ namespace conifs.rms.data.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("conifs.rms.dto.CreateUserCompanyDto", b =>
+            modelBuilder.Entity("conifs.rms.dto.Users.CreateUserCompanyDto", b =>
                 {
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
@@ -367,7 +410,7 @@ namespace conifs.rms.data.Migrations
                     b.ToTable("CreateUserCompanyDto");
                 });
 
-            modelBuilder.Entity("conifs.rms.dto.CreateUserDto", b =>
+            modelBuilder.Entity("conifs.rms.dto.Users.CreateUserDto", b =>
                 {
                     b.Property<string>("DefaultCompany")
                         .IsRequired()
@@ -406,7 +449,7 @@ namespace conifs.rms.data.Migrations
                     b.ToTable("CreateUserDto");
                 });
 
-            modelBuilder.Entity("conifs.rms.dto.CreateUserRoleDto", b =>
+            modelBuilder.Entity("conifs.rms.dto.Users.CreateUserRoleDto", b =>
                 {
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
@@ -417,57 +460,11 @@ namespace conifs.rms.data.Migrations
                     b.ToTable("CreateUserRoleDto");
                 });
 
-            modelBuilder.Entity("conifs.rms.dto.GetUserDto", b =>
+            modelBuilder.Entity("conifs.rms.dto.Users.GetUserDto", b =>
                 {
                     b.Property<string>("Companies")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DefaultCompany")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Designation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PrimaryRole")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ValidTill")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.ToTable("GetUserDto");
-                });
-
-            modelBuilder.Entity("conifs.rms.dto.PutUserDto", b =>
-                {
-                    b.Property<Guid>("Userid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DefaultCompany")
                         .IsRequired()
@@ -497,6 +494,64 @@ namespace conifs.rms.data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Roles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ValidTill")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.ToTable("GetUserDto");
+                });
+
+            modelBuilder.Entity("conifs.rms.dto.Users.PutUserDto", b =>
+                {
+                    b.Property<Guid>("Userid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Companies")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DefaultCompany")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Designation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrimaryRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Roles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ValidFrom")
                         .HasColumnType("datetime2");
 
@@ -506,6 +561,33 @@ namespace conifs.rms.data.Migrations
                     b.HasKey("Userid");
 
                     b.ToTable("PutUserDto");
+                });
+
+            modelBuilder.Entity("conifs.rms.data.entities.Reservation", b =>
+                {
+                    b.HasOne("conifs.rms.data.entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.ReservationItem", "ReservationItem")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("ReservationGroup");
+
+                    b.Navigation("ReservationItem");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.UserCompany", b =>

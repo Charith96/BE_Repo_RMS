@@ -22,31 +22,23 @@ namespace conifs.rms.data.repositories.TimeSlots
             _mapper = mapper;
         }
 
-        public async Task<List<TimeSlotDto>> GetTimeSlot()
+        public async Task<List<TimeSlotDto>> GetTimeSlotById(Guid itemId)
         {
             try
             {
-                var timeSlots = await _context.TimeSlots.ToListAsync();
+                // Fetch the time slots from the context using the itemId
+                var timeSlots = await _context.TimeSlots
+                    .Where(ts => ts.ItemId == itemId)
+                    .ToListAsync();
+
+                // Map the time slot entities to TimeSlotDto list
                 return _mapper.Map<List<TimeSlotDto>>(timeSlots);
             }
             catch (Exception ex)
             {
-                // Log or handle the exception accordingly
-                throw new Exception($"Error getting time slots: {ex.Message}", ex);
-            }
-        }
-
-        public async Task<TimeSlotDto> GetTimeSlotById(Guid id)
-        {
-            try
-            {
-                var timeSlots = await _context.TimeSlots.FindAsync(id);
-                return _mapper.Map<TimeSlotDto>(timeSlots);
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception accordingly
-                throw new Exception($"Error getting time slot by id: {ex.Message}", ex);
+                // Log the exception using your preferred logging framework
+                // Example: _logger.LogError(ex, "Error getting time slots by itemId");
+                throw new Exception($"Error getting time slots by itemId: {ex.Message}", ex);
             }
         }
 

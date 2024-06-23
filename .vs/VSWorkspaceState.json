@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\conifs.rms.business",
-    "\\conifs.rms.business\\managers"
+    "\\conifs.rms.base.api",
+    "\\conifs.rms.data"
   ],
-  "SelectedNode": "\\conifs.rms.business\\managers\\RoleManager.cs",
+  "SelectedNode": "\\conifs.rms.base.api\\Program.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace conifs.rms.data.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -125,6 +125,7 @@ namespace conifs.rms.data.Migrations
                     PrimaryRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Companies = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Roles = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -158,7 +159,9 @@ namespace conifs.rms.data.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ValidTill = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Companies = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Roles = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,7 +190,7 @@ namespace conifs.rms.data.Migrations
                     ItemName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     TimeSlotType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SlotDurationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DurationPerSlot = table.Column<int>(type: "int", nullable: false),
+                    DurationPerSlot = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NoOfSlots = table.Column<int>(type: "int", nullable: false),
                     NoOfReservations = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Capacity = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -247,6 +250,43 @@ namespace conifs.rms.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    ReservationCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReservationID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NoOfPeople = table.Column<int>(type: "int", nullable: false),
+                    Time1 = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Time2 = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.ReservationCode);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Customers_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerCode",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_ReservationGroups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "ReservationGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_ReservationItems_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "ReservationItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserCompany",
                 columns: table => new
                 {
@@ -297,6 +337,21 @@ namespace conifs.rms.data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reservations_CustomerID",
+                table: "Reservations",
+                column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_GroupId",
+                table: "Reservations",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ItemId",
+                table: "Reservations",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserCompany_CompanyId",
                 table: "UserCompany",
                 column: "CompanyId");
@@ -326,9 +381,6 @@ namespace conifs.rms.data.Migrations
                 name: "Currencies");
 
             migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
                 name: "GetUserDto");
 
             migrationBuilder.DropTable(
@@ -338,10 +390,7 @@ namespace conifs.rms.data.Migrations
                 name: "PutUserDto");
 
             migrationBuilder.DropTable(
-                name: "ReservationGroups");
-
-            migrationBuilder.DropTable(
-                name: "ReservationItems");
+                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "TimeSlots");
@@ -351,6 +400,15 @@ namespace conifs.rms.data.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRole");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "ReservationGroups");
+
+            migrationBuilder.DropTable(
+                name: "ReservationItems");
 
             migrationBuilder.DropTable(
                 name: "Companies");

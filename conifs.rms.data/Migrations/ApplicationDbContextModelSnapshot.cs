@@ -189,6 +189,12 @@ namespace conifs.rms.data.Migrations
 
                     b.HasKey("ReservationCode");
 
+                    b.HasIndex("CustomerID");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ItemId");
+
                     b.ToTable("Reservations");
                 });
 
@@ -223,8 +229,9 @@ namespace conifs.rms.data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationPerSlot")
-                        .HasColumnType("int");
+                    b.Property<string>("DurationPerSlot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
@@ -476,6 +483,10 @@ namespace conifs.rms.data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PrimaryRole")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -547,6 +558,33 @@ namespace conifs.rms.data.Migrations
                     b.HasKey("Userid");
 
                     b.ToTable("PutUserDto");
+                });
+
+            modelBuilder.Entity("conifs.rms.data.entities.Reservation", b =>
+                {
+                    b.HasOne("conifs.rms.data.entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.ReservationGroup", "ReservationGroup")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.ReservationItem", "ReservationItem")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("ReservationGroup");
+
+                    b.Navigation("ReservationItem");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.UserCompany", b =>

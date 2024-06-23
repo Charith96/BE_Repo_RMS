@@ -29,28 +29,16 @@ namespace conifs.rms.business.managers
             _context = context;
 
         }
-        public Task<List<TimeSlotDto>> GetTimeSlot()
+        public Task<List<TimeSlotDto>> GetTimeSlotById(Guid itemId)
         {
             try
             {
-                return _timeSlotRepository.GetTimeSlot();
+                return _timeSlotRepository.GetTimeSlotById(itemId);
             }
             catch (Exception ex)
             {
                 // Log or handle the exception accordingly
-                throw new Exception("Error getting time slots", ex);
-            }
-        }
-
-        public Task<TimeSlotDto> GetTimeSlotById(Guid id)
-        {
-            try
-            {
-                return _timeSlotRepository.GetTimeSlotById(id);
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the exception accordingly
+                // Use your logging mechanism here, e.g., _logger.LogError(ex, "Error getting time slot by id");
                 throw new Exception("Error getting time slots by id", ex);
             }
         }

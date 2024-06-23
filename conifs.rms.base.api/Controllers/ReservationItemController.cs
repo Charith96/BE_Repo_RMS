@@ -20,12 +20,22 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllItems()
+        public async Task<IActionResult> GetAllItems(Guid? groupId = null)
         {
             try
             {
-                var result = await _reservationItemManager.GetReservationItem();
-                return Ok(result);
+
+
+                if (groupId.HasValue)
+                {
+                    return Ok(await _reservationItemManager.GetReservationItemsByGroupId(groupId.Value));
+                }
+                else
+                {
+                    return Ok(await _reservationItemManager.GetReservationItem());
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -52,8 +62,8 @@ namespace conifs.rms.@base.api.Controllers
         {
             try
             {
-                await _reservationItemManager.AddReservationItem(item);
-                return Ok();
+                var reservationItem = await _reservationItemManager.AddReservationItem(item);
+                return Ok(reservationItem);
             }
             catch (ValidationException vex)
             {

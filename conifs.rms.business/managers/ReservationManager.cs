@@ -2,7 +2,7 @@
 using conifs.rms.business.managers;
 using conifs.rms.data;
 using conifs.rms.data.entities;
-using conifs.rms.data.Migrations;
+//using conifs.rms.data.Migrations;
 using conifs.rms.data.repositories;
 using conifs.rms.dto.Customer;
 using conifs.rms.dto.Reservation;
