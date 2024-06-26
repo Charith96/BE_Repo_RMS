@@ -40,23 +40,19 @@ namespace conifs.rms.data.Migrations
 
                     b.Property<string>("CompanyCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid>("CountryID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                    b.Property<Guid>("CurrencyID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("DefaultCompany")
                         .HasColumnType("bit");
@@ -68,16 +64,18 @@ namespace conifs.rms.data.Migrations
 
                     b.HasKey("CompanyID");
 
+                    b.HasIndex("CountryID");
+
+                    b.HasIndex("CurrencyID");
+
                     b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.Country", b =>
                 {
-                    b.Property<int>("CountryID")
+                    b.Property<Guid>("CountryID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
@@ -91,15 +89,14 @@ namespace conifs.rms.data.Migrations
 
             modelBuilder.Entity("conifs.rms.data.entities.Currency", b =>
                 {
-                    b.Property<int>("CurrencyID")
+                    b.Property<Guid>("CurrencyID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CurrencyID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CurrencyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.HasKey("CurrencyID");
 
@@ -283,6 +280,27 @@ namespace conifs.rms.data.Migrations
                     b.HasKey("RoleCode");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("conifs.rms.data.entities.RolePrivilege", b =>
+                {
+                    b.Property<Guid>("RolePrivilegeCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PrivilegeCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolePrivilegeCode");
+
+                    b.HasIndex("PrivilegeCode");
+
+                    b.HasIndex("RoleCode");
+
+                    b.ToTable("RolePrivileges");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.TimeSlot", b =>
@@ -560,6 +578,25 @@ namespace conifs.rms.data.Migrations
                     b.ToTable("PutUserDto");
                 });
 
+            modelBuilder.Entity("conifs.rms.data.entities.Company", b =>
+                {
+                    b.HasOne("conifs.rms.data.entities.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Currency");
+                });
+
             modelBuilder.Entity("conifs.rms.data.entities.Reservation", b =>
                 {
                     b.HasOne("conifs.rms.data.entities.Customer", "Customer")
@@ -587,10 +624,29 @@ namespace conifs.rms.data.Migrations
                     b.Navigation("ReservationItem");
                 });
 
+            modelBuilder.Entity("conifs.rms.data.entities.RolePrivilege", b =>
+                {
+                    b.HasOne("conifs.rms.data.entities.Privilege", "Privilege")
+                        .WithMany()
+                        .HasForeignKey("PrivilegeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("conifs.rms.data.entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Privilege");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("conifs.rms.data.entities.UserCompany", b =>
                 {
                     b.HasOne("conifs.rms.data.entities.Company", "Company")
-                        .WithMany("UserCompanies")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -623,11 +679,6 @@ namespace conifs.rms.data.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("conifs.rms.data.entities.Company", b =>
-                {
-                    b.Navigation("UserCompanies");
                 });
 
             modelBuilder.Entity("conifs.rms.data.entities.Role", b =>

@@ -31,15 +31,15 @@ namespace conifs.rms.data
         public DbSet<UserRoles> UserRole { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Privilege> Privileges { get; set; }
+        public DbSet<RolePrivilege> RolePrivileges { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Privilege> Privileges { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<RolePrivilege> RolePrivileges { get; set; }
+        
+        
 
         
        // public DbSet<RolePrivilege> RolePrivileges { get; set; }
@@ -65,7 +65,7 @@ namespace conifs.rms.data
 
             modelBuilder.Entity<UserCompany>()
                 .HasOne(uc => uc.Company)
-                .WithMany(c => c.UserCompanies)
+                .WithMany()
                 .HasForeignKey(uc => uc.CompanyId);
 
             modelBuilder.Entity<UserRoles>()

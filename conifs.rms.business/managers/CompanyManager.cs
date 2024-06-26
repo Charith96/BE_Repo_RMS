@@ -13,9 +13,9 @@ namespace conifs.rms.business.managers
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
-        private readonly CompanyDataContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CompanyManager(ICompanyRepository companyRepository, IMapper mapper, CompanyDataContext context)
+        public CompanyManager(ICompanyRepository companyRepository, IMapper mapper, ApplicationDbContext context)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;

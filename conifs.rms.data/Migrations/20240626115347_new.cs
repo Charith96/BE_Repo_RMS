@@ -12,30 +12,10 @@ namespace conifs.rms.data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    CompanyID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CompanyCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    Address01 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Address02 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DefaultCompany = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.CompanyID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
-                    CountryID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CountryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CountryName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -87,9 +67,8 @@ namespace conifs.rms.data.Migrations
                 name: "Currencies",
                 columns: table => new
                 {
-                    CurrencyID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CurrencyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CurrencyID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyName = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,6 +229,37 @@ namespace conifs.rms.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    CompanyID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyCode = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CountryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Address01 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address02 = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DefaultCompany = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.CompanyID);
+                    table.ForeignKey(
+                        name: "FK_Companies_Countries_CountryID",
+                        column: x => x.CountryID,
+                        principalTable: "Countries",
+                        principalColumn: "CountryID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Companies_Currencies_CurrencyID",
+                        column: x => x.CurrencyID,
+                        principalTable: "Currencies",
+                        principalColumn: "CurrencyID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reservations",
                 columns: table => new
                 {
@@ -287,27 +297,27 @@ namespace conifs.rms.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserCompany",
+                name: "RolePrivileges",
                 columns: table => new
                 {
-                    Userid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserCompanyID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RolePrivilegeCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PrivilegeCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserCompany", x => new { x.Userid, x.CompanyId });
+                    table.PrimaryKey("PK_RolePrivileges", x => x.RolePrivilegeCode);
                     table.ForeignKey(
-                        name: "FK_UserCompany_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyID",
+                        name: "FK_RolePrivileges_Privileges_PrivilegeCode",
+                        column: x => x.PrivilegeCode,
+                        principalTable: "Privileges",
+                        principalColumn: "PrivilegeCode",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserCompany_User_Userid",
-                        column: x => x.Userid,
-                        principalTable: "User",
-                        principalColumn: "Userid",
+                        name: "FK_RolePrivileges_Roles_RoleCode",
+                        column: x => x.RoleCode,
+                        principalTable: "Roles",
+                        principalColumn: "RoleCode",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -336,6 +346,41 @@ namespace conifs.rms.data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserCompany",
+                columns: table => new
+                {
+                    Userid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserCompanyID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCompany", x => new { x.Userid, x.CompanyId });
+                    table.ForeignKey(
+                        name: "FK_UserCompany_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserCompany_User_Userid",
+                        column: x => x.Userid,
+                        principalTable: "User",
+                        principalColumn: "Userid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_CountryID",
+                table: "Companies",
+                column: "CountryID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_CurrencyID",
+                table: "Companies",
+                column: "CurrencyID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_CustomerID",
                 table: "Reservations",
@@ -352,6 +397,16 @@ namespace conifs.rms.data.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RolePrivileges_PrivilegeCode",
+                table: "RolePrivileges",
+                column: "PrivilegeCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePrivileges_RoleCode",
+                table: "RolePrivileges",
+                column: "RoleCode");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserCompany_CompanyId",
                 table: "UserCompany",
                 column: "CompanyId");
@@ -366,9 +421,6 @@ namespace conifs.rms.data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Countries");
-
-            migrationBuilder.DropTable(
                 name: "CreateUserCompanyDto");
 
             migrationBuilder.DropTable(
@@ -378,19 +430,16 @@ namespace conifs.rms.data.Migrations
                 name: "CreateUserRoleDto");
 
             migrationBuilder.DropTable(
-                name: "Currencies");
-
-            migrationBuilder.DropTable(
                 name: "GetUserDto");
-
-            migrationBuilder.DropTable(
-                name: "Privileges");
 
             migrationBuilder.DropTable(
                 name: "PutUserDto");
 
             migrationBuilder.DropTable(
                 name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "RolePrivileges");
 
             migrationBuilder.DropTable(
                 name: "TimeSlots");
@@ -411,6 +460,9 @@ namespace conifs.rms.data.Migrations
                 name: "ReservationItems");
 
             migrationBuilder.DropTable(
+                name: "Privileges");
+
+            migrationBuilder.DropTable(
                 name: "Companies");
 
             migrationBuilder.DropTable(
@@ -418,6 +470,12 @@ namespace conifs.rms.data.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
+
+            migrationBuilder.DropTable(
+                name: "Currencies");
         }
     }
 }

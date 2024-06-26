@@ -8,8 +8,8 @@ namespace conifs.rms.business.validators
     public class CompanyValidator : AbstractValidator<Company>
     {
 
-        private readonly CompanyDataContext _context;
-        public CompanyValidator(CompanyDataContext context, bool isNew)
+        private readonly ApplicationDbContext _context;
+        public CompanyValidator(ApplicationDbContext context, bool isNew)
         {
 
             _context = context;
