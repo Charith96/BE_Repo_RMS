@@ -1,7 +1,11 @@
-﻿namespace conifs.rms.dto.Customer
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace conifs.rms.dto.Customer
 {
     public class CustomerDto
     {
+        [Key]
+        public Guid CustomerCode { get; set; }
         public string CustomerID { get; set; }
 
         public string FullName { get; set; }
