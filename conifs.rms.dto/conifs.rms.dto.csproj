@@ -27,14 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Reservation\ReservationDto.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Folder Include="Customers\" />
+    <Folder Include="Companies\" />
+    <Folder Include="Roles\" />
+    <Folder Include="Users\" />
+    <Folder Include="Reservation\" />
     <Folder Include="ReservationItem\" />
     <Folder Include="ReservationGroup\" />
 
   </ItemGroup>
+	<ItemGroup>
+		<Content Include="Reservation\ReservationDto.cs" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

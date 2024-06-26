@@ -1,10 +1,12 @@
 ﻿using conifs.rms.business;
 using conifs.rms.data.entities;
+using conifs.rms.dto;
 using conifs.rms.dto.Role;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -25,13 +27,10 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var roles = await _roleManager.GetAllRolesAsync();
-                var roleDtos = roles.Select(role => new RoleDto
-                {
-                    RoleID = role.RoleID,
-                    RoleName = role.RoleName
-                });
+               // var roleDtos = roles.Select(role => new RoleDto
+              
 
-                return Ok(roleDtos);
+                return Ok(roles);
             }
             catch (Exception ex)
             {
@@ -39,7 +38,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpGet("{RoleCode}")]
+        [HttpGet("{RoleCode:guid}")]
         public async Task<IActionResult> GetRoleById(Guid RoleCode)
         {
             try
@@ -93,7 +92,7 @@ namespace conifs.rms.@base.api.Controllers
                     RoleName = addedRole.RoleName
                 };
 
-                return CreatedAtAction(nameof(GetRoleById), new { RoleCode = addedRole.RoleCode }, addedRoleDto);
+                return Ok(addedRole);
             }
             catch (Exception ex)
             {
@@ -101,7 +100,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpPut("{RoleCode}")]
+        [HttpPut("{RoleCode:guid}")]
         public async Task<IActionResult> UpdateRole(Guid RoleCode, [FromBody] RoleDto roleDto)
         {
             if (!ModelState.IsValid)
@@ -136,12 +135,94 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-        [HttpDelete("{RoleCode}")]
+        [HttpDelete("{RoleCode:guid}")]
         public async Task<IActionResult> DeleteRole(Guid RoleCode)
         {
             try
             {
                 await _roleManager.DeleteRoleAsync(RoleCode);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // RolePrivilege methods
+
+        [HttpPost("AddRolePrivilege")]
+        public async Task<IActionResult> AddRolePrivilege([FromBody] RolePrivilegeDto rolePrivilegeDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _roleManager.AddRolePrivilege(rolePrivilegeDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetRolePrivileges")]
+        public async Task<IActionResult> GetAllRolePrivileges()
+        {
+            try
+            {
+                var result = await _roleManager.GetAllRolePrivilege();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetRolePrivilegeById")]
+        public async Task<IActionResult> GetRolePrivilegeById([FromQuery] Guid roleCode)
+        {
+            try
+            {
+                var result = await _roleManager.GetRolePrivilege(roleCode);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("UpdateRolePrivilege")]
+        public async Task<IActionResult> UpdateRolePrivilege([FromBody] RolePrivilegeDto updatedRolePrivilege)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _roleManager.UpdateRolePrivilege(updatedRolePrivilege);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("DeleteRolePrivilege/{id:guid}")]
+        public async Task<IActionResult> DeleteRolePrivilege(Guid id)
+        {
+            try
+            {
+                await _roleManager.DeleteRolePrivilege(id);
                 return NoContent();
             }
             catch (Exception ex)

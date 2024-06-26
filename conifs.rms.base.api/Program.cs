@@ -18,6 +18,7 @@ using conifs.rms.data.entities;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using conifs.rms.data.entities;
 
 using conifs.rms.data.repositories.ReservationGroups;
 using conifs.rms.data.repositories.ReservationItems;

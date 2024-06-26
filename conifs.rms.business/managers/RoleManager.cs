@@ -6,6 +6,7 @@ using conifs.rms.data.entities;
 using conifs.rms.business.validations;
 using FluentValidation;
 using FluentValidation.Results;
+using conifs.rms.dto;
 
 namespace conifs.rms.business
 {
@@ -56,6 +57,76 @@ namespace conifs.rms.business
         public async Task DeleteRoleAsync(Guid roleId)
         {
             await _roleRepository.DeleteRoleAsync(roleId);
+        }
+
+        public Task<IEnumerable<RolePrivilegeDto>> GetAllRolePrivilege()
+        {
+            try
+            {
+                return _roleRepository.GetAllRolePrivilege();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error getting reservation groups", ex);
+            }
+        }
+        public Task<IEnumerable<RolePrivilegeDto>> GetRolePrivilege(Guid id)
+        {
+            try
+            {
+                return _roleRepository.GetRolePrivilege(id);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error getting reservation group by id", ex);
+            }
+        }
+
+        public async Task AddRolePrivilege(RolePrivilegeDto rolePrivilegeDto)
+        {
+
+            
+
+            try
+            {
+                await _roleRepository.AddRolePrivilege(rolePrivilegeDto);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error adding reservation group", ex);
+            }
+        }
+
+        public async Task UpdateRolePrivilege(RolePrivilegeDto updatedRolePrivilege)
+        {
+
+            
+            try
+            {
+
+                await _roleRepository.UpdateRolePrivilege(updatedRolePrivilege);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error updating reservation group", ex);
+            }
+        }
+
+        public async Task DeleteRolePrivilege(Guid id)
+        {
+            try
+            {
+                await _roleRepository.DeleteRolePrivilege(id);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error deleting reservation group", ex);
+            }
         }
     }
 }

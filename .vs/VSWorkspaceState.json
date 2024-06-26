@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\conifs.rms.base.api",
-    "\\conifs.rms.data"
+    "\\conifs.rms.data",
+    "\\conifs.rms.data\\repositories",
+    "\\conifs.rms.data\\repositories\\ReservationItems"
   ],
-  "SelectedNode": "\\conifs.rms.base.api\\Program.cs",
+  "SelectedNode": "\\conifs.rms.data\\repositories\\ReservationItems\\ReservationItemRepository.cs",
   "PreviewInSolutionExplorer": false
 }

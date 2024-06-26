@@ -25,8 +25,8 @@ namespace conifs.rms.@base.api.Controllers
             try
             {
                 var privileges = await _privilegeManager.GetAllPrivilegesAsync();
-                var privilegeDtos = privileges.Select(PrivilegeMappers.ToDto);
-                return Ok(privilegeDtos);
+               
+                return Ok(privileges);
             }
             catch (Exception ex)
             {

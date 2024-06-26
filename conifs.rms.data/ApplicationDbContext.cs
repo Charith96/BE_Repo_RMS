@@ -37,6 +37,9 @@ namespace conifs.rms.data
         {
         }
 
+        public DbSet<Privilege> Privileges { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePrivilege> RolePrivileges { get; set; }
 
         
        // public DbSet<RolePrivilege> RolePrivileges { get; set; }
@@ -81,6 +84,8 @@ namespace conifs.rms.data
             modelBuilder.Entity<PutUserDto>()
              .HasKey(r => r.Userid);
             // Configure the CompanyID property conversion
+            modelBuilder.Entity<Privilege>()
+                .HasKey(p => p.PrivilegeCode);
             modelBuilder.Entity<Company>()
                 .Property(e => e.CompanyID)
                 .HasConversion(
@@ -95,7 +100,7 @@ namespace conifs.rms.data
             modelBuilder.Entity<ReservationItem>(entity =>
             {
                 entity.HasOne(e => e.ReservationGroup)
-                      .WithMany()
+                .WithMany()
                       .HasForeignKey(ri => ri.GroupId)
                       .OnDelete(DeleteBehavior.Restrict);
 
@@ -106,14 +111,30 @@ namespace conifs.rms.data
             modelBuilder.Entity<TimeSlot>(entity =>
             {
                 entity.HasOne(e => e.ReservationItem)
-                      .WithMany()
+                .WithMany()
                       .HasForeignKey(ts => ts.ItemId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 // Ignore navigation property
                 entity.Ignore(ts => ts.ReservationItem);
             });
+            // Configure Role entity
+            modelBuilder.Entity<Role>()
+                .HasKey(r => r.RoleCode);
 
+            // Configure RolePrivilege entity
+            modelBuilder.Entity<RolePrivilege>()
+                .HasKey(rp => rp.RolePrivilegeCode);
+
+            modelBuilder.Entity<RolePrivilege>()
+                .HasOne(rp => rp.Role)
+                .WithMany()
+                .HasForeignKey(rp => rp.RoleCode);
+
+            modelBuilder.Entity<RolePrivilege>()
+                .HasOne(rp => rp.Privilege)
+                .WithMany()
+                .HasForeignKey(rp => rp.PrivilegeCode);
 
             base.OnModelCreating(modelBuilder);
         }
