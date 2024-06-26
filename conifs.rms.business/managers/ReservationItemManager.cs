@@ -35,6 +35,19 @@ namespace conifs.rms.business.managers
             }
         }
 
+        public Task<List<ReservationItemDto>> GetReservationItemsByGroupId(Guid groupId)
+        {
+            try
+            {
+                return _reservationItemRepository.GetReservationItemsByGroupId(groupId);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception("Error getting reservation items", ex);
+            }
+        }
+
         public Task<ReservationItemDto> GetReservationItemById(Guid id)
         {
             try
@@ -48,7 +61,7 @@ namespace conifs.rms.business.managers
             }
         }
 
-        public async Task AddReservationItem(ReservationItemDto item)
+        public async Task<ReservationItem> AddReservationItem(ReservationItemDto item)
         {
             var validator = new ReservationItemValidator();
             var validationResult = await validator.ValidateAsync(item);
@@ -61,7 +74,7 @@ namespace conifs.rms.business.managers
 
             try
             {
-                await _reservationItemRepository.AddReservationItem(item);
+                return await _reservationItemRepository.AddReservationItem(item);
             }
             catch (Exception ex)
             {

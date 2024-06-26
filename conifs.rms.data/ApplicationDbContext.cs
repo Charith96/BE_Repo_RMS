@@ -29,6 +29,8 @@ namespace conifs.rms.data
         public DbSet<UserTable> User { get; set; }
         public DbSet<UserCompany> UserCompany { get; set; }
         public DbSet<UserRoles> UserRole { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Privilege> Privileges { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -36,8 +38,7 @@ namespace conifs.rms.data
         }
 
 
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Privilege> Privileges { get; set; }
+        
        // public DbSet<RolePrivilege> RolePrivileges { get; set; }
     
         

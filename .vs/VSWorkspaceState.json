@@ -2,10 +2,16 @@
   "ExpandedNodes": [
     "",
     "\\conifs.rms.base.api",
+<<<<<<< HEAD
     "\\conifs.rms.base.api\\Controllers",
     "\\conifs.rms.data",
     "\\conifs.rms.data\\Profiles"
   ],
   "SelectedNode": "\\conifs.rms.data\\Profiles\\ReservationProfile.cs",
+=======
+    "\\conifs.rms.data"
+  ],
+  "SelectedNode": "\\conifs.rms.base.api\\Program.cs",
+>>>>>>> 4085d7e30798a68d3e1e5febe6921aada250d06f
   "PreviewInSolutionExplorer": false
 }

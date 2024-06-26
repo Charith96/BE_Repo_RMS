@@ -24,8 +24,8 @@ namespace conifs.rms.data.entities
 
         public string SlotDurationType { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "DurationPerSlot must be a positive number.")]
-        public int DurationPerSlot { get; set; }
+        
+        public string DurationPerSlot { get; set; }
 
         [Range(0, 20, ErrorMessage = "NoOfSlots must be between 0 and 20.")]
         public int NoOfSlots { get; set; }

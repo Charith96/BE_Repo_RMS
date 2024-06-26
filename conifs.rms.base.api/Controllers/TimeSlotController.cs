@@ -18,32 +18,24 @@ private readonly ITimeSlotManager _timeSlotManager;
     }
 
         [HttpGet]
-    public async Task<IActionResult> GetAllTimeSlots()
+        public async Task<IActionResult> GetTimeSlot([FromQuery] Guid? itemId)
         {
-        try
+            try
             {
-            var result = await _timeSlotManager.GetTimeSlot();
-            return Ok(result);
-        }
-        catch (Exception ex)
-            {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
+                if (itemId == null)
+                {
+                    return BadRequest("Item ID is required.");
+                }
 
-        [HttpGet("{id}")]
-    public async Task<IActionResult> GetTimeSlot(Guid id)
-        {
-        try
+                var result = await _timeSlotManager.GetTimeSlotById(itemId.Value);
+                return Ok(result);
+            }
+            catch (Exception ex)
             {
-            var result = await _timeSlotManager.GetTimeSlotById(id);
-            return Ok(result);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-        catch (Exception ex)
-            {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
+
 
         [HttpPost]
     public async Task<IActionResult> AddTimeSlot(TimeSlotDto timeSlot)

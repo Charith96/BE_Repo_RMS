@@ -34,6 +34,25 @@ namespace conifs.rms.data.repositories.ReservationItems
             }
         }
 
+        public async Task<List<ReservationItemDto>> GetReservationItemsByGroupId(Guid groupId)
+        {
+            try
+            {
+                // Fetch the time slots from the context using the itemId
+                var reservationItems = await _context.ReservationItems
+                    .Where(ri => ri.GroupId == groupId)
+                    .ToListAsync();
+
+                // Map the time slot entities to TimeSlotDto list
+                return _mapper.Map<List<ReservationItemDto>>(reservationItems);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception accordingly
+                throw new Exception($"Error getting reservation items: {ex.Message}", ex);
+            }
+        }
+
         public async Task<ReservationItemDto> GetReservationItemById(Guid id)
         {
             try
@@ -48,15 +67,16 @@ namespace conifs.rms.data.repositories.ReservationItems
             }
         }
 
-        public async Task AddReservationItem(ReservationItemDto item)
+        public async Task<ReservationItem> AddReservationItem(ReservationItemDto item)
         {
             try
             {
                 var reservationItem = _mapper.Map<ReservationItem>(item);
 
-                
+
                 _context.ReservationItems.Add(reservationItem);
                 await _context.SaveChangesAsync();
+                return reservationItem;
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 using AutoMapper;
 using conifs.rms.data.entities;
-using conifs.rms.data.Migrations;
+//using conifs.rms.data.Migrations;
 using conifs.rms.dto.Reservation;
 using conifs.rms.dto.Users;
 using Microsoft.EntityFrameworkCore;

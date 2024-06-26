@@ -9,7 +9,7 @@ using FluentValidation.Results;
 using FluentValidation;
 using System.Linq;
 using conifs.rms.business.validations;
-using conifs.rms.data.Migrations;
+//using conifs.rms.data.Migrations;
 using conifs.rms.business.validations.conifs.rms.business.validations;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;

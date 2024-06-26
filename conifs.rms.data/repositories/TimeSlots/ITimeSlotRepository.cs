@@ -10,8 +10,7 @@ namespace conifs.rms.data.repositories.TimeSlots
 {
     public interface ITimeSlotRepository
     {
-        public Task<List<TimeSlotDto>> GetTimeSlot();
-        public Task<TimeSlotDto> GetTimeSlotById(Guid id);
+        public Task<List<TimeSlotDto>> GetTimeSlotById(Guid itemId);
         public Task AddTimeSlot(TimeSlotDto timeSlot);
         public Task UpdateTimeSlot(TimeSlotDto updatedTimeSlot);
         public Task DeleteTimeSlot(Guid id);

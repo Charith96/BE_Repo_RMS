@@ -10,7 +10,8 @@ namespace conifs.rms.data.repositories.ReservationItems
     {
         public Task<List<ReservationItemDto>> GetReservationItem();
         public Task<ReservationItemDto> GetReservationItemById(Guid id);
-        public Task AddReservationItem(ReservationItemDto item);
+        public Task<List<ReservationItemDto>> GetReservationItemsByGroupId(Guid groupId);
+        public Task<ReservationItem> AddReservationItem(ReservationItemDto item);
         public Task UpdateReservationItem(ReservationItemDto updatedItem);
         public Task DeleteReservationItem(Guid id);
     }
