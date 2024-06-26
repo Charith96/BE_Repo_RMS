@@ -6,6 +6,7 @@ namespace conifs.rms.dto.Reservation
 {
     public class ReservationDto
     {
+        public Guid ReservationCode { get; set; }
         public string ReservationID { get; set; }
 
         [ForeignKey("Customer")]

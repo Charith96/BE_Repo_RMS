@@ -1,6 +1,8 @@
 {
   "ExpandedNodes": [
     "",
+    "\\conifs.rms.base.api\\Controllers",
+    "\\conifs.rms.data\\Profiles",
     "\\conifs.rms.base.api",
     "\\conifs.rms.data",
     "\\conifs.rms.data\\repositories",
