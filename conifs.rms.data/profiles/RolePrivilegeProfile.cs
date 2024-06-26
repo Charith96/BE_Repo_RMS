@@ -10,6 +10,7 @@ namespace conifs.rms.data.profiles
         public RolePrivilegeProfile()
         {
             CreateMap<RolePrivilegeDto, RolePrivilege>()
+                
                 .ForMember(dest => dest.RolePrivilegeCode, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.RoleCode, opt => opt.MapFrom(src => src.RoleCode))
                 .ForMember(dest => dest.PrivilegeCode, opt => opt.MapFrom(src => src.PrivilegeCode))

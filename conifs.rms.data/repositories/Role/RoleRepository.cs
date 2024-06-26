@@ -69,12 +69,14 @@ namespace conifs.rms.data
             }
         }
 
-        public async Task<RolePrivilegeDto> GetRolePrivilege(Guid id)
+        public async Task<IEnumerable<RolePrivilegeDto>> GetRolePrivilege(Guid id)
         {
             try
             {
-                var privi = await _context.RolePrivileges.FindAsync(id);
-                return _mapper.Map<RolePrivilegeDto>(privi);
+                var privi = await _context.RolePrivileges
+                    .Where(ts => ts.RoleCode == id)
+                .ToListAsync();
+                return _mapper.Map<IEnumerable<RolePrivilegeDto>>(privi);
             }
             catch (Exception ex)
             {

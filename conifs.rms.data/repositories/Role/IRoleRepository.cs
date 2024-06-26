@@ -14,7 +14,7 @@ namespace conifs.rms.data
         Task<Role> UpdateRoleAsync(Role role);
         Task DeleteRoleAsync(Guid roleId);
         Task<IEnumerable<RolePrivilegeDto>> GetAllRolePrivilege();
-        Task<RolePrivilegeDto> GetRolePrivilege(Guid id);
+        Task<IEnumerable<RolePrivilegeDto>> GetRolePrivilege(Guid id);
         Task AddRolePrivilege(RolePrivilegeDto rolePrivilegeDto);
         Task UpdateRolePrivilege(RolePrivilegeDto updatedRolePrivilege);
         Task DeleteRolePrivilege(Guid id);

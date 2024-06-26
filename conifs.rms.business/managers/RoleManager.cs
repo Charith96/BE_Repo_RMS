@@ -71,7 +71,7 @@ namespace conifs.rms.business
                 throw new Exception("Error getting reservation groups", ex);
             }
         }
-        public Task<RolePrivilegeDto> GetRolePrivilege(Guid id)
+        public Task<IEnumerable<RolePrivilegeDto>> GetRolePrivilege(Guid id)
         {
             try
             {
