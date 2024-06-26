@@ -11,10 +11,11 @@ namespace conifs.rms.data.Profiles
         {
             CreateMap<Currency, CurrencyDto>()
                  .ForMember(dest => dest.CurrencyID, opt => opt.MapFrom(src => src.CurrencyID))
-                 .ForMember(dest => dest.CurrencyName, opt => opt.MapFrom(src => src.CurrencyName));
-
-            CreateMap<CurrencyDto, Currency>()
-                .ForMember(dest => dest.CurrencyID, opt => opt.Ignore());
+                 .ForMember(dest => dest.CurrencyName, opt => opt.MapFrom(src => src.CurrencyName))
+               //  .ForMember(dest => dest.CurrencyCode, opt => opt.MapFrom(src => src.CurrencyCode))
+            .ReverseMap();
+           // CreateMap<CurrencyDto, Currency>()
+               // .ForMember(dest => dest.CurrencyID, opt => opt.Ignore());
         }
     }
 }

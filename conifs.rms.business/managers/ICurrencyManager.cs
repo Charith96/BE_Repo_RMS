@@ -6,10 +6,10 @@ namespace conifs.rms.business.managers
 {
     public interface ICurrencyManager
     {
-        Task<List<CurrencyDto>> GetAllCurrenciesAsync();
-        Task<CurrencyDto> GetCurrencyByIdAsync(int id);
-        Task AddCurrencyAsync(CurrencyDto currencyDto);
-        Task UpdateCurrencyAsync(CurrencyDto currencyDto);
-        Task DeleteCurrencyAsync(int id);
+        Task<IEnumerable<CurrencyDto>> GetAllCurrencies();
+        Task<CurrencyDto> GetCurrencyById(Guid currencyID);
+        Task<CurrencyDto> AddCurrency(CurrencyDto newCurrencyDto);
+        Task<CurrencyDto> UpdateCurrency(CurrencyDto updatedCurrencyDto);
+        Task DeleteCurrency(Guid currencyID);
     }
 }

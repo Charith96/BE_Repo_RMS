@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using conifs.rms.business.validators;
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories;
 using conifs.rms.dto.Company;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.business.managers
 {
@@ -18,33 +19,66 @@ namespace conifs.rms.business.managers
             _mapper = mapper;
         }
 
-        public async Task<List<CurrencyDto>> GetAllCurrenciesAsync()
+        public async Task<IEnumerable<CurrencyDto>> GetAllCurrencies()
         {
-            var currencies = await _currencyRepository.GetAllCurrenciesAsync();
-            return _mapper.Map<List<CurrencyDto>>(currencies);
+            var currency = await _currencyRepository.GetAllCurrencies();
+            return _mapper.Map<List<CurrencyDto>>(currency);
         }
 
-        public async Task<CurrencyDto> GetCurrencyByIdAsync(int id)
+        public async Task<CurrencyDto> GetCurrencyById(Guid currencyID)
         {
-            var currency = await _currencyRepository.GetCurrencyByIdAsync(id);
-            return _mapper.Map<CurrencyDto>(currency);
+            var currency = await _currencyRepository.GetCurrencyById(currencyID);
+            return _mapper.Map<CurrencyDto>(currency) ?? new CurrencyDto();
         }
 
-        public async Task AddCurrencyAsync(CurrencyDto currencyDto)
+        public async Task<CurrencyDto> AddCurrency(CurrencyDto newCurrencyDto)
         {
-            var currency = _mapper.Map<Currency>(currencyDto);
-            await _currencyRepository.AddCurrencyAsync(currency);
+            Currency newCurrency = _mapper.Map<Currency>(newCurrencyDto);
+
+            var validator = new CurrencyValidator();
+
+            var validationResult = await validator.ValidateAsync(newCurrency);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            var addedCurrency = await _currencyRepository.AddCurrency(newCurrency);
+
+            newCurrencyDto.CurrencyID = addedCurrency.CurrencyID;
+
+            return newCurrencyDto;
+
         }
 
-        public async Task UpdateCurrencyAsync(CurrencyDto currencyDto)
+        public async Task<CurrencyDto> UpdateCurrency(CurrencyDto updatedCurrencyDto)
         {
-            var currency = _mapper.Map<Currency>(currencyDto);
-            await _currencyRepository.UpdateCurrencyAsync(currency);
+            var existingCurrency = await _currencyRepository.GetCurrencyById(updatedCurrencyDto.CurrencyID);
+
+            if (existingCurrency == null)
+            {
+                throw new Exception($"Currency with ID {updatedCurrencyDto.CurrencyID} not found.");
+            }
+
+            var updatedCurrency = _mapper.Map<Currency>(updatedCurrencyDto);
+            var validator = new CurrencyValidator();
+            var validationResult = await validator.ValidateAsync(updatedCurrency);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            existingCurrency.CurrencyName = updatedCurrency.CurrencyName;
+
+            var updatedCurrencyEntity = await _currencyRepository.UpdateCurrency(existingCurrency);
+            return _mapper.Map<CurrencyDto>(updatedCurrencyEntity);
         }
 
-        public async Task DeleteCurrencyAsync(int id)
+        public async Task DeleteCurrency(Guid currencyID)
         {
-            await _currencyRepository.DeleteCurrencyAsync(id);
+            await _currencyRepository.DeleteCurrency(currencyID);
         }
     }
 }

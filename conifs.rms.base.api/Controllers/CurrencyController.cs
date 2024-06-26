@@ -18,46 +18,90 @@ namespace conifs.rms.api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CurrencyDto>>> GetAllCurrencies()
+        public async Task<IActionResult> GetAllCurrencies()
         {
-            var currencies = await _currencyManager.GetAllCurrenciesAsync();
-            return Ok(currencies);
+            try
+            {
+                var currencies = await _currencyManager.GetAllCurrencies();
+                return Ok(currencies);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CurrencyDto>> GetCurrencyById(int id)
+        public async Task<IActionResult> GetCurrencyById(Guid id)
         {
-            var currency = await _currencyManager.GetCurrencyByIdAsync(id);
-            if (currency == null)
+            try
             {
-                return NotFound();
+                var currency = await _currencyManager.GetCurrencyById(id);
+                if (currency == null)
+                {
+                    return NotFound();
+                }
+                return Ok(currency);
             }
-            return Ok(currency);
+            catch (Exception ex)
+            {
+                // _logger.LogError(ex, "Error fetching company by ID.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCurrency(CurrencyDto currencyDto)
+        public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto newCurrencyDto)
         {
-            await _currencyManager.AddCurrencyAsync(currencyDto);
-            return CreatedAtAction(nameof(GetCurrencyById), new { id = currencyDto.CurrencyID }, currencyDto);
+            try
+            {
+                var addedCurrency = await _currencyManager.AddCurrency(newCurrencyDto);
+                return Ok(addedCurrency);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCurrency(int id, CurrencyDto currencyDto)
+        public async Task<IActionResult> UpdateCurrency(Guid id, [FromBody] CurrencyDto updatedCurrencyDto)
         {
-            if (id != currencyDto.CurrencyID)
+            try
             {
-                return BadRequest();
+                if (id != updatedCurrencyDto.CurrencyID)
+                {
+                    return BadRequest("Currency ID mismatch");
+                }
+                var updatedCurrency = await _currencyManager.UpdateCurrency(updatedCurrencyDto);
+                if(updatedCurrency == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedCurrency);
             }
-            await _currencyManager.UpdateCurrencyAsync(currencyDto);
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCurrency(int id)
+        public async Task<IActionResult> DeleteCurrency(Guid id)
         {
-            await _currencyManager.DeleteCurrencyAsync(id);
-            return NoContent();
+            try
+            {
+                await _currencyManager.DeleteCurrency(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
     }
 }

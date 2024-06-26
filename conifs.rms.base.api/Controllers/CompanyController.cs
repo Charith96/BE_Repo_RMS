@@ -58,14 +58,20 @@ namespace conifs.rms.@base.api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCompany([FromBody] CompanyDto newCompanyDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var addedCompany = await _companyManager.AddCompany(newCompanyDto);
-                return Ok(addedCompany);
-                //  return CreatedAtAction(nameof(GetCompanyById), new { id = addedCompany.CompanyID }, addedCompany);
+                // If AddCompany provides the ID, you can use CreatedAtAction
+                return CreatedAtAction(nameof(GetCompanyById), new { id = addedCompany.CompanyID }, addedCompany);
             }
             catch (Exception ex)
             {
+                // Consider logging the error here
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

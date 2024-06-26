@@ -5,6 +5,7 @@ using conifs.rms.data.repositories.Company;
 using FluentValidation;
 using conifs.rms.dto.Company;
 using Microsoft.EntityFrameworkCore;
+using conifs.rms.data;
 
 namespace conifs.rms.business.managers
 {
@@ -12,11 +13,13 @@ namespace conifs.rms.business.managers
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
+        private readonly CompanyDataContext _context;
 
-        public CompanyManager(ICompanyRepository companyRepository, IMapper mapper)
+        public CompanyManager(ICompanyRepository companyRepository, IMapper mapper, CompanyDataContext context)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<IEnumerable<CompanyDto>> GetAllCompanies()
@@ -32,14 +35,14 @@ namespace conifs.rms.business.managers
         {
             var company = await _companyRepository.GetCompanyById(companyID);
 
-                return _mapper.Map<CompanyDto>(company) ?? new CompanyDto(); ;
+                return _mapper.Map<CompanyDto>(company) ?? new CompanyDto(); 
         }
 
         public async Task<CompanyDto> AddCompany(CompanyDto newCompanyDto)
         {
             Company newCompany = _mapper.Map<Company>(newCompanyDto);
 
-            var validator = new CompanyValidator();
+            var validator = new CompanyValidator(_context, isNew: true);
 
             var validationResult = await validator.ValidateAsync(newCompany);
 
@@ -66,7 +69,16 @@ namespace conifs.rms.business.managers
             }
 
             var updatedCompany = _mapper.Map<Company>(updatedCompanyDto);
-            var validator = new CompanyValidator();
+            var validator = new CompanyValidator(_context, isNew: false);
+
+            //validator.RuleFor(c => c.CompanyCode)
+            //    .MustAsync(async (code, cancellation) =>
+            //    {
+            //        return !await _context.Companies
+            //        .Where(c => c.CompanyID != updatedCompany.CompanyID)
+            //        .AnyAsync(c => c.CompanyCode == code, cancellation);
+            //    }).WithMessage("Company Code must be unique.");
+
             var validationResult = await validator.ValidateAsync(updatedCompany);
 
             if (!validationResult.IsValid)
@@ -77,8 +89,8 @@ namespace conifs.rms.business.managers
             existingCompany.CompanyCode = updatedCompany.CompanyCode;
             existingCompany.CompanyName = updatedCompany.CompanyName;
             existingCompany.Description = updatedCompany.Description;
-            existingCompany.Country = updatedCompany.Country;
-            existingCompany.Currency = updatedCompany.Currency;
+            existingCompany.CountryID = updatedCompany.CountryID;
+            existingCompany.CurrencyID = updatedCompany.CurrencyID;
             existingCompany.Address01 = updatedCompany.Address01;
             existingCompany.Address02 = updatedCompany.Address02;
             existingCompany.DefaultCompany = updatedCompany.DefaultCompany;

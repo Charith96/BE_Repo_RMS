@@ -32,6 +32,7 @@ namespace conifs.rms.data.repositories.Company
 
         public async Task<entities.Company> AddCompany(entities.Company newCompany)
         {
+
             _context.Companies.Add(newCompany);
             await _context.SaveChangesAsync();
             return newCompany;

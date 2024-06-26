@@ -1,15 +1,13 @@
 ﻿using conifs.rms.data.entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace conifs.rms.data.repositories
 {
     public interface ICountryRepository
     {
-        Task<IEnumerable<Country>> GetAllCountriesAsync();
-        Task<Country> GetCountryByIdAsync(int countryId);
-        Task AddCountryAsync(Country country);
-        Task UpdateCountryAsync(Country country);
-        Task DeleteCountryAsync(int countryId);
+        Task<IEnumerable<Country>> GetAllCountries();
+        Task<Country> GetCountryById(Guid countryId);
+        Task<Country> AddCountry(Country newCountry);
+        Task<Country> UpdateCountry(Country country);
+        Task DeleteCountry(Guid countryId);
     }
 }

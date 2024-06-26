@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using conifs.rms.data.entities;
 using Microsoft.EntityFrameworkCore;
-using conifs.rms.data.entities;
 
 namespace conifs.rms.data.repositories
 {
@@ -14,35 +12,36 @@ namespace conifs.rms.data.repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Country>> GetAllCountriesAsync()
+        public async Task<IEnumerable<Country>> GetAllCountries()
         {
             return await _context.Countries.ToListAsync();
         }
 
-        public async Task<Country> GetCountryByIdAsync(int countryId)
+        public async Task<Country> GetCountryById(Guid countryId)
         {
             var country = await _context.Countries.FindAsync(countryId);
-            return country ?? throw new KeyNotFoundException($"Country with ID {countryId} not found.");
+            return country ?? new Country();
+                //throw new KeyNotFoundException($"Country with ID {countryId} not found.");
         }
 
-        public async Task AddCountryAsync(Country country)
+        public async Task<Country> AddCountry(Country newCountry)
         {
             // Remove any explicit setting of CountryID
            // country.CountryID = 0; // or default(int) if the type is nullable
 
-            _context.Countries.Add(country);
+            _context.Countries.Add(newCountry);
             await _context.SaveChangesAsync();
+            return newCountry;
         }
 
-
-
-        public async Task UpdateCountryAsync(Country country)
+        public async Task<Country> UpdateCountry(Country country)
         {
-            _context.Entry(country).State = EntityState.Modified;
+            _context.Countries.Update(country);
             await _context.SaveChangesAsync();
+            return country;
         }
 
-        public async Task DeleteCountryAsync(int countryId)
+        public async Task DeleteCountry(Guid countryId)
         {
             var country = await _context.Countries.FindAsync(countryId);
             if (country != null)

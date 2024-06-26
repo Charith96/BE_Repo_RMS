@@ -6,10 +6,10 @@ namespace conifs.rms.data.repositories
 {
     public interface ICurrencyRepository
     {
-        Task<List<Currency>> GetAllCurrenciesAsync();
-        Task<Currency> GetCurrencyByIdAsync(int id);
-        Task AddCurrencyAsync(Currency currency);
-        Task UpdateCurrencyAsync(Currency currency);
-        Task DeleteCurrencyAsync(int id);
+        Task<IEnumerable<Currency>> GetAllCurrencies();
+        Task<Currency> GetCurrencyById(Guid currencyID);
+        Task<Currency> AddCurrency(Currency newCurrency);
+        Task<Currency> UpdateCurrency(Currency currency);
+        Task DeleteCurrency(Guid currencyID);
     }
 }
