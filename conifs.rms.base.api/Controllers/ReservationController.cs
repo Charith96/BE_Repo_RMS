@@ -33,58 +33,68 @@ namespace conifs.rms.@base.api.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<GetReservationListDto>>> GetAllReservations()
-        {
-            // Fetch all reservations asynchronously
-            var reservations = await _reservationManager.GetAllReservationsAsync();
+             [HttpGet]
+     public async Task<ActionResult<List<GetReservationListDto>>> GetAllReservations()
+     {
+         // Fetch all reservations asynchronously
+         var reservations = await _reservationManager.GetAllReservationsAsync();
 
-            // Create a list to hold the DTOs
-            var reservationDtos = new List<GetReservationListDto>();
+         // Create a list to hold the DTOs
+         var reservationDtos = new List<GetReservationListDto>();
 
-            // Fetch related data in batches to improve performance
-            var customerCodes = reservations.Select(r => r.CustomerID).Distinct().ToList();
-            var groupIds = reservations.Select(r => r.GroupId).Distinct().ToList();
-            var reservationIds = reservations.Select(r => r.ReservationCode).Distinct().ToList();
+         // Fetch related data in batches to improve performance
+         var customerCodes = reservations.Select(r => r.CustomerID).Distinct().ToList();
+         var groupIds = reservations.Select(r => r.GroupId).Distinct().ToList();
+         var itemIds = reservations.Select(r => r.ItemId).Distinct().ToList();
+         var reservationCodes = reservations.Select(r => r.ReservationCode).Distinct().ToList();
 
-            var customerIds = await _context.Customers
-                .Where(c => customerCodes.Contains(c.CustomerCode))
-                .ToDictionaryAsync(c => c.CustomerCode, c => c.CustomerID);
+         var customerIdsDict = await _context.Customers
+             .Where(c => customerCodes.Contains(c.CustomerCode))
+             .ToDictionaryAsync(c => c.CustomerCode, c => c.CustomerID);
 
-            var groupIdsDict = await _context.ReservationGroups
-                .Where(rg => groupIds.Contains(rg.Id))
-                .ToDictionaryAsync(rg => rg.Id, rg => rg.GroupId);
+         var groupIdsDict = await _context.ReservationGroups
+             .Where(rg => groupIds.Contains(rg.Id))
+             .ToDictionaryAsync(rg => rg.Id, rg => rg.GroupId);
 
-            var resevationIdsDict = await _context.Reservations
-                .Where(ri => reservationIds.Contains(ri.ReservationCode))
-                .ToDictionaryAsync(ri => ri.ReservationCode, ri => ri.ReservationID);
+         var itemIdsDict = await _context.ReservationItems
+             .Where(ri => itemIds.Contains(ri.Id))
+             .ToDictionaryAsync(ri => ri.Id, ri => ri.ItemId);
 
-            // Map reservations to DTOs and set related data
-            foreach (var reservation in reservations)
-            {
-                var reservationDto = _mapper.Map<GetReservationListDto>(reservation);
+         var reservationIdsDict = await _context.Reservations
+             .Where(r => reservationCodes.Contains(r.ReservationCode))
+             .ToDictionaryAsync(r => r.ReservationCode, r => r.ReservationID);
 
-                if (customerIds.TryGetValue(reservation.CustomerID, out var customerId))
-                {
-                    reservationDto.CustomerID = customerId;
-                }
+         // Map reservations to DTOs and set related data
+         foreach (var reservation in reservations)
+         {
+             var reservationDto = _mapper.Map<GetReservationListDto>(reservation);
 
-                if (groupIdsDict.TryGetValue(reservation.GroupId, out var groupId))
-                {
-                    reservationDto.GroupId = groupId;
-                }
+             if (customerIdsDict.TryGetValue(reservation.CustomerID, out var customerId))
+             {
+                 reservationDto.CustomerID = customerId;
+             }
 
-                if (resevationIdsDict.TryGetValue(reservation.ItemId, out var itemId))
-                {
-                    reservationDto.ItemId = itemId;
-                }
+             if (groupIdsDict.TryGetValue(reservation.GroupId, out var groupId))
+             {
+                 reservationDto.GroupId = groupId;
+             }
 
-                reservationDtos.Add(reservationDto);
-            }
+             if (itemIdsDict.TryGetValue(reservation.ItemId, out var itemId))
+             {
+                 reservationDto.ItemId = itemId;
+             }
 
-            // Return the list of DTOs
-            return Ok(reservationDtos);
-        }
+             if (reservationIdsDict.TryGetValue(reservation.ReservationCode, out var reservationId))
+             {
+                 reservationDto.ReservationID = reservationId;
+             }
+
+             reservationDtos.Add(reservationDto);
+         }
+
+         // Return the list of DTOs
+         return Ok(reservationDtos);
+     }
 
         [HttpGet("ByItem/{Item}")]
         public async Task<ActionResult<List<ReservationDto>>> GetReservationsByItem(Guid Item)
