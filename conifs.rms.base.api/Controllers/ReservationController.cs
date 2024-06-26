@@ -11,6 +11,9 @@ using System.Linq;
 using conifs.rms.business.validations;
 using conifs.rms.data.Migrations;
 using conifs.rms.business.validations.conifs.rms.business.validations;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using conifs.rms.data;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -19,19 +22,67 @@ namespace conifs.rms.@base.api.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationManager _reservationManager;
+        private readonly IMapper _mapper;
+        private readonly ApplicationDbContext _context;
 
 
-        public ReservationController(IReservationManager reservationManager)
+        public ReservationController(IReservationManager reservationManager, IMapper mapper, ApplicationDbContext context)
         {
             _reservationManager = reservationManager;
-
+            _mapper = mapper;
+            _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ReservationDto>>> GetAllReservations()
+        public async Task<ActionResult<List<GetReservationListDto>>> GetAllReservations()
         {
+            // Fetch all reservations asynchronously
             var reservations = await _reservationManager.GetAllReservationsAsync();
-            var reservationDtos = reservations.Select(r => MapToReservationDto(r)).ToList();
+
+            // Create a list to hold the DTOs
+            var reservationDtos = new List<GetReservationListDto>();
+
+            // Fetch related data in batches to improve performance
+            var customerCodes = reservations.Select(r => r.CustomerID).Distinct().ToList();
+            var groupIds = reservations.Select(r => r.GroupId).Distinct().ToList();
+            var reservationIds = reservations.Select(r => r.ReservationCode).Distinct().ToList();
+
+            var customerIds = await _context.Customers
+                .Where(c => customerCodes.Contains(c.CustomerCode))
+                .ToDictionaryAsync(c => c.CustomerCode, c => c.CustomerID);
+
+            var groupIdsDict = await _context.ReservationGroups
+                .Where(rg => groupIds.Contains(rg.Id))
+                .ToDictionaryAsync(rg => rg.Id, rg => rg.GroupId);
+
+            var resevationIdsDict = await _context.Reservations
+                .Where(ri => reservationIds.Contains(ri.ReservationCode))
+                .ToDictionaryAsync(ri => ri.ReservationCode, ri => ri.ReservationID);
+
+            // Map reservations to DTOs and set related data
+            foreach (var reservation in reservations)
+            {
+                var reservationDto = _mapper.Map<GetReservationListDto>(reservation);
+
+                if (customerIds.TryGetValue(reservation.CustomerID, out var customerId))
+                {
+                    reservationDto.CustomerID = customerId;
+                }
+
+                if (groupIdsDict.TryGetValue(reservation.GroupId, out var groupId))
+                {
+                    reservationDto.GroupId = groupId;
+                }
+
+                if (resevationIdsDict.TryGetValue(reservation.ItemId, out var itemId))
+                {
+                    reservationDto.ItemId = itemId;
+                }
+
+                reservationDtos.Add(reservationDto);
+            }
+
+            // Return the list of DTOs
             return Ok(reservationDtos);
         }
 
@@ -147,6 +198,7 @@ namespace conifs.rms.@base.api.Controllers
         {
             return new data.entities.Reservation
             {
+                ReservationCode=reservationDto.ReservationCode,
                 ReservationID = reservationDto.ReservationID,
                 CustomerID = reservationDto.CustomerID,
                 GroupId = reservationDto.GroupId,

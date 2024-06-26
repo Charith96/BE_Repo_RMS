@@ -57,7 +57,8 @@ namespace conifs.rms.data.repositories
 
         public async Task DeleteReservationAsync(Guid id)
         {
-            var dbReservation = await _context.Reservations.FindAsync(id);
+        
+            var dbReservation = _context.Reservations.FirstOrDefault(u => u.ReservationCode == id);
             if (dbReservation == null)
                 throw new Exception("Reservation not found.");
 

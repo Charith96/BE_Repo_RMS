@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace conifs.rms.dto.Reservation
 {
-    public class GetReservation
+    public class GetReservationListDto
     {
-     
 
+
+        public Guid ReservationCode { get; set; }
         public string ReservationID { get; set; }
 
         [ForeignKey("Customer")]
@@ -22,9 +23,6 @@ namespace conifs.rms.dto.Reservation
 
         [ForeignKey("ReservationItem")]
         public String ItemId { get; set; }
-
-
-
 
         public DateTime? date { get; set; }
 
