@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using conifs.rms.business.managers;
+using conifs.rms.business.validators;
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories;
 using conifs.rms.dto.Company;
+using FluentValidation;
 
 namespace conifs.rms.business
 {
@@ -23,7 +25,7 @@ namespace conifs.rms.business
             return _mapper.Map<List<CountryDto>>(country);
         }
 
-        public async Task<CountryDto> GetCountryById(int countryId)
+        public async Task<CountryDto> GetCountryById(Guid countryId)
         {
             var country = await _countryRepository.GetCountryById(countryId);
             return _mapper.Map<CountryDto>(country) ?? new CountryDto();
@@ -31,23 +33,25 @@ namespace conifs.rms.business
 
         public async Task<CountryDto> AddCountry(CountryDto newCountryDto)
         {
-            // Ensure that the CountryID is not set before mapping
-           // countryDto.CountryID = 0; // or default(int) if the type is nullable
            Country newCountry = _mapper.Map<Country>(newCountryDto);
+
+            var validator = new CountryValidator();
+
+            var validationResult = await validator.ValidateAsync(newCountry);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
 
             var addedCountry = await _countryRepository.AddCountry(newCountry);
             newCountryDto.CountryID = addedCountry.CountryID;
 
             return newCountryDto;
-            //    _mapper.Map<Country>(countryDto);
-           // await _countryRepository.AddCountryAsync(country);
         }
 
         public async Task<CountryDto> UpdateCountry(CountryDto updatedCountryDto)
         {
-            // Ensure that the CountryID is not set before mapping
-          //  countryDto.CountryID = 0; // or default(int) if the type is nullable
-
             var existingCountry = await _countryRepository.GetCountryById(updatedCountryDto.CountryID);
             if (existingCountry == null) {
                 throw new Exception($"Company with ID {updatedCountryDto.CountryID} not found.");
@@ -55,15 +59,23 @@ namespace conifs.rms.business
 
             var updatedCountry = _mapper.Map<Country>(updatedCountryDto);
 
-            existingCountry.CountryName = updatedCountry.CountryName;
+            var validator = new CountryValidator(); ;
 
+            var validationResult = await validator.ValidateAsync(updatedCountry);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            existingCountry.CountryName = updatedCountry.CountryName;
             
             var updatedCountryEntitiy = await _countryRepository.UpdateCountry(existingCountry);
 
             return _mapper.Map<CountryDto>(updatedCountryEntitiy);
         }
 
-        public async Task DeleteCountry(int countryId)
+        public async Task DeleteCountry(Guid countryId)
         {
             await _countryRepository.DeleteCountry(countryId);
         }

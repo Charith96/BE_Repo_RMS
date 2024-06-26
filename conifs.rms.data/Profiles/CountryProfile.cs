@@ -11,10 +11,11 @@ namespace conifs.rms.data.Profiles
         {
             CreateMap<Country, CountryDto>()
                  .ForMember(dest => dest.CountryID, opt => opt.MapFrom(src => src.CountryID))
-                 .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.CountryName));
-
-            CreateMap<CountryDto, Country>()
-                .ForMember(dest => dest.CountryID, opt => opt.Ignore()); // Ignore mapping CountryID back
+                 .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.CountryName))
+                 //.ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
+            .ReverseMap();
+          //  CreateMap<CountryDto, Country>()
+          //      .ForMember(dest => dest.CountryID, opt => opt.Ignore()); // Ignore mapping CountryID back
         }
     }
 }

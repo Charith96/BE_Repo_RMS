@@ -17,21 +17,12 @@ namespace conifs.rms.data
 
         public DbSet<Currency> Currencies { get; set; }
 
+       // public DbSet<CompanyCountry> CompanyCountries { get; set; }
+      //  public DbSet<CompanyCurrency> companyCurrencies { get; set; }
 
-
-        // protected override void OnModelCreating(ModelBuilder modelBuilder)
-        // {
-        //    modelBuilder.Entity<CreateCompanyDto>()
-        //      .HasOne(c => c.Country)
-        //    .WithMany()
-        //  .HasForeignKey(c => c.CountryID)
-        // .OnDelete(DeleteBehavior.Cascade); // Or choose a different delete behavior
-        //  }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Other configurations...
-
             // Configure the CompanyID property conversion
             modelBuilder.Entity<Company>()
                 .Property(e => e.CompanyID)
@@ -41,31 +32,54 @@ namespace conifs.rms.data
                 );
 
             modelBuilder.Entity<Country>()
-        .Property(c => c.CountryID)
-        .ValueGeneratedOnAdd();
-
-        //    modelBuilder.Entity<Company>(entity =>
-        //        { 
-        //        entity.HasOne(c => c.Country)
-        //        .WithMany()
-        //        .HasForeignKey(c => c.CountryID)
-        //        .OnDelete(DeleteBehavior.Restrict);
-
-        //         entity.Ignore(c => c.Country);
-        //});
-
-        //    modelBuilder.Entity<Company>(entity =>
-        //    {
-        //        entity.HasOne(c => c.Currency)
-        //        .WithMany()
-        //        .HasForeignKey(c => c.CurrencyID)
-        //        .OnDelete(DeleteBehavior.Restrict);
-
-        //        entity.Ignore(c => c.Currency);
-        //    });
+           .Property(c => c.CountryID)
+           .ValueGeneratedOnAdd();
 
             base.OnModelCreating(modelBuilder);
-        }
 
+            modelBuilder.Entity<Country>()
+           .HasKey(c => new { c.CountryID });
+
+            modelBuilder.Entity<Company>()
+                .HasOne(c => c.Country)
+                .WithMany()
+                .HasForeignKey(c => c.CountryID);
+               // .HasPrincipalKey(c => c.CountryName);
+
+            modelBuilder.Entity<Currency>()
+           .HasKey(c => new { c.CurrencyID });
+
+            modelBuilder.Entity<Company>()
+                .HasOne(c => c.Currency)
+                .WithMany()
+                .HasForeignKey(c => c.CurrencyID);
+               // .HasPrincipalKey(c => c.CurrencyName);
+
+            //    modelBuilder.Entity<CompanyCountry>()
+            //        .HasKey(cc => new { cc.CompanyID, cc.CountryID });
+
+            //    modelBuilder.Entity<CompanyCountry>()
+            //        .HasOne(cc => cc.Company)
+            //        .WithMany(c => c.CompanyCountries)
+            //        .HasForeignKey(cc => cc.CompanyID);
+
+            //    modelBuilder.Entity<CompanyCountry>()
+            //        .HasOne(cc => cc.Country)
+            //        .WithMany(c => c.CompanyCountries)
+            //        .HasForeignKey(cc => cc.CountryID);
+
+            //    modelBuilder.Entity<CompanyCurrency>()
+            //.HasKey(cc => new { cc.CompanyID, cc.CurrencyID });
+
+            //    modelBuilder.Entity<CompanyCurrency>()
+            //        .HasOne(cc => cc.Company)
+            //        .WithMany(c => c.CompanyCurrencies)
+            //        .HasForeignKey(cc => cc.CompanyID);
+
+            //    modelBuilder.Entity<CompanyCurrency>()
+            //        .HasOne(cc => cc.Currency)
+            //        .WithMany(c => c.CompanyCurrencies)
+            //        .HasForeignKey(cc => cc.CurrencyID);
+        }
     }
 }

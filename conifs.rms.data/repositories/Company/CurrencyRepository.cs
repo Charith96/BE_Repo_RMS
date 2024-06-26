@@ -20,7 +20,7 @@ namespace conifs.rms.data.repositories
             return await _context.Currencies.ToListAsync();
         }
 
-        public async Task<Currency> GetCurrencyById(int currencyID)
+        public async Task<Currency> GetCurrencyById(Guid currencyID)
         {
             var currency = await _context.Currencies.FindAsync(currencyID);
             return currency ?? new Currency();
@@ -40,7 +40,7 @@ namespace conifs.rms.data.repositories
             return currency;
         }
 
-        public async Task DeleteCurrency(int currencyID)
+        public async Task DeleteCurrency(Guid currencyID)
         {
             var currency = await _context.Currencies.FindAsync(currencyID);
             if(currency != null)

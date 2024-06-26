@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using conifs.rms.data;
 
@@ -11,9 +12,11 @@ using conifs.rms.data;
 namespace conifs.rms.data.Migrations
 {
     [DbContext(typeof(CompanyDataContext))]
-    partial class CompanyDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240620164848_InitialeCreate")]
+    partial class InitialeCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +43,8 @@ namespace conifs.rms.data.Migrations
 
                     b.Property<string>("CompanyCode")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -95,8 +98,8 @@ namespace conifs.rms.data.Migrations
 
                     b.Property<string>("CurrencyName")
                         .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("CurrencyID");
 

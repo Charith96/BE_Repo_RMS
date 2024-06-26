@@ -30,12 +30,12 @@ namespace conifs.rms.api.Controllers
 
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCountryById(int id)
+        [HttpGet("{countryId}")]
+        public async Task<IActionResult> GetCountryById(Guid countryId)
         {
             try
             {
-                var country = await _countryManager.GetCountryById(id);
+                var country = await _countryManager.GetCountryById(countryId);
                 if (country == null)
                 {
                     return NotFound();
@@ -66,7 +66,7 @@ namespace conifs.rms.api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCountry(int id, [FromBody] CountryDto updatedCountryDto)
+        public async Task<IActionResult> UpdateCountry(Guid id, [FromBody] CountryDto updatedCountryDto)
         {
             try
             {
@@ -88,12 +88,12 @@ namespace conifs.rms.api.Controllers
            
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCountry(int id)
+        [HttpDelete("{countryId}")]
+        public async Task<IActionResult> DeleteCountry(Guid countryId)
         {
             try
             {
-                await _countryManager.DeleteCountry(id);
+                await _countryManager.DeleteCountry(countryId);
                 return NoContent();
             }
             catch(Exception ex)

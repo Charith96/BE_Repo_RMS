@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -12,7 +11,7 @@ namespace conifs.rms.data.entities
         public Guid CompanyID { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(8)]
         public string? CompanyCode { get; set; }
 
         [Required]
@@ -22,13 +21,17 @@ namespace conifs.rms.data.entities
         [StringLength(50)]
         public string Description { get; set; } = "";
 
-        [Required]
-        [StringLength(50)]
-        public string Country { get; set; } = "";
+        [ForeignKey("Country")]
+        public Guid CountryID { get; set; }
 
-        [Required]
-        [StringLength(3)]
-        public string Currency { get; set; } = "";
+        [JsonIgnore]
+        public virtual Country Country { get; set; }
+
+        [ForeignKey("Currency")]
+        public Guid CurrencyID { get; set; }
+
+        [JsonIgnore]
+        public virtual Currency Currency { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -39,20 +42,11 @@ namespace conifs.rms.data.entities
 
         public bool DefaultCompany { get; set; }
 
-        //[ForeignKey("Country")]
-        //public int CountryID { get; set; }
-
-        //[ForeignKey("Currency")]
-        //public int CurrencyID { get; set; }
-
         public Company()
         {
             CompanyID = Guid.NewGuid(); // Initialize CompanyID with a new Guid
-        }
-
-        //[JsonIgnore]
-        //public virtual Country Country { get; set; }
-        //[JsonIgnore]    
-
+        }   
     }
 }
+
+

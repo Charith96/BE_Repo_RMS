@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using conifs.rms.business.validators;
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories;
 using conifs.rms.dto.Company;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.business.managers
 {
@@ -22,7 +25,7 @@ namespace conifs.rms.business.managers
             return _mapper.Map<List<CurrencyDto>>(currency);
         }
 
-        public async Task<CurrencyDto> GetCurrencyById(int currencyID)
+        public async Task<CurrencyDto> GetCurrencyById(Guid currencyID)
         {
             var currency = await _currencyRepository.GetCurrencyById(currencyID);
             return _mapper.Map<CurrencyDto>(currency) ?? new CurrencyDto();
@@ -31,6 +34,15 @@ namespace conifs.rms.business.managers
         public async Task<CurrencyDto> AddCurrency(CurrencyDto newCurrencyDto)
         {
             Currency newCurrency = _mapper.Map<Currency>(newCurrencyDto);
+
+            var validator = new CurrencyValidator();
+
+            var validationResult = await validator.ValidateAsync(newCurrency);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
 
             var addedCurrency = await _currencyRepository.AddCurrency(newCurrency);
 
@@ -50,6 +62,13 @@ namespace conifs.rms.business.managers
             }
 
             var updatedCurrency = _mapper.Map<Currency>(updatedCurrencyDto);
+            var validator = new CurrencyValidator();
+            var validationResult = await validator.ValidateAsync(updatedCurrency);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
 
             existingCurrency.CurrencyName = updatedCurrency.CurrencyName;
 
@@ -57,7 +76,7 @@ namespace conifs.rms.business.managers
             return _mapper.Map<CurrencyDto>(updatedCurrencyEntity);
         }
 
-        public async Task DeleteCurrency(int currencyID)
+        public async Task DeleteCurrency(Guid currencyID)
         {
             await _currencyRepository.DeleteCurrency(currencyID);
         }

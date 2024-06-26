@@ -17,7 +17,7 @@ namespace conifs.rms.data.repositories
             return await _context.Countries.ToListAsync();
         }
 
-        public async Task<Country> GetCountryById(int countryId)
+        public async Task<Country> GetCountryById(Guid countryId)
         {
             var country = await _context.Countries.FindAsync(countryId);
             return country ?? new Country();
@@ -41,7 +41,7 @@ namespace conifs.rms.data.repositories
             return country;
         }
 
-        public async Task DeleteCountry(int countryId)
+        public async Task DeleteCountry(Guid countryId)
         {
             var country = await _context.Countries.FindAsync(countryId);
             if (country != null)

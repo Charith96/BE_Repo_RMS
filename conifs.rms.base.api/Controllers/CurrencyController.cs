@@ -33,7 +33,7 @@ namespace conifs.rms.api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCurrencyById(int id)
+        public async Task<IActionResult> GetCurrencyById(Guid id)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace conifs.rms.api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCurrency(int id, [FromBody] CurrencyDto updatedCurrencyDto)
+        public async Task<IActionResult> UpdateCurrency(Guid id, [FromBody] CurrencyDto updatedCurrencyDto)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace conifs.rms.api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCurrency(int id)
+        public async Task<IActionResult> DeleteCurrency(Guid id)
         {
             try
             {
