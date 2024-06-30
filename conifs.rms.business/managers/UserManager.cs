@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using conifs.rms.data;
 using conifs.rms.data.entities;
 using conifs.rms.data.repositories.TimeSlots;
@@ -185,8 +185,43 @@ namespace conifs.rms.business.managers
         }
         public void CreateUser(CreateUserDto userCreateDto)
         {
-
             var userEntity = _mapper.Map<UserTable>(userCreateDto);
+
+            var userCompany = userCreateDto.DefaultCompany;
+            var userRole = userCreateDto.PrimaryRole;
+
+           
+                var companyID = _context.Companies
+                    .Where(c => c.CompanyName == userCompany)
+                    .Select(c => c.CompanyID)
+                    .First();
+
+            var RoleID = _context.Roles
+                   .Where(c => c.RoleName == userRole)
+                   .Select(c => c.RoleCode)
+                   .First();
+
+            // If it doesn't exist, create a new UserCompany entity
+            var userCompanyEntity = new CreateUserCompanyDto
+                    {
+                        id = userEntity.Userid,
+                        CompanyId = companyID
+                    };
+                    var userCompanyUpdate = _mapper.Map<UserCompany>(userCompanyEntity);
+                    _context.UserCompany.Add(userCompanyUpdate);
+
+          
+                    // If it doesn't exist, create a new UserCompany entity
+                    var userRoleEntity = new CreateUserRoleDto
+                    {
+                        id = userEntity.Userid,
+                        RoleId = RoleID
+                    };
+                    var userRoleUpdate = _mapper.Map<UserRoles>(userRoleEntity);
+                    _context.UserRole.Add(userRoleUpdate);
+                
+
+
 
             _UserReopsitory.CreateUser(userEntity);
         }
@@ -216,7 +251,5 @@ namespace conifs.rms.business.managers
            
             _UserReopsitory.DeleteUserRole(id);
         }
-
-
     }
 }
