@@ -36,6 +36,8 @@ namespace conifs.rms.business.managers
         public void DeleteUserCompany(string id);
 
         public void DeleteUserRole(string id);
+
+     //   public Task<List<CreateUserCompanyDto>> GetUsersByCompanyId(Guid companyId);
      
     }
 }

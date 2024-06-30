@@ -32,5 +32,10 @@ namespace conifs.rms.business.managers
             throw new NotImplementedException();
         }
 
+        Task<bool> CompanyHasUsers(string companyID)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

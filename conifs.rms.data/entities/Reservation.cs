@@ -35,5 +35,7 @@ namespace conifs.rms.data.entities
         public DateTime Time1 { get; set; }
         [Required(ErrorMessage = "First  Time2 is required")]
         public DateTime Time2 { get; set; }
+
+
     }
 }

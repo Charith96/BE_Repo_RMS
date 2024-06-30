@@ -33,5 +33,9 @@ namespace conifs.rms.data.repositories.Company
             throw new NotImplementedException();
         }
 
+        Task<bool> CompanyHasUsers(string companyID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

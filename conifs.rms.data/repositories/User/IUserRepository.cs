@@ -30,4 +30,6 @@ public interface IUserRepository
     void DeleteUserCompany(string id);
 
     void DeleteUserRole(string id);
+
+   // public Task<List<UserCompany>> GetUsersByCompanyId(Guid companyId);
 }

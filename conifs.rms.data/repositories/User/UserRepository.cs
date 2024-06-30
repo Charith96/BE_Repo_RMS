@@ -111,5 +111,18 @@ namespace conifs.rms.data.repositories.User
             _context.SaveChanges();
 
         }
+
+
+        //public async Task<List<UserCompany>> GetUsersByCompanyId(Guid companyId)
+        //{
+        //        var users = await _context.UserCompany
+        //            .Where(u => u.CompanyId == companyId)
+        //            .ToListAsync();
+
+        //    return users;
+
+        //        //return new Exception($"Error getting users: {Exception.}")
+        //    }
+        //}
     }
 }

@@ -6,6 +6,7 @@ namespace conifs.rms.data.repositories
     {
         Task<IEnumerable<Country>> GetAllCountries();
         Task<Country> GetCountryById(Guid countryId);
+        //Task<Country> GetCountryByName(string countryName);
         Task<Country> AddCountry(Country newCountry);
         Task<Country> UpdateCountry(Country country);
         Task DeleteCountry(Guid countryId);

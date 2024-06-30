@@ -54,5 +54,10 @@ namespace conifs.rms.data.repositories.Company
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> CompanyHasUsers(string companyID)
+        {
+            return await _context.UserCompany.AnyAsync(uc => uc.CompanyId.ToString() == companyID);
+        }
     }
 }

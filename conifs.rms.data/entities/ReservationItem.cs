@@ -43,6 +43,6 @@ namespace conifs.rms.data.entities
         [JsonIgnore]
         public virtual ReservationGroup ReservationGroup { get; set; }
 
-        
+
     }
 }

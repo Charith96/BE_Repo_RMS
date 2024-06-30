@@ -101,6 +101,20 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteCompany(string id)
+        //{
+        //    try
+        //    {
+        //        await _companyManager.DeleteCompany(id);
+        //        return NoContent();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {ex.Message}");
+        //    }
+        //}
+
+
         public async Task<IActionResult> DeleteCompany(string id)
         {
             try
@@ -108,10 +122,15 @@ namespace conifs.rms.@base.api.Controllers
                 await _companyManager.DeleteCompany(id);
                 return NoContent();
             }
+            catch (InvalidOperationException ex) when (ex.Message == "Cannot delete company with associated users.")
+            {
+                return BadRequest("Cannot delete company with associated users.");
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
     }
 }

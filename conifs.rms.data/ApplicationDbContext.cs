@@ -86,6 +86,7 @@ namespace conifs.rms.data
             // Configure the CompanyID property conversion
             modelBuilder.Entity<Privilege>()
                 .HasKey(p => p.PrivilegeCode);
+
             modelBuilder.Entity<Company>()
                 .Property(e => e.CompanyID)
                 .HasConversion(
@@ -136,11 +137,16 @@ namespace conifs.rms.data
                 .WithMany()
                 .HasForeignKey(rp => rp.PrivilegeCode);
 
+            modelBuilder.Entity<Country>()
+                .HasIndex(c => c.CountryName)
+                .IsUnique();
+
+            modelBuilder.Entity<Currency>()
+                .HasIndex(c => c.CurrencyName)
+                .IsUnique();
+
             base.OnModelCreating(modelBuilder);
         }
-     
-
-
     }
 }
 
