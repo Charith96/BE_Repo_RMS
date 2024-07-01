@@ -19,7 +19,6 @@ namespace conifs.rms.business.validators
 
             RuleFor(ts => ts.EndTime)
                 .NotEmpty().WithMessage("End Time is required.")
-                .GreaterThan(ts => ts.StartTime).WithMessage("End Time must be greater than Start Time.")
                 .NotEqual(ts => ts.StartTime).WithMessage("End Time cannot be equal to Start Time.");
 
             RuleFor(ts => ts)

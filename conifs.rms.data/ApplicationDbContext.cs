@@ -32,6 +32,7 @@ namespace conifs.rms.data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<RolePrivilege> RolePrivileges { get; set; }
+        public DbSet<Admin> Admins { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using conifs.rms.data.entities;
 using conifs.rms.business.managers;
 using conifs.rms.dto.TimeSlot;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -36,7 +37,7 @@ private readonly ITimeSlotManager _timeSlotManager;
             }
         }
 
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
     public async Task<IActionResult> AddTimeSlot(TimeSlotDto timeSlot)
         {
@@ -50,7 +51,7 @@ private readonly ITimeSlotManager _timeSlotManager;
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut]
     public async Task<IActionResult> UpdateTimeSlot(TimeSlotDto timeSlot)
         {
@@ -64,7 +65,7 @@ private readonly ITimeSlotManager _timeSlotManager;
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTimeSlot(Guid id)
         {

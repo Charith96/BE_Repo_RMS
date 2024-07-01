@@ -6,6 +6,7 @@ using conifs.rms.dto.Users;
 using conifs.rms.business.validations;
 using FluentValidation;
 using conifs.rms.business.managers;
+using Microsoft.AspNetCore.Authorization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace conifs.rms.@base.api.Controllers
@@ -54,10 +55,10 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-  
 
-  
 
+
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{Userid}")]
         public IActionResult UpdateUser(string Userid, PutUserDto user)
         {
@@ -83,7 +84,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
 
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(string id)
         {
@@ -101,6 +102,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("user-companies/{Userid}")]
         public IActionResult GetUserCompanies(string Userid)
         {
@@ -115,6 +117,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("user-roles/{Userid}")]
         public IActionResult GetUserRoles(string Userid)
         {
@@ -129,6 +132,8 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public IActionResult CreateUser(CreateUserDto userCreateDto)
         {
@@ -157,6 +162,8 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
+
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("create-UserCompany")]
         public IActionResult CreateUserCompany(CreateUserCompanyDto userCompany)
         {
@@ -175,6 +182,8 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
+
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("create-UserRole")]
         public IActionResult CreateUserRole(CreateUserRoleDto userRole)
         {
@@ -195,7 +204,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("userCompanies/{id}")]
         public IActionResult DeleteUserCompany(string id)
         {
@@ -210,6 +219,8 @@ namespace conifs.rms.@base.api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
+
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("userRoles/{id}")]
         public IActionResult DeleteUserRoles(string id)
         {

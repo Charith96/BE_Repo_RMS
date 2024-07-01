@@ -1,6 +1,7 @@
 ﻿using conifs.rms.business;
 using conifs.rms.dto.Customer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -46,6 +47,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "CanCreate")]
         [HttpPost]
         public async Task<ActionResult<CustomerDto>> AddCustomer(CustomerDto customerDto)
         {
@@ -60,6 +62,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "CanUpdate")]
         [HttpPut("{customerId}")]
         public async Task<ActionResult<CustomerDto>> UpdateCustomer(Guid customerId, CustomerDto customerDto)
         {
@@ -81,6 +84,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "CanDelete")]
         [HttpDelete("{customerId}")]
         public async Task<IActionResult> DeleteCustomer(Guid customerId)
         {

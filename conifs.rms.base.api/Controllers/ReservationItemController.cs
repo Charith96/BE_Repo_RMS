@@ -5,6 +5,7 @@ using conifs.rms.dto.ReservationItem;
 using System;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -57,6 +58,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddItem(ReservationItemDto item)
         {
@@ -75,7 +77,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut]
         public async Task<IActionResult> UpdateItem(ReservationItemDto updatedItem)
         {
@@ -90,6 +92,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(Guid id)
         {

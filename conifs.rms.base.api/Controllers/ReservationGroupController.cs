@@ -4,6 +4,7 @@ using conifs.rms.dto.ReservationGroup;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -18,6 +19,7 @@ namespace conifs.rms.@base.api.Controllers
             _reservationGroupManager = reservationGroupManager;
         }
 
+        
         [HttpGet]
         public async Task<IActionResult> GetAllGroups()
         {
@@ -46,6 +48,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddGroup(ReservationGroupDto group)
         {
@@ -60,6 +63,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut]
         public async Task<IActionResult> UpdateGroup(ReservationGroupDto updatedGroup)
         {
@@ -74,6 +78,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGroup(Guid id)
         {

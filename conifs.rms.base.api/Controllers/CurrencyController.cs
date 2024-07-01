@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using conifs.rms.business.managers;
 using conifs.rms.dto.Company;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.api.Controllers
 {
@@ -17,6 +18,7 @@ namespace conifs.rms.api.Controllers
             _currencyManager = currencyManager;
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAllCurrencies()
         {
@@ -32,6 +34,7 @@ namespace conifs.rms.api.Controllers
 
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCurrencyById(Guid id)
         {
@@ -52,6 +55,7 @@ namespace conifs.rms.api.Controllers
 
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto newCurrencyDto)
         {
@@ -66,6 +70,7 @@ namespace conifs.rms.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCurrency(Guid id, [FromBody] CurrencyDto updatedCurrencyDto)
         {
@@ -89,6 +94,7 @@ namespace conifs.rms.api.Controllers
 
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCurrency(Guid id)
         {

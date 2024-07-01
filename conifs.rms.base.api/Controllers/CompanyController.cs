@@ -3,6 +3,7 @@ using conifs.rms.business.managers;
 using conifs.rms.data.entities;
 using conifs.rms.dto.Company;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace conifs.rms.@base.api.Controllers
@@ -20,7 +21,7 @@ namespace conifs.rms.@base.api.Controllers
     //_mapper = mapper;
          }
 
-
+       
         [HttpGet]
         public async Task<IActionResult> GetAllCompanies()
         {
@@ -35,6 +36,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCompanyById(string id)
         {
@@ -55,6 +57,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddCompany([FromBody] CompanyDto newCompanyDto)
         {
@@ -76,6 +79,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCompany(string id, [FromBody] CompanyDto updatedCompanyDto)
         {
@@ -100,6 +104,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(string id)
         {

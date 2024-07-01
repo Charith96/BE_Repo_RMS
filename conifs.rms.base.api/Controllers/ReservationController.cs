@@ -14,6 +14,7 @@ using conifs.rms.business.validations.conifs.rms.business.validations;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using conifs.rms.data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -33,6 +34,7 @@ namespace conifs.rms.@base.api.Controllers
             _context = context;
         }
 
+        
              [HttpGet]
      public async Task<ActionResult<List<GetReservationListDto>>> GetAllReservations()
      {
@@ -96,6 +98,7 @@ namespace conifs.rms.@base.api.Controllers
          return Ok(reservationDtos);
      }
 
+
         [HttpGet("ByItem/{Item}")]
         public async Task<ActionResult<List<ReservationDto>>> GetReservationsByItem(Guid Item)
         {
@@ -120,7 +123,7 @@ namespace conifs.rms.@base.api.Controllers
             return Ok(reservation);
         }
 
-
+        [Authorize(Policy = "CanCreate")]
         [HttpPost]
         public async Task<ActionResult<List<ReservationDto>>> AddReservation(GetReservation reservationDto)
         {
@@ -137,6 +140,7 @@ namespace conifs.rms.@base.api.Controllers
             return Ok(reservations);
         }
 
+        [Authorize(Policy = "CanUpdate")]
         [HttpPut("{id}")]
         public async Task<ActionResult<List<ReservationDto>>> UpdateReservation(Guid id, GetReservation updatedReservationDto)
         {
@@ -164,6 +168,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "CanDelete")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<ReservationDto>>> DeleteReservation(Guid id)
         {

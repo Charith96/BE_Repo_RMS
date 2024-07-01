@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using static System.Net.WebRequestMethods;
 
 namespace conifs.rms.@base.api.Controllers
@@ -21,6 +22,7 @@ namespace conifs.rms.@base.api.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAllRoles()
         {
@@ -38,6 +40,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("{RoleCode:guid}")]
         public async Task<IActionResult> GetRoleById(Guid RoleCode)
         {
@@ -67,6 +70,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddRole([FromBody] RoleDto newRoleDto)
         {
@@ -100,6 +104,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{RoleCode:guid}")]
         public async Task<IActionResult> UpdateRole(Guid RoleCode, [FromBody] RoleDto roleDto)
         {
@@ -135,6 +140,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{RoleCode:guid}")]
         public async Task<IActionResult> DeleteRole(Guid RoleCode)
         {
@@ -150,7 +156,7 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         // RolePrivilege methods
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("AddRolePrivilege")]
         public async Task<IActionResult> AddRolePrivilege([FromBody] RolePrivilegeDto rolePrivilegeDto)
         {
@@ -170,6 +176,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("GetRolePrivileges")]
         public async Task<IActionResult> GetAllRolePrivileges()
         {
@@ -184,6 +191,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("GetRolePrivilegeById")]
         public async Task<IActionResult> GetRolePrivilegeById([FromQuery] Guid roleCode)
         {
@@ -198,6 +206,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("UpdateRolePrivilege")]
         public async Task<IActionResult> UpdateRolePrivilege([FromBody] RolePrivilegeDto updatedRolePrivilege)
         {
@@ -217,6 +226,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("DeleteRolePrivilege/{id:guid}")]
         public async Task<IActionResult> DeleteRolePrivilege(Guid id)
         {

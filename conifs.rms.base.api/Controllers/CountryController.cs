@@ -1,6 +1,7 @@
 ﻿using conifs.rms.business.managers;
 using conifs.rms.dto.Company;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.api.Controllers
 {
@@ -15,6 +16,7 @@ namespace conifs.rms.api.Controllers
             _countryManager = countryManager;
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAllCountries()
         {
@@ -30,6 +32,7 @@ namespace conifs.rms.api.Controllers
 
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("{countryId}")]
         public async Task<IActionResult> GetCountryById(Guid countryId)
         {
@@ -49,6 +52,7 @@ namespace conifs.rms.api.Controllers
 
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddCountry([FromBody] CountryDto newCountryDto)
         {
@@ -65,6 +69,7 @@ namespace conifs.rms.api.Controllers
            // return CreatedAtAction(nameof(GetCountryById), new { id = countryDto.CountryID }, countryDto);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCountry(Guid id, [FromBody] CountryDto updatedCountryDto)
         {
@@ -88,6 +93,7 @@ namespace conifs.rms.api.Controllers
            
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{countryId}")]
         public async Task<IActionResult> DeleteCountry(Guid countryId)
         {

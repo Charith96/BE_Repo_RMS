@@ -4,6 +4,7 @@ using conifs.rms.business.managers;
 using conifs.rms.data;
 using conifs.rms.data.repositories;
 using conifs.rms.data.repositories.Company;
+using conifs.rms.data.repositories.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,9 @@ using conifs.rms.data.repositories.TimeSlots;
 using conifs.rms.data.repositories.User;
 using Microsoft.Extensions.Configuration;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +53,40 @@ builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+}); 
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Role", "Admin"));
+    options.AddPolicy("CanCreate", policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(claim => claim.Type == "Privileges" && claim.Value.Split(',').Contains("Create"))));
+    options.AddPolicy("CanUpdate", policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(claim => claim.Type == "Privileges" && claim.Value.Split(',').Contains("Update"))));
+    options.AddPolicy("CanDelete", policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(claim => claim.Type == "Privileges" && claim.Value.Split(',').Contains("Delete"))));
+    options.AddPolicy("CanView", policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(claim => claim.Type == "Privileges" && claim.Value.Split(',').Contains("View"))));
+});
+
+
+
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetService<IConfiguration>();
 
@@ -69,6 +107,9 @@ builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<ICountryManager, CountryManager>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<ICurrencyManager, CurrencyManager>();
+builder.Services.AddScoped<IAdminManager, AdminManager>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 //builder.Services.AddScoped<IValidator<Company>, CompanyValidator>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -144,13 +185,21 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
+app.UseRouting();
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

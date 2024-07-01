@@ -5,6 +5,7 @@ using conifs.rms.business.mappers;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -19,6 +20,7 @@ namespace conifs.rms.@base.api.Controllers
             _privilegeManager = privilegeManager;
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAllPrivileges()
         {
@@ -34,6 +36,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet("{privilegeId}")]
         public async Task<IActionResult> GetPrivilegeById(Guid privilegeId)
         {
@@ -57,6 +60,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> AddPrivilege([FromBody] PrivilegeDto newPrivilegeDto)
         {
@@ -77,6 +81,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{privilegeId}")]
         public async Task<IActionResult> UpdatePrivilege(Guid privilegeId, [FromBody] PrivilegeDto privilegeDto)
         {
@@ -104,6 +109,7 @@ namespace conifs.rms.@base.api.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{privilegeId}")]
         public async Task<IActionResult> DeletePrivilege(Guid privilegeId)
         {
