@@ -19,7 +19,9 @@ namespace conifs.rms.data.repositories
 
         public async Task<IEnumerable<Currency>> GetAllCurrencies()
         {
-            return await _context.Currencies.ToListAsync();
+            return await _context.Currencies
+                .OrderBy(c => c.CurrencyName)
+                .ToListAsync();
         }
 
         public async Task<Currency> GetCurrencyById(Guid currencyID)
