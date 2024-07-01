@@ -71,14 +71,6 @@ namespace conifs.rms.business.managers
             var updatedCompany = _mapper.Map<Company>(updatedCompanyDto);
             var validator = new CompanyValidator(_context, isNew: false);
 
-            //validator.RuleFor(c => c.CompanyCode)
-            //    .MustAsync(async (code, cancellation) =>
-            //    {
-            //        return !await _context.Companies
-            //        .Where(c => c.CompanyID != updatedCompany.CompanyID)
-            //        .AnyAsync(c => c.CompanyCode == code, cancellation);
-            //    }).WithMessage("Company Code must be unique.");
-
             var validationResult = await validator.ValidateAsync(updatedCompany);
 
             if (!validationResult.IsValid)
@@ -102,11 +94,26 @@ namespace conifs.rms.business.managers
             return _mapper.Map<CompanyDto>(updatedCompanyEntity);
         }
 
+        public async Task<bool> CompanyHasUsers(string companyID)
+        {
+            return await _companyRepository.CompanyHasUsers(companyID);
+        }
+
         public async Task DeleteCompany(string companyID)
         {
-             await _companyRepository.DeleteCompany(companyID);
+            if (await CompanyHasUsers(companyID))
+            {
+                throw new InvalidOperationException("Cannot delete company with associated users.");
+            }
 
+            await _companyRepository.DeleteCompany(companyID);
         }
+
+        //    public async Task DeleteCompany(string companyID)
+        //{ 
+        //    await _companyRepository.DeleteCompany(companyID);
+
+        //}
     }
 }
 

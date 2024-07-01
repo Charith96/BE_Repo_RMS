@@ -8,6 +8,7 @@ namespace conifs.rms.data.repositories
     {
         Task<IEnumerable<Currency>> GetAllCurrencies();
         Task<Currency> GetCurrencyById(Guid currencyID);
+        //Task<Currency> GetCurrencyByName(string currencyName);
         Task<Currency> AddCurrency(Currency newCurrency);
         Task<Currency> UpdateCurrency(Currency currency);
         Task DeleteCurrency(Guid currencyID);

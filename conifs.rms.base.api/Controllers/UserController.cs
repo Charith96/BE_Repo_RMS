@@ -37,10 +37,14 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers(Guid? companyId = null)
         {
             try
             {
+                //if (companyId.HasValue) 
+                //{
+                //    return Ok(await _userService.GetUsersByCompanyId(companyId.Value));
+                //}
                 var users = await _userService.GetAllUsers();
                 return Ok(users);
             }

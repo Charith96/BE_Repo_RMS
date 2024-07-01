@@ -6,8 +6,6 @@ using System.ComponentModel.DataAnnotations;
 namespace conifs.rms.data.entities
 {
     public class UserCompany
-
-    
     {
         [Key]
    
