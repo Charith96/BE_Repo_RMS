@@ -6,11 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace conifs.rms.data.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Admins",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Admins", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
@@ -382,6 +398,18 @@ namespace conifs.rms.data.Migrations
                 column: "CurrencyID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Countries_CountryName",
+                table: "Countries",
+                column: "CountryName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Currencies_CurrencyName",
+                table: "Currencies",
+                column: "CurrencyName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_CustomerID",
                 table: "Reservations",
                 column: "CustomerID");
@@ -420,6 +448,9 @@ namespace conifs.rms.data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Admins");
+
             migrationBuilder.DropTable(
                 name: "CreateUserCompanyDto");
 

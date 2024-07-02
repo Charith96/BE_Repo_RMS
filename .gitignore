@@ -11,3 +11,5 @@ obj/
 *.cache
 *.dll
 *.pdb
+/conifs.rms.data/Migrations/20240701065801_first.Designer.cs
+/conifs.rms.data/Migrations/20240701065801_first.cs

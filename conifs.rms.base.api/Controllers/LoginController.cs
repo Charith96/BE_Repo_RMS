@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace conifs.rms.@base.api.Controllers
 {
@@ -26,44 +27,58 @@ namespace conifs.rms.@base.api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginDto loginDto)
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
             try
             {
-                var admin =  _context.Admins.FirstOrDefault(x => x.Email == loginDto.Email && x.Password == loginDto.Password);
+                var admin = await _context.Admins.FirstOrDefaultAsync(x => x.Email == loginDto.Email && x.Password == loginDto.Password);
 
                 if (admin == null)
                 {
-                    var user = _context.User.FirstOrDefault(x => x.Email == loginDto.Email && x.Password == loginDto.Password);
+                    var user = await _context.User.FirstOrDefaultAsync(x => x.Email == loginDto.Email && x.Password == loginDto.Password);
                     if (user == null)
                     {
-                        return NotFound("");
+                        return NotFound("User not found");
                     }
 
-                    //generate token for the normal user
+                    // Generate token for the normal user
                     var claims = new List<Claim>
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("Email", user.Email.ToString())
-                };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("Email", user.Email.ToString())
+            };
 
-                    var userRoles = _context.UserRole.Where(x => x.Userid == user.Userid).ToList();
+                    var userRoles = await _context.UserRole
+                        .Where(x => x.Userid == user.Userid)
+                        .Select(x => x.RoleId)
+                        .ToListAsync();
 
-                    var privilegeNames = new List<string>();
-                    foreach (var role in userRoles)
+                    if (!userRoles.Any())
                     {
-                        var rolePrivileges = _context.RolePrivileges.Where(x => x.RoleCode == role.RoleId).ToList();
+                        return NotFound("User roles not found");
+                    }
 
-                        foreach (var privilege in rolePrivileges)
-                        {
-                            var privileges = _context.Privileges.FirstOrDefault(x => x.PrivilegeCode == privilege.PrivilegeCode);
-                            if (privileges != null)
-                            {
-                                privilegeNames.Add(privileges.PrivilegeName);
+                    var roleCodes = userRoles.ToHashSet(); // Using HashSet for quick lookup
 
-                            }
-                        }
+                    var rolePrivileges = await _context.RolePrivileges
+                        .Where(x => roleCodes.Contains(x.RoleCode))
+                        .Select(x => x.PrivilegeCode)
+                        .ToListAsync();
+
+                    if (!rolePrivileges.Any())
+                    {
+                        return NotFound("Role privileges not found");
+                    }
+
+                    var privilegeNames = await _context.Privileges
+                        .Where(x => rolePrivileges.Contains(x.PrivilegeCode))
+                        .Select(x => x.PrivilegeName)
+                        .ToListAsync();
+
+                    if (!privilegeNames.Any())
+                    {
+                        return NotFound("Privileges not found");
                     }
 
                     if (privilegeNames.Any())
@@ -78,21 +93,20 @@ namespace conifs.rms.@base.api.Controllers
                                                      _configuration["Jwt:Audience"],
                                                      claims,
                                                      expires: DateTime.UtcNow.AddMinutes(60),
-                                                     signingCredentials: creds
-                                                     );
+                                                     signingCredentials: creds);
 
                     var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-                    return Ok(new { Token = tokenValue, User = new {user.FirstName, user.LastName, user.Email} });
+                    return Ok(new { Token = tokenValue, User = new { user.FirstName, user.LastName, user.Email }, priv = privilegeNames });
                 }
 
-                //generate token for the admin user
+                // Generate token for the admin user
                 var claimsAdmin = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("Role", "Admin"),
-                    new Claim("Email", admin.Email.ToString())
-                };
+            new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("Role", "Admin"),
+            new Claim("Email", admin.Email.ToString())
+        };
 
                 var keyAdmin = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var credsAdmin = new SigningCredentials(keyAdmin, SecurityAlgorithms.HmacSha256);
@@ -100,20 +114,16 @@ namespace conifs.rms.@base.api.Controllers
                                                  _configuration["Jwt:Audience"],
                                                  claimsAdmin,
                                                  expires: DateTime.UtcNow.AddMinutes(60),
-                                                 signingCredentials: credsAdmin
-                                                 );
+                                                 signingCredentials: credsAdmin);
 
                 var tokenValueAdmin = new JwtSecurityTokenHandler().WriteToken(tokenAdmin);
 
-                return Ok(new { Token = tokenValueAdmin, User = new{admin.FirstName, admin.LastName, admin.Email} });
-                //return Ok(admin);
+                return Ok(new { Token = tokenValueAdmin, User = new { admin.FirstName, admin.LastName, admin.Email } });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-
     }
-}
+    }
