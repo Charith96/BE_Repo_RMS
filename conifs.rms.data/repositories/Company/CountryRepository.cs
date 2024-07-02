@@ -16,7 +16,9 @@ namespace conifs.rms.data.repositories
 
         public async Task<IEnumerable<Country>> GetAllCountries()
         {
-            return await _context.Countries.ToListAsync();
+            return await _context.Countries
+                .OrderBy(c => c.CountryName)
+                .ToListAsync();
         }
 
         public async Task<Country> GetCountryById(Guid countryId)
