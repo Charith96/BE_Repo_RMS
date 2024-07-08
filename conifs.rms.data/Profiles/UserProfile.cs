@@ -26,7 +26,8 @@ namespace conifs.rms.data.Profiles
                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Userid))
                .ForMember(dest => dest.Companies, opt => opt.Ignore())
                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
-               .ForMember(dest => dest.Roles, opt => opt.Ignore());
+               .ForMember(dest => dest.Roles, opt => opt.Ignore())
+               .ForMember(dest => dest.ImageData, opt => opt.MapFrom(src => src.ImageData));
 
 
             CreateMap<UserTable, GetUserDtoList>()
@@ -66,8 +67,8 @@ namespace conifs.rms.data.Profiles
               .ForMember(dest => dest.ValidTill, opt => opt.MapFrom(src => src.ValidTill))
               .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
               .ForMember(dest => dest.Userid, opt => opt.MapFrom(src => src.Userid))
-              .ForMember(dest => dest.ImageData, opt => opt.Ignore());
-           
+                .ForMember(dest => dest.ImageData, opt => opt.MapFrom(src => src.ImageData));
+
             CreateMap<CreateUserCompanyDto, UserCompany>()
               .ForMember(dest => dest.UserCompanyID, opt => opt.MapFrom(src => Guid.NewGuid()))
               .ForMember(dest => dest.Userid, opt => opt.MapFrom(src => src.id))

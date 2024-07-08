@@ -62,7 +62,7 @@ namespace conifs.rms.@base.api.Controllers
 
 
 
-        [Authorize(Policy = "AdminOnly")]
+       
         [HttpPut("{Userid}")]
         public IActionResult UpdateUser(string Userid, PutUserDto user)
         {

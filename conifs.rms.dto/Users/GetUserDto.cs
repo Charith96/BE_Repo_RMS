@@ -31,7 +31,7 @@ namespace conifs.rms.dto.Users
 
         public string Email { get; set; }
 
-
+        public string ImageData { get; set; }
         public DateTime ValidFrom { get; set; }
 
         public string Password { get; set; }

@@ -96,7 +96,7 @@ namespace conifs.rms.@base.api.Controllers
                                                      signingCredentials: creds);
 
                     var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-                    return Ok(new { Token = tokenValue, User = new { user.FirstName, user.LastName, user.Email }, priv = privilegeNames });
+                    return Ok(new { Token = tokenValue, User = new { user.FirstName, user.LastName, user.Email , user.ImageData, user.DefaultCompany, user.Userid }, priv = privilegeNames });
                 }
 
                 // Generate token for the admin user

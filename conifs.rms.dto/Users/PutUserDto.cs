@@ -20,7 +20,7 @@ namespace conifs.rms.dto.Users
 
         public string DefaultCompany { get; set; }
 
-
+        public string ImageData { get; set; }
         public string Designation { get; set; }
 
 
